@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Dict, Iterable, List, Set
+from typing import Dict, Iterable, List, Set, Tuple
 
 from algorithms.base import BaseScheduler
 from core.models import ScheduleBlock, ScheduleResult, Task, TaskScore, TaskStatus, UserProfile
@@ -14,6 +14,7 @@ class Slot:
     end: datetime
     energy: float
     quietness: float
+    environments: Tuple[str, ...]
 
 
 class GreedyScheduler(BaseScheduler):
@@ -37,11 +38,12 @@ class GreedyScheduler(BaseScheduler):
         profile: UserProfile,
         now: datetime,
     ) -> ScheduleResult:
-        affected_ids = affected_task_ids(missed_task_id, tasks)
+        affected_ids = affected_task_ids(missed_task_id, tasks, now)
         recovery_tasks = [
-            task
+            relax_recovery_dependencies(task, affected_ids, missed_task_id)
             for task in tasks
             if task.task_id in affected_ids and task.task_id != missed_task_id
+            and task.status in {TaskStatus.PENDING, TaskStatus.SCHEDULED}
         ]
         return self.schedule(recovery_tasks, scores, profile, now)
 
@@ -126,8 +128,8 @@ def priority_order(
     return sorted(
         tasks,
         key=lambda task: (
-            task.deadline,
             -scores[task.task_id].priority(profile.weights),
+            task.deadline,
             -scores[task.task_id].block_integrity,
         ),
     )
@@ -142,13 +144,18 @@ def find_first_slot(
 ) -> Slot | None:
     cursor = ceil_to_step(task.earliest_start or now, step_min=15)
     horizon = max(task.deadline + timedelta(hours=8), now + timedelta(days=3))
+    best_slot: Slot | None = None
+    best_cost: tuple[float, datetime] | None = None
 
     while cursor < horizon:
         candidate = build_slot(cursor, task.duration_min, profile)
         if is_available(candidate.start, candidate.end, profile) and fits(task, score, candidate, placed):
-            return candidate
+            candidate_cost = (slot_cost(task, score, profile, candidate), candidate.start)
+            if best_cost is None or candidate_cost < best_cost:
+                best_slot = candidate
+                best_cost = candidate_cost
         cursor += timedelta(minutes=15)
-    return None
+    return best_slot
 
 
 def build_slot(start: datetime, duration_min: int, profile: UserProfile) -> Slot:
@@ -157,6 +164,7 @@ def build_slot(start: datetime, duration_min: int, profile: UserProfile) -> Slot
         end=start + timedelta(minutes=duration_min),
         energy=profile.energy_at(start),
         quietness=profile.quietness_at(start),
+        environments=profile.preferred_environments,
     )
 
 
@@ -168,8 +176,24 @@ def fits(
 ) -> bool:
     if any(overlaps(slot.start, slot.end, block.start, block.end) for block in placed):
         return False
+    if not set(task.required_environment).issubset(set(slot.environments)):
+        return False
     quietness_need = max(task.required_quietness, score.quietness_need * 0.75)
     return slot.quietness + 0.05 >= quietness_need
+
+
+def slot_cost(task: Task, score: TaskScore, profile: UserProfile, slot: Slot) -> float:
+    lateness_hours = max(0.0, (slot.end - task.deadline).total_seconds() / 3600)
+    cognitive_gap = abs(score.cognitive_load - slot.energy)
+    quiet_gap = max(0.0, max(task.required_quietness, score.quietness_need) - slot.quietness)
+    preference_fit = 1.0 - min(1.0, cognitive_gap + quiet_gap)
+    priority_bonus = score.priority(profile.weights) * preference_fit
+    return (
+        profile.weights.lateness * lateness_hours
+        + profile.weights.cognitive_fit * cognitive_gap
+        + profile.weights.preference_match * quiet_gap
+        - priority_bonus
+    )
 
 
 def is_available(start: datetime, end: datetime, profile: UserProfile) -> bool:
@@ -203,6 +227,7 @@ def reason(task: Task, score: TaskScore, slot: Slot) -> str:
     return (
         f"priority={score.urgency:.2f}/{score.cognitive_load:.2f}, "
         f"energy_fit={slot.energy:.2f}, quiet={slot.quietness:.2f}, "
+        f"env={','.join(slot.environments) or 'none'}, "
         f"ddl={task.deadline:%m-%d %H:%M}"
     )
 
@@ -221,7 +246,7 @@ def total_cost(
     return round(cost, 4)
 
 
-def affected_task_ids(missed_task_id: str, tasks: List[Task]) -> Set[str]:
+def affected_task_ids(missed_task_id: str, tasks: List[Task], now: datetime | None = None) -> Set[str]:
     by_id = {task.task_id: task for task in tasks}
     affected = {missed_task_id}
     series_id = by_id[missed_task_id].series_id if missed_task_id in by_id else None
@@ -229,7 +254,20 @@ def affected_task_ids(missed_task_id: str, tasks: List[Task]) -> Set[str]:
     changed = True
     while changed:
         changed = extend_affected_tasks(affected, series_id, tasks)
+    if now is not None:
+        affected.update(tasks_in_recovery_window(tasks, now))
     return affected
+
+
+def tasks_in_recovery_window(tasks: List[Task], now: datetime) -> Set[str]:
+    window_end = now + timedelta(hours=8)
+    return {
+        task.task_id
+        for task in tasks
+        if task.status in {TaskStatus.PENDING, TaskStatus.SCHEDULED}
+        and (task.earliest_start or now) <= window_end
+        and task.deadline >= now
+    }
 
 
 def extend_affected_tasks(affected: Set[str], series_id: str | None, tasks: List[Task]) -> bool:
@@ -241,6 +279,26 @@ def extend_affected_tasks(affected: Set[str], series_id: str | None, tasks: List
             affected.add(task.task_id)
             changed = True
     return changed
+
+
+def relax_recovery_dependencies(task: Task, affected_ids: Set[str], missed_task_id: str) -> Task:
+    return Task(
+        task_id=task.task_id,
+        title=task.title,
+        description=task.description,
+        duration_min=task.duration_min,
+        deadline=task.deadline,
+        earliest_start=task.earliest_start,
+        series_id=task.series_id,
+        required_environment=task.required_environment,
+        required_quietness=task.required_quietness,
+        dependencies=tuple(
+            dep for dep in task.dependencies if dep != missed_task_id and dep in affected_ids
+        ),
+        must_be_contiguous=task.must_be_contiguous,
+        status=TaskStatus.PENDING,
+        tags=task.tags,
+    )
 
 
 def has_missing_dependency(task: Task, active_ids: Set[str], scheduled_ids: Set[str]) -> bool:

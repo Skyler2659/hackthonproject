@@ -10,6 +10,7 @@ import streamlit as st
 from agents import TaskParserAgent
 from llm_client import DeepSeekLLMClient, LLMProviderError
 from models import Task, TaskStatus, UserProfile, clamp01
+from web_ui.archive import record_operation
 from web_ui.constants import ENVIRONMENT_OPTIONS
 from web_ui.profile import build_profile
 from web_ui.session_state import mark_schedule_dirty
@@ -18,10 +19,19 @@ from web_ui.task_data import materialize_tasks
 
 def render_task_form(profile_config: Dict[str, Any]) -> None:
     st.subheader("Task Input & Management")
+    render_task_added_notice()
     task_request = render_task_request_form()
     if task_request is None:
         return
     add_task_from_request(task_request, profile_config)
+
+
+def render_task_added_notice() -> None:
+    notice = st.session_state.get("task_added_notice", "")
+    if not notice:
+        return
+    st.success(notice)
+    st.session_state.task_added_notice = ""
 
 
 def render_task_request_form() -> Dict[str, Any] | None:
@@ -82,8 +92,15 @@ def add_task_from_request(task_request: Dict[str, Any], profile_config: Dict[str
         return
 
     st.session_state.pending_tasks.append(task_payload)
+    record_operation(
+        "task_added",
+        task_id=str(task_payload["task_id"]),
+        title=str(task_payload["title"]),
+        detail=f"duration_min={task_payload['duration_min']}",
+    )
     mark_schedule_dirty()
     show_task_added_message(task_payload)
+    st.rerun()
 
 
 def validate_task_request(task_request: Dict[str, Any], profile_config: Dict[str, Any]) -> str:
@@ -289,8 +306,7 @@ def make_task_id(title: str) -> str:
 
 def show_task_added_message(task_payload: Dict[str, Any]) -> None:
     deadline = datetime.fromisoformat(task_payload["deadline"])
-    st.success(
+    st.session_state.task_added_notice = (
         f"AI 已添加任务：{task_payload['title']} · "
         f"{task_payload['duration_min']} min · DDL {deadline:%m-%d %H:%M}"
     )
-

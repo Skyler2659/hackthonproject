@@ -9,6 +9,7 @@ from agents import LocalSeriesAgent, ScoringAgent
 from algorithms import WeightedScheduler
 from llm_client import DeepSeekLLMClient, LLMProviderError
 from models import ScheduleResult, Task, TaskScore, UserProfile
+from web_ui.archive import record_operation
 from web_ui.profile import build_profile
 from web_ui.task_data import active_schedulable_tasks, materialize_tasks
 
@@ -156,4 +157,7 @@ def save_schedule_result(
     st.session_state.last_profile = profile
     st.session_state.last_run_at = datetime.now().replace(second=0, microsecond=0)
     st.session_state.auto_schedule_needed = False
-
+    record_operation(
+        "schedule_updated",
+        detail=f"scheduled={len(result.blocks)}, unscheduled={len(result.unscheduled_task_ids)}",
+    )

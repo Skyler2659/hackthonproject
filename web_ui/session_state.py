@@ -5,11 +5,15 @@ from datetime import time
 import streamlit as st
 
 from web_ui.constants import DEFAULT_BASE_URL
+from web_ui.archive import load_archive
 
 
 def init_session_state() -> None:
+    archive = load_archive()
     defaults = {
-        "pending_tasks": [],
+        "pending_tasks": archive["pending_tasks"],
+        "operation_history": archive["operation_history"],
+        "task_added_notice": "",
         "last_scores": None,
         "last_result": None,
         "last_ordered_tasks": None,
@@ -56,4 +60,3 @@ def clear_last_run() -> None:
 def mark_schedule_dirty() -> None:
     clear_last_run()
     st.session_state.auto_schedule_needed = True
-

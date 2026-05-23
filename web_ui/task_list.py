@@ -7,27 +7,57 @@ import pandas as pd
 import streamlit as st
 
 from models import TaskStatus
+from web_ui.archive import record_operation
 from web_ui.session_state import mark_schedule_dirty
-from web_ui.task_data import remove_task, task_status_value
+from web_ui.task_data import clear_tasks, remove_task, task_status_value
 
 
 def render_pending_tasks() -> None:
+    _, center, _ = st.columns([0.35, 4.3, 0.35])
+    with center:
+        render_task_list_content()
+
+
+def render_task_list_content() -> None:
     tasks = st.session_state.pending_tasks
+    st.markdown('<div class="task-list-shell">', unsafe_allow_html=True)
+    st.subheader("Task List")
+
     if not tasks:
-        st.info("当前待处理任务列表为空。先添加几个任务，再启动调度。")
+        render_empty_task_list()
+        st.markdown("</div>", unsafe_allow_html=True)
         return
 
-    completed_count = count_completed_tasks(tasks)
-    pending_count = len(tasks) - completed_count
+    status_counts = count_tasks_by_status(tasks)
     col_left, col_right = st.columns([4, 1.2])
     with col_left:
         render_task_table(tasks)
     with col_right:
-        render_task_list_actions(tasks, pending_count, completed_count)
+        render_task_list_actions(tasks, status_counts)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def render_empty_task_list() -> None:
+    st.markdown(
+        """
+        <div class="task-list-empty">
+          <div class="task-list-empty-title">No tasks archived yet</div>
+          <div class="task-list-empty-copy">The task list stays centered here. Add a task from the AI box at the bottom.</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def count_completed_tasks(tasks: List[Dict[str, Any]]) -> int:
     return sum(1 for task in tasks if task_status_value(task) == TaskStatus.DONE.value)
+
+
+def count_tasks_by_status(tasks: List[Dict[str, Any]]) -> Dict[str, int]:
+    counts = {status.value: 0 for status in TaskStatus}
+    for task in tasks:
+        counts[task_status_value(task)] += 1
+    return counts
 
 
 def render_task_table(tasks: List[Dict[str, Any]]) -> None:
@@ -37,9 +67,9 @@ def render_task_table(tasks: List[Dict[str, Any]]) -> None:
         use_container_width=True,
         num_rows="fixed",
         column_config={
-            "Done": st.column_config.CheckboxColumn("完成"),
+            "Done": st.column_config.CheckboxColumn("Done"),
         },
-        disabled=["Task ID", "Title", "Series", "Duration", "DDL", "Quiet", "Deps", "Env"],
+        disabled=["Task ID", "Title", "Status", "Series", "Duration", "DDL", "Quiet", "Deps", "Env"],
         key="task_status_editor",
     )
     if apply_status_edits(edited_tasks):
@@ -48,22 +78,23 @@ def render_task_table(tasks: List[Dict[str, Any]]) -> None:
 
 def render_task_list_actions(
     tasks: List[Dict[str, Any]],
-    pending_count: int,
-    completed_count: int,
+    status_counts: Dict[str, int],
 ) -> None:
-    st.metric("待调度", pending_count)
-    st.metric("已完成", completed_count)
+    st.metric("Pending", status_counts[TaskStatus.PENDING.value])
+    st.metric("Done", status_counts[TaskStatus.DONE.value])
+    st.metric("Missed", status_counts[TaskStatus.MISSED.value])
+    st.metric("History Ops", len(st.session_state.get("operation_history", [])))
+
     delete_label = st.selectbox(
-        "删除任务",
+        "Delete task",
         options=[""] + [f"{task['title']} / {task['task_id']}" for task in tasks],
     )
-    if st.button("删除选中任务", use_container_width=True, disabled=not delete_label):
+    if st.button("Delete selected task", use_container_width=True, disabled=not delete_label):
         task_id = delete_label.split(" / ")[-1]
         remove_task(task_id)
         st.rerun()
-    if st.button("清空任务列表", use_container_width=True):
-        st.session_state.pending_tasks = []
-        mark_schedule_dirty()
+    if st.button("Clear task list", use_container_width=True):
+        clear_tasks()
         st.rerun()
 
 
@@ -76,6 +107,7 @@ def task_to_table_row(task: Dict[str, Any]) -> Dict[str, Any]:
         "Done": task_status_value(task) == TaskStatus.DONE.value,
         "Task ID": task["task_id"],
         "Title": task["title"],
+        "Status": task_status_value(task),
         "Series": task.get("series_id") or "standalone",
         "Duration": f"{task['duration_min']} min",
         "DDL": datetime.fromisoformat(task["deadline"]).strftime("%m-%d %H:%M"),
@@ -108,9 +140,24 @@ def update_task_statuses(done_by_id: Dict[str, bool]) -> bool:
         task_id = task["task_id"]
         if task_id not in done_by_id:
             continue
-        next_status = TaskStatus.DONE.value if done_by_id[task_id] else TaskStatus.PENDING.value
-        if task_status_value(task) != next_status:
-            task["status"] = next_status
-            changed = True
+        current_status = task_status_value(task)
+        next_status = resolve_next_status(current_status, done_by_id[task_id])
+        if current_status == next_status:
+            continue
+        task["status"] = next_status
+        record_operation(
+            "task_status_changed",
+            task_id=task_id,
+            title=str(task.get("title", "")),
+            detail=f"{current_status}->{next_status}",
+        )
+        changed = True
     return changed
 
+
+def resolve_next_status(current_status: str, done_checked: bool) -> str:
+    if done_checked and current_status != TaskStatus.DONE.value:
+        return TaskStatus.DONE.value
+    if not done_checked and current_status == TaskStatus.DONE.value:
+        return TaskStatus.PENDING.value
+    return current_status

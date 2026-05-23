@@ -12,6 +12,33 @@ def inject_styles() -> None:
             padding-bottom: 3rem;
             max-width: 1180px;
         }
+        .task-list-shell {
+            max-width: 980px;
+            margin: 1.75rem auto 1.5rem auto;
+        }
+        .task-list-empty {
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 1px dashed rgba(100, 116, 139, 0.42);
+            border-radius: 8px;
+            background: rgba(248, 250, 252, 0.66);
+        }
+        .task-list-empty-title {
+            font-size: 1.08rem;
+            font-weight: 750;
+            color: #0f172a;
+        }
+        .task-list-empty-copy {
+            margin-top: 0.35rem;
+            max-width: 430px;
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
         .timeline-shell {
             margin-top: 1rem;
         }
@@ -107,4 +134,3 @@ def inject_styles() -> None:
         """,
         unsafe_allow_html=True,
     )
-
