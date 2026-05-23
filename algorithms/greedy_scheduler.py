@@ -8,6 +8,16 @@ from algorithms.base import BaseScheduler
 from core.models import ScheduleBlock, ScheduleResult, Task, TaskScore, TaskStatus, UserProfile
 
 
+ENVIRONMENT_LABELS = {
+    "desk": "书桌",
+    "library": "图书馆",
+    "classroom": "教室",
+    "meeting_room": "会议室",
+    "mobile": "移动场景",
+    "online": "线上环境",
+}
+
+
 @dataclass(frozen=True)
 class Slot:
     start: datetime
@@ -225,11 +235,15 @@ def build_block(
 
 def reason(task: Task, score: TaskScore, slot: Slot) -> str:
     return (
-        f"priority={score.urgency:.2f}/{score.cognitive_load:.2f}, "
-        f"energy_fit={slot.energy:.2f}, quiet={slot.quietness:.2f}, "
-        f"env={','.join(slot.environments) or 'none'}, "
-        f"ddl={task.deadline:%m-%d %H:%M}"
+        f"优先级因子={score.urgency:.2f}/{score.cognitive_load:.2f}, "
+        f"精力匹配={slot.energy:.2f}, 安静度={slot.quietness:.2f}, "
+        f"环境={environment_text(slot.environments)}, "
+        f"DDL={task.deadline:%m-%d %H:%M}"
     )
+
+
+def environment_text(environments: Tuple[str, ...]) -> str:
+    return ",".join(ENVIRONMENT_LABELS.get(env, env) for env in environments) or "无"
 
 
 def total_cost(

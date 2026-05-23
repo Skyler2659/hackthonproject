@@ -9,6 +9,13 @@ from models import ScheduleResult, Task, TaskScore, TaskStatus, UserProfile, cla
 from web_ui.task_data import materialize_tasks, task_status_value
 
 
+DIMENSION_LABELS = {
+    "cognitive_load": "认知负荷",
+    "urgency": "紧急度",
+    "confidence": "置信度",
+}
+
+
 def render_results() -> None:
     result = st.session_state.last_result
     scores = st.session_state.last_scores
@@ -16,7 +23,7 @@ def render_results() -> None:
     if result is None or scores is None or profile is None:
         return
 
-    st.subheader("Dashboard / Visualization")
+    st.subheader("调度结果")
     render_schedule_metrics(result)
     render_unscheduled_warning(result)
     render_schedule_timeline(result, scores, task_lookup(), profile)
@@ -24,11 +31,11 @@ def render_results() -> None:
 
 def render_schedule_metrics(result: ScheduleResult) -> None:
     metric_cols = st.columns(5)
-    metric_cols[0].metric("Scheduled Tasks", scheduled_count(result))
-    metric_cols[1].metric("Unscheduled Tasks", unscheduled_count(result))
-    metric_cols[2].metric("Completed Tasks", completed_count())
-    metric_cols[3].metric("Total Cost", f"{result.total_cost:.4f}")
-    metric_cols[4].metric("Avg Priority", f"{average_priority(result):.2f}")
+    metric_cols[0].metric("已排程任务", scheduled_count(result))
+    metric_cols[1].metric("未排入任务", unscheduled_count(result))
+    metric_cols[2].metric("已完成任务", completed_count())
+    metric_cols[3].metric("总成本", f"{result.total_cost:.4f}")
+    metric_cols[4].metric("平均优先级", f"{average_priority(result):.2f}")
 
 
 def scheduled_count(result: ScheduleResult) -> int:
@@ -106,20 +113,20 @@ def schedule_block_html(
     <div class="schedule-block" style="border-left-color:{priority_color(priority)};">
       <div class="schedule-head">
         <div>
-          <div class="schedule-time">{block.start:%m-%d %H:%M} - {block.end:%H:%M} · {duration_min(block)} min</div>
+          <div class="schedule-time">{block.start:%m-%d %H:%M} - {block.end:%H:%M} · {duration_min(block)} 分钟</div>
           <div class="schedule-title">{index}. {safe(block.title)}</div>
         </div>
-        <div class="priority-badge" style="background:{priority_color(priority)};">Priority {priority:.2f}</div>
+        <div class="priority-badge" style="background:{priority_color(priority)};">优先级 {priority:.2f}</div>
       </div>
       <div class="schedule-meta">
-        <span>Series: {safe(series_text(task))}</span>
-        <span>Deps: {safe(dependencies_text(task))}</span>
+        <span>系列：{safe(series_text(task))}</span>
+        <span>依赖：{safe(dependencies_text(task))}</span>
         <span>DDL: {safe(deadline_text(task))}</span>
       </div>
       <div class="dimension-grid">
-        {dimension_bar("Cognitive Load", score.cognitive_load, "#ef4444")}
-        {dimension_bar("Urgency", score.urgency, "#f59e0b")}
-        {dimension_bar("Confidence", score.confidence, "#2563eb")}
+        {dimension_bar(DIMENSION_LABELS["cognitive_load"], score.cognitive_load, "#ef4444")}
+        {dimension_bar(DIMENSION_LABELS["urgency"], score.urgency, "#f59e0b")}
+        {dimension_bar(DIMENSION_LABELS["confidence"], score.confidence, "#2563eb")}
       </div>
       <div class="reason">{safe(block.reason)}</div>
     </div>
@@ -133,19 +140,19 @@ def duration_min(block: Any) -> int:
 def series_text(task: Optional[Task]) -> str:
     if task and task.series_id:
         return task.series_id
-    return "standalone"
+    return "单独任务"
 
 
 def dependencies_text(task: Optional[Task]) -> str:
     if task and task.dependencies:
         return ", ".join(task.dependencies)
-    return "none"
+    return "无"
 
 
 def deadline_text(task: Optional[Task]) -> str:
     if task:
         return task.deadline.strftime("%m-%d %H:%M")
-    return "unknown"
+    return "未知"
 
 
 def dimension_bar(label: str, value: float, color: str) -> str:
@@ -171,4 +178,3 @@ def priority_color(priority: float) -> str:
 
 def safe(value: Any) -> str:
     return html.escape(str(value))
-

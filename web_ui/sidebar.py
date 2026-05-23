@@ -5,13 +5,13 @@ from typing import Any, Dict
 import streamlit as st
 
 from models import UserWeights
-from web_ui.constants import DEFAULT_BASE_URL, ENVIRONMENT_OPTIONS
+from web_ui.constants import DEFAULT_BASE_URL, ENERGY_PEAK_LABELS, ENVIRONMENT_LABELS, ENVIRONMENT_OPTIONS
 from web_ui.profile import build_available_windows, build_energy_curve
 
 
 def render_sidebar() -> Dict[str, Any]:
     with st.sidebar:
-        st.header("User Profile")
+        st.header("用户画像")
         llm_settings = render_llm_settings()
         profile_settings = render_profile_settings()
         available_windows = render_available_windows()
@@ -36,9 +36,9 @@ def render_llm_settings() -> Dict[str, Any]:
         key="api_key",
         help="仅保存在当前 Streamlit 会话中，用于调用 AI 分析任务和生成日程。",
     )
-    model = st.text_input("LLM Model", key="llm_model")
+    model = st.text_input("LLM 模型", key="llm_model")
     base_url = st.text_input("LLM Base URL", key="llm_base_url")
-    ensemble_size = st.slider("Agent Ensemble Size", 1, 5, key="ensemble_size")
+    ensemble_size = st.slider("Agent 集成数量", 1, 5, key="ensemble_size")
     st.divider()
     return {
         "api_key": api_key.strip(),
@@ -52,10 +52,11 @@ def render_profile_settings() -> Dict[str, Any]:
     energy_peak = st.selectbox(
         "精力高峰期",
         options=["Morning", "Afternoon", "Night", "Irregular"],
+        format_func=lambda value: ENERGY_PEAK_LABELS[value],
         key="energy_peak",
     )
     max_daily_deep_work_min = st.slider(
-        "每日深度工作上限 (min)",
+        "每日深度工作上限（分钟）",
         30,
         360,
         step=15,
@@ -64,6 +65,7 @@ def render_profile_settings() -> Dict[str, Any]:
     preferred_environments = st.multiselect(
         "偏好环境",
         ENVIRONMENT_OPTIONS,
+        format_func=lambda value: ENVIRONMENT_LABELS.get(value, value),
         key="preferred_environments",
     )
     return {
@@ -77,20 +79,20 @@ def render_profile_settings() -> Dict[str, Any]:
 
 def render_available_windows() -> tuple:
     with st.expander("可用时间窗", expanded=True):
-        use_morning = st.checkbox("Morning Slot", key="use_morning_window")
+        use_morning = st.checkbox("上午时段", key="use_morning_window")
         col_a, col_b = st.columns(2)
-        morning_start = col_a.time_input("Morning Start", key="morning_start")
-        morning_end = col_b.time_input("Morning End", key="morning_end")
+        morning_start = col_a.time_input("上午开始", key="morning_start")
+        morning_end = col_b.time_input("上午结束", key="morning_end")
 
-        use_afternoon = st.checkbox("Afternoon Slot", key="use_afternoon_window")
+        use_afternoon = st.checkbox("下午时段", key="use_afternoon_window")
         col_a, col_b = st.columns(2)
-        afternoon_start = col_a.time_input("Afternoon Start", key="afternoon_start")
-        afternoon_end = col_b.time_input("Afternoon End", key="afternoon_end")
+        afternoon_start = col_a.time_input("下午开始", key="afternoon_start")
+        afternoon_end = col_b.time_input("下午结束", key="afternoon_end")
 
-        use_night = st.checkbox("Night Slot", key="use_night_window")
+        use_night = st.checkbox("夜间时段", key="use_night_window")
         col_a, col_b = st.columns(2)
-        night_start = col_a.time_input("Night Start", key="night_start")
-        night_end = col_b.time_input("Night End", key="night_end")
+        night_start = col_a.time_input("夜间开始", key="night_start")
+        night_end = col_b.time_input("夜间结束", key="night_end")
 
     return build_available_windows(
         [
@@ -104,8 +106,8 @@ def render_available_windows() -> tuple:
 def render_quiet_windows() -> tuple:
     with st.expander("安静专注窗口"):
         col_a, col_b = st.columns(2)
-        quiet_start = col_a.time_input("Quiet Start", key="quiet_start")
-        quiet_end = col_b.time_input("Quiet End", key="quiet_end")
+        quiet_start = col_a.time_input("安静开始", key="quiet_start")
+        quiet_end = col_b.time_input("安静结束", key="quiet_end")
     return tuple([(quiet_start, quiet_end)] if quiet_start < quiet_end else [])
 
 
@@ -188,4 +190,3 @@ def render_preference_match_weight() -> float:
     )
     st.caption("调高后，排程会更贴近你的习惯；调低后，系统会更强调完成效率。")
     return float(value)
-

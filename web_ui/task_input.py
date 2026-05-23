@@ -18,7 +18,7 @@ from web_ui.task_data import materialize_tasks
 
 
 def render_task_form(profile_config: Dict[str, Any]) -> None:
-    st.subheader("Task Input & Management")
+    st.subheader("AI 添加任务")
     render_task_added_notice()
     task_request = render_task_request_form()
     if task_request is None:
@@ -189,7 +189,7 @@ def build_task_payload_from_ai(
 
 def ensure_parsed_task_is_dict(parsed: Dict[str, Any]) -> None:
     if not isinstance(parsed, dict):
-        raise ValueError("AI 必须返回 JSON object。")
+        raise ValueError("AI 必须返回 JSON 对象。")
 
 
 def resolve_title(parsed: Dict[str, Any], source_text: str) -> str:
@@ -200,7 +200,7 @@ def resolve_description(parsed: Dict[str, Any], source_text: str) -> str:
     description = normalized_text(parsed.get("description")) or source_text
     assumptions = normalized_text(parsed.get("assumptions"))
     if assumptions:
-        return f"{description}\n\nAI assumptions: {assumptions}"
+        return f"{description}\n\nAI 推断说明：{assumptions}"
     return description
 
 
@@ -308,5 +308,5 @@ def show_task_added_message(task_payload: Dict[str, Any]) -> None:
     deadline = datetime.fromisoformat(task_payload["deadline"])
     st.session_state.task_added_notice = (
         f"AI 已添加任务：{task_payload['title']} · "
-        f"{task_payload['duration_min']} min · DDL {deadline:%m-%d %H:%M}"
+        f"{task_payload['duration_min']} 分钟 · DDL {deadline:%m-%d %H:%M}"
     )

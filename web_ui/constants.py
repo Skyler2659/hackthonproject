@@ -1,4 +1,17 @@
-APP_TITLE = "Cognitive-Aware Scheduler V2.0"
+APP_TITLE = "认知能耗自适应调度引擎 V2.0"
 DEFAULT_BASE_URL = "https://api.deepseek.com/chat/completions"
 ENVIRONMENT_OPTIONS = ["desk", "library", "classroom", "meeting_room", "mobile", "online"]
-
+ENVIRONMENT_LABELS = {
+    "desk": "书桌",
+    "library": "图书馆",
+    "classroom": "教室",
+    "meeting_room": "会议室",
+    "mobile": "移动场景",
+    "online": "线上环境",
+}
+ENERGY_PEAK_LABELS = {
+    "Morning": "上午型",
+    "Afternoon": "下午型",
+    "Night": "夜间型",
+    "Irregular": "不规律",
+}
