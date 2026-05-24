@@ -1,1 +1,1261 @@
-2026-05-24 11:10:34.545 Uvicorn server started on 127.0.0.1:8501
+2026-05-24 14:45:00.847 Uvicorn server started on 127.0.0.1:8501
+2026-05-24 15:05:24.855 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:15:06.189 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:20:34.704 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:21:04.582 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:21:08.355 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:21:19.344 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:21:21.817 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:23:24.318 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:23:35.064 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:26:54.817 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:28:47.181 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:29:04.675 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:29:04.784 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:29:09.942 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:29:10.076 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:37:50.646 127.0.0.1:49208 - "GET / HTTP/1.1" 304
+2026-05-24 15:37:50.687 connection closed
+2026-05-24 15:37:51.846 127.0.0.1:49208 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 15:37:51.849 127.0.0.1:56392 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 15:37:52.186 127.0.0.1:61430 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 15:37:52.190 connection open
+2026-05-24 15:37:52.334 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:37:56.018 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:37:56.086 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:37:56.225 127.0.0.1:56392 - "GET /static/js/DateInput.CEvUtll2.js HTTP/1.1" 200
+2026-05-24 15:37:56.227 127.0.0.1:49208 - "GET /static/js/useIntlLocale.CzDvWKbw.js HTTP/1.1" 200
+2026-05-24 15:37:56.234 127.0.0.1:56392 - "GET /static/js/timepicker.CM65sYVo.js HTTP/1.1" 200
+2026-05-24 15:37:56.239 127.0.0.1:49208 - "GET /static/js/ErrorOutline.esm.CWSS1LaE.js HTTP/1.1" 200
+2026-05-24 15:37:56.245 127.0.0.1:49208 - "GET /static/js/TimeInput.Cj4OjH8d.js HTTP/1.1" 200
+2026-05-24 15:37:56.245 127.0.0.1:56392 - "GET /static/js/styled-components.D2-xjCg5.js HTTP/1.1" 200
+2026-05-24 15:37:56.251 127.0.0.1:49208 - "GET /static/js/NumberInput.D_-y4tTv.js HTTP/1.1" 200
+2026-05-24 15:37:56.252 127.0.0.1:56392 - "GET /static/js/Multiselect.BO1DJqJ_.js HTTP/1.1" 200
+2026-05-24 15:37:56.258 127.0.0.1:56392 - "GET /static/js/_baseIndexOf.DmzSbCrC.js HTTP/1.1" 200
+2026-05-24 15:37:56.259 127.0.0.1:49208 - "GET /static/js/_arrayIncludesWith.C7He3_lH.js HTTP/1.1" 200
+2026-05-24 15:37:59.936 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:37:59.996 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:41:19.039 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:41:19.120 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:41:30.789 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:41:43.330 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:41:43.445 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:43:26.810 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:43:26.921 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:45:30.768 127.0.0.1:51429 - "GET / HTTP/1.1" 304
+2026-05-24 15:45:30.792 connection closed
+2026-05-24 15:45:31.482 127.0.0.1:51429 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 15:45:31.485 127.0.0.1:54071 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 15:45:31.804 127.0.0.1:63688 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 15:45:31.807 connection open
+2026-05-24 15:45:31.818 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:46:36.112 127.0.0.1:65326 - "GET / HTTP/1.1" 304
+2026-05-24 15:46:36.140 connection closed
+2026-05-24 15:46:36.390 127.0.0.1:65326 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 15:46:36.393 127.0.0.1:60259 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 15:46:36.711 127.0.0.1:58413 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 15:46:36.714 connection open
+2026-05-24 15:46:36.724 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:46:55.346 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:46:58.879 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:46:59.811 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:50:12.601 127.0.0.1:52678 - "GET / HTTP/1.1" 304
+2026-05-24 15:50:12.627 connection closed
+2026-05-24 15:50:13.427 127.0.0.1:52678 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 15:50:13.430 127.0.0.1:58764 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 15:50:13.751 127.0.0.1:60071 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 15:50:13.755 connection open
+2026-05-24 15:50:13.883 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:50:16.923 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:50:18.918 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:59:41.264 127.0.0.1:60438 - "GET / HTTP/1.1" 304
+2026-05-24 15:59:41.288 connection closed
+2026-05-24 15:59:42.056 127.0.0.1:60438 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 15:59:42.058 127.0.0.1:60554 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 15:59:42.374 127.0.0.1:63884 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 15:59:42.379 connection open
+2026-05-24 15:59:42.422 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:59:57.159 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 15:59:58.053 127.0.0.1:57982 - "GET /static/js/Checkbox.jqjO-3P7.js HTTP/1.1" 200
+2026-05-24 15:59:58.056 127.0.0.1:55999 - "GET /static/js/checkbox.D-sGpr_4.js HTTP/1.1" 200
+2026-05-24 16:03:06.495 127.0.0.1:51145 - "GET / HTTP/1.1" 304
+2026-05-24 16:03:06.529 connection closed
+2026-05-24 16:03:07.450 127.0.0.1:51145 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:03:07.452 127.0.0.1:64614 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:03:07.770 127.0.0.1:62586 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:03:07.773 connection open
+2026-05-24 16:03:07.780 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:03:17.592 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:25:26.035 127.0.0.1:58507 - "GET / HTTP/1.1" 200
+2026-05-24 16:25:26.051 127.0.0.1:58507 - "GET /static/media/SourceSansVF-Upright.ttf.BsWL4Kly.woff2 HTTP/1.1" 200
+2026-05-24 16:25:26.065 127.0.0.1:58507 - "GET /static/js/index.D2ZqaFuW.js HTTP/1.1" 200
+2026-05-24 16:25:26.073 127.0.0.1:58507 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 16:25:26.081 127.0.0.1:58507 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 16:25:26.087 127.0.0.1:58507 - "GET /static/js/chunk.DuxOD-Sk.js HTTP/1.1" 200
+2026-05-24 16:25:26.092 127.0.0.1:58507 - "GET /static/js/preload-helper.CAj27AsG.js HTTP/1.1" 200
+2026-05-24 16:25:26.097 127.0.0.1:58507 - "GET /static/js/emotion-is-prop-valid.esm.DV_OErv-.js HTTP/1.1" 200
+2026-05-24 16:25:26.101 127.0.0.1:58507 - "GET /static/js/emotion-styled.browser.esm.BPUx6WuE.js HTTP/1.1" 200
+2026-05-24 16:25:26.106 127.0.0.1:58507 - "GET /static/js/getColors.DUygtxH4.js HTTP/1.1" 200
+2026-05-24 16:25:26.112 127.0.0.1:58507 - "GET /static/js/assertNever.B_SfJlM1.js HTTP/1.1" 200
+2026-05-24 16:25:26.116 127.0.0.1:58507 - "GET /static/js/protobuf.DyZGXwGk.js HTTP/1.1" 200
+2026-05-24 16:25:26.125 127.0.0.1:58507 - "GET /static/js/isSymbol.CDgzX1Rm.js HTTP/1.1" 200
+2026-05-24 16:25:26.130 127.0.0.1:58507 - "GET /static/js/toString.BkSzPhlJ.js HTTP/1.1" 200
+2026-05-24 16:25:26.136 127.0.0.1:58507 - "GET /static/js/eq.BGqw_fW_.js HTTP/1.1" 200
+2026-05-24 16:25:26.140 127.0.0.1:58507 - "GET /static/js/_toKey.C0ohEqce.js HTTP/1.1" 200
+2026-05-24 16:25:26.145 127.0.0.1:58507 - "GET /static/js/utils.B9mvrYZE.js HTTP/1.1" 200
+2026-05-24 16:25:26.151 127.0.0.1:58507 - "GET /static/js/isArguments.CEs-JkNn.js HTTP/1.1" 200
+2026-05-24 16:25:26.156 127.0.0.1:58507 - "GET /static/js/isLength.DwwZub7z.js HTTP/1.1" 200
+2026-05-24 16:25:26.161 127.0.0.1:58507 - "GET /static/js/_isIterateeCall.DYlLOvxr.js HTTP/1.1" 200
+2026-05-24 16:25:26.165 127.0.0.1:58507 - "GET /static/js/loglevel.H4SN4KQm.js HTTP/1.1" 200
+2026-05-24 16:25:26.171 127.0.0.1:58507 - "GET /static/js/utils.D9m7Ykmm.js HTTP/1.1" 200
+2026-05-24 16:25:26.176 127.0.0.1:58507 - "GET /static/js/utils.CuRWPZ_O.js HTTP/1.1" 200
+2026-05-24 16:25:26.180 127.0.0.1:58507 - "GET /static/js/UriUtil.B2jDpauP.js HTTP/1.1" 200
+2026-05-24 16:25:26.185 127.0.0.1:58507 - "GET /static/js/PortalContext.BL8o-V2m.js HTTP/1.1" 200
+2026-05-24 16:25:26.189 127.0.0.1:58507 - "GET /static/js/useRequiredContext.DPvSYqB2.js HTTP/1.1" 200
+2026-05-24 16:25:26.193 127.0.0.1:58507 - "GET /static/js/useWindowDimensionsContext.gRLzw0wB.js HTTP/1.1" 200
+2026-05-24 16:25:26.199 127.0.0.1:58507 - "GET /static/js/useEmotionTheme.61kSPILX.js HTTP/1.1" 200
+2026-05-24 16:25:26.203 127.0.0.1:58507 - "GET /static/js/ErrorElement.BPchO-rz.js HTTP/1.1" 200
+2026-05-24 16:25:26.207 127.0.0.1:58507 - "GET /static/js/DynamicIcon.CdUbRvnw.js HTTP/1.1" 200
+2026-05-24 16:25:26.211 127.0.0.1:58507 - "GET /static/js/FormClearHelper.DblyIMUS.js HTTP/1.1" 200
+2026-05-24 16:25:26.216 127.0.0.1:58507 - "GET /static/js/useTimeout.DBBq-Pb3.js HTTP/1.1" 200
+2026-05-24 16:25:26.221 127.0.0.1:58507 - "GET /static/js/useCopyToClipboard.D6zHcWPd.js HTTP/1.1" 200
+2026-05-24 16:25:26.225 127.0.0.1:58507 - "GET /static/js/useCrossOriginAttribute.wOZu23rZ.js HTTP/1.1" 200
+2026-05-24 16:25:26.229 127.0.0.1:58507 - "GET /static/js/lib.Bp2YInuy.js HTTP/1.1" 200
+2026-05-24 16:25:26.233 127.0.0.1:58507 - "GET /static/js/lib.C6qHMNlQ.js HTTP/1.1" 200
+2026-05-24 16:25:26.237 127.0.0.1:58507 - "GET /static/js/v4.D-g8Wqsd.js HTTP/1.1" 200
+2026-05-24 16:25:26.244 127.0.0.1:58507 - "GET /static/js/space-separated-tokens.DeggmezP.js HTTP/1.1" 200
+2026-05-24 16:25:26.248 127.0.0.1:58507 - "GET /static/js/katex.min.mf1jZfsG.js HTTP/1.1" 200
+2026-05-24 16:25:26.253 127.0.0.1:58507 - "GET /static/js/_hasPath.w5yP9zye.js HTTP/1.1" 200
+2026-05-24 16:25:26.257 127.0.0.1:58507 - "GET /static/js/lib.BSsNtqqO.js HTTP/1.1" 200
+2026-05-24 16:25:26.262 127.0.0.1:58507 - "GET /static/js/src.D9MArGZj.js HTTP/1.1" 200
+2026-05-24 16:25:26.272 127.0.0.1:59351 - "GET /static/js/possibleConstructorReturn.DKlO5zKF.js HTTP/1.1" 200
+2026-05-24 16:25:26.273 127.0.0.1:58507 - "GET /static/js/slicedToArray.DMaxrggJ.js HTTP/1.1" 200
+2026-05-24 16:25:26.281 127.0.0.1:59351 - "GET /static/js/createSuper.Da188CdT.js HTTP/1.1" 200
+2026-05-24 16:25:26.282 127.0.0.1:58507 - "GET /static/js/lib.Ck2gXDna.js HTTP/1.1" 200
+2026-05-24 16:25:26.307 127.0.0.1:59351 - "GET /static/js/pick.CL94X30U.js HTTP/1.1" 200
+2026-05-24 16:25:26.308 127.0.0.1:58507 - "GET /static/js/toaster.B_KSvIoz.js HTTP/1.1" 200
+2026-05-24 16:25:26.322 127.0.0.1:58507 - "GET /static/js/ResizeObserver.es.DtpUvxB0.js HTTP/1.1" 200
+2026-05-24 16:25:26.384 127.0.0.1:58507 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:25:26.386 127.0.0.1:59351 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:25:26.711 127.0.0.1:64413 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:25:26.715 connection open
+2026-05-24 16:25:26.737 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:25:28.340 127.0.0.1:58507 - "GET /static/js/IFrameUtil.BaqCY7QW.js HTTP/1.1" 200
+2026-05-24 16:25:28.343 127.0.0.1:59351 - "GET /static/js/IFrame.CWtgwiOd.js HTTP/1.1" 200
+2026-05-24 16:25:28.344 127.0.0.1:56408 - "GET /static/js/rehype-raw.DycST9n0.js HTTP/1.1" 200
+2026-05-24 16:25:28.345 127.0.0.1:55331 - "GET /static/js/hastscript.D23cXY9u.js HTTP/1.1" 200
+2026-05-24 16:25:28.345 127.0.0.1:50487 - "GET /static/js/web-namespaces.CPTLFhKH.js HTTP/1.1" 200
+2026-05-24 16:25:28.397 127.0.0.1:56408 - "GET /static/js/TextInput.D3Tz_H2g.js HTTP/1.1" 200
+2026-05-24 16:25:28.400 127.0.0.1:58507 - "GET /static/js/InputInstructions.PgD3jd3r.js HTTP/1.1" 200
+2026-05-24 16:25:28.401 127.0.0.1:59142 - "GET /static/js/input.u1KH_YID.js HTTP/1.1" 200
+2026-05-24 16:25:28.402 127.0.0.1:59351 - "GET /static/js/inputUtils.BdAxEjXK.js HTTP/1.1" 200
+2026-05-24 16:25:28.403 127.0.0.1:50487 - "GET /static/js/useBasicWidgetState.DAZ7WsXN.js HTTP/1.1" 200
+2026-05-24 16:25:28.404 127.0.0.1:55331 - "GET /static/js/useUpdateUiValue.D01djDVK.js HTTP/1.1" 200
+2026-05-24 16:25:28.411 127.0.0.1:56408 - "GET /static/js/base-input.DwcYxu9p.js HTTP/1.1" 200
+2026-05-24 16:25:28.415 127.0.0.1:58507 - "GET /static/js/FormSubmitContent.mVZv5XK_.js HTTP/1.1" 200
+2026-05-24 16:25:28.417 127.0.0.1:59142 - "GET /static/js/iconPosition.CAyE8Pjc.js HTTP/1.1" 200
+2026-05-24 16:25:28.671 127.0.0.1:59142 - "GET /static/media/SourceCodeVF-Upright.ttf.BjWn63N-.woff2 HTTP/1.1" 200
+2026-05-24 16:25:32.159 connection closed
+2026-05-24 16:30:34.648 127.0.0.1:50208 - "GET / HTTP/1.1" 200
+2026-05-24 16:30:34.741 127.0.0.1:50208 - "GET /static/media/SourceSansVF-Upright.ttf.BsWL4Kly.woff2 HTTP/1.1" 200
+2026-05-24 16:30:34.806 127.0.0.1:56615 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 16:30:34.837 127.0.0.1:56616 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 16:30:34.839 127.0.0.1:56617 - "GET /static/js/index.D2ZqaFuW.js HTTP/1.1" 200
+2026-05-24 16:30:34.846 127.0.0.1:56618 - "GET /static/js/chunk.DuxOD-Sk.js HTTP/1.1" 200
+2026-05-24 16:30:34.849 127.0.0.1:56619 - "GET /static/js/preload-helper.CAj27AsG.js HTTP/1.1" 200
+2026-05-24 16:30:35.738 127.0.0.1:56616 - "GET /static/js/emotion-is-prop-valid.esm.DV_OErv-.js HTTP/1.1" 200
+2026-05-24 16:30:35.764 127.0.0.1:56615 - "GET /static/js/emotion-styled.browser.esm.BPUx6WuE.js HTTP/1.1" 200
+2026-05-24 16:30:35.772 127.0.0.1:50208 - "GET /static/js/getColors.DUygtxH4.js HTTP/1.1" 200
+2026-05-24 16:30:36.740 127.0.0.1:56618 - "GET /static/js/assertNever.B_SfJlM1.js HTTP/1.1" 200
+2026-05-24 16:30:37.742 127.0.0.1:56618 - "GET /static/js/toString.BkSzPhlJ.js HTTP/1.1" 200
+2026-05-24 16:30:37.743 127.0.0.1:56619 - "GET /static/js/eq.BGqw_fW_.js HTTP/1.1" 200
+2026-05-24 16:30:37.745 127.0.0.1:56616 - "GET /static/js/isSymbol.CDgzX1Rm.js HTTP/1.1" 200
+2026-05-24 16:30:37.746 127.0.0.1:56617 - "GET /static/js/protobuf.DyZGXwGk.js HTTP/1.1" 200
+2026-05-24 16:30:37.751 127.0.0.1:56615 - "GET /static/js/_toKey.C0ohEqce.js HTTP/1.1" 200
+2026-05-24 16:30:37.839 127.0.0.1:50208 - "GET /static/js/utils.B9mvrYZE.js HTTP/1.1" 200
+2026-05-24 16:30:37.845 127.0.0.1:56618 - "GET /static/js/isArguments.CEs-JkNn.js HTTP/1.1" 200
+2026-05-24 16:30:37.850 127.0.0.1:56619 - "GET /static/js/_isIterateeCall.DYlLOvxr.js HTTP/1.1" 200
+2026-05-24 16:30:37.851 127.0.0.1:56616 - "GET /static/js/isLength.DwwZub7z.js HTTP/1.1" 200
+2026-05-24 16:30:38.738 127.0.0.1:56615 - "GET /static/js/loglevel.H4SN4KQm.js HTTP/1.1" 200
+2026-05-24 16:30:42.742 127.0.0.1:56618 - "GET /static/js/UriUtil.B2jDpauP.js HTTP/1.1" 200
+2026-05-24 16:30:42.743 127.0.0.1:56617 - "GET /static/js/utils.D9m7Ykmm.js HTTP/1.1" 200
+2026-05-24 16:30:42.746 127.0.0.1:56619 - "GET /static/js/utils.CuRWPZ_O.js HTTP/1.1" 200
+2026-05-24 16:30:42.785 127.0.0.1:50208 - "GET /static/js/PortalContext.BL8o-V2m.js HTTP/1.1" 200
+2026-05-24 16:30:43.742 127.0.0.1:56615 - "GET /static/js/useRequiredContext.DPvSYqB2.js HTTP/1.1" 200
+2026-05-24 16:30:43.745 127.0.0.1:56619 - "GET /static/js/useWindowDimensionsContext.gRLzw0wB.js HTTP/1.1" 200
+2026-05-24 16:30:43.786 127.0.0.1:56618 - "GET /static/js/ErrorElement.BPchO-rz.js HTTP/1.1" 200
+2026-05-24 16:30:43.842 127.0.0.1:56617 - "GET /static/js/DynamicIcon.CdUbRvnw.js HTTP/1.1" 200
+2026-05-24 16:30:43.900 127.0.0.1:54374 - "GET / HTTP/1.1" 200
+2026-05-24 16:30:44.740 127.0.0.1:56615 - "GET /static/js/FormClearHelper.DblyIMUS.js HTTP/1.1" 200
+2026-05-24 16:30:44.746 127.0.0.1:56617 - "GET /static/js/useCrossOriginAttribute.wOZu23rZ.js HTTP/1.1" 200
+2026-05-24 16:30:44.747 127.0.0.1:56619 - "GET /static/js/useTimeout.DBBq-Pb3.js HTTP/1.1" 200
+2026-05-24 16:30:44.748 127.0.0.1:50208 - "GET /static/js/useCopyToClipboard.D6zHcWPd.js HTTP/1.1" 200
+2026-05-24 16:30:44.781 127.0.0.1:56618 - "GET /static/js/lib.Bp2YInuy.js HTTP/1.1" 200
+2026-05-24 16:30:44.815 127.0.0.1:56615 - "GET /static/js/lib.C6qHMNlQ.js HTTP/1.1" 200
+2026-05-24 16:30:44.821 127.0.0.1:54378 - "GET /static/js/v4.D-g8Wqsd.js HTTP/1.1" 200
+2026-05-24 16:30:44.849 127.0.0.1:56617 - "GET /static/js/space-separated-tokens.DeggmezP.js HTTP/1.1" 200
+2026-05-24 16:30:44.850 127.0.0.1:56619 - "GET /static/js/katex.min.mf1jZfsG.js HTTP/1.1" 200
+2026-05-24 16:30:44.862 127.0.0.1:56618 - "GET /static/js/_hasPath.w5yP9zye.js HTTP/1.1" 200
+2026-05-24 16:30:44.877 127.0.0.1:54379 - "GET /static/js/index.D2ZqaFuW.js HTTP/1.1" 200
+2026-05-24 16:30:44.878 127.0.0.1:54374 - "GET /static/media/SourceSansVF-Upright.ttf.BsWL4Kly.woff2 HTTP/1.1" 200
+2026-05-24 16:30:44.893 127.0.0.1:56615 - "GET /static/js/lib.BSsNtqqO.js HTTP/1.1" 200
+2026-05-24 16:30:44.944 127.0.0.1:50208 - "GET /static/js/src.D9MArGZj.js HTTP/1.1" 200
+2026-05-24 16:30:45.072 127.0.0.1:54381 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 16:30:45.106 127.0.0.1:54385 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 16:30:45.116 127.0.0.1:54386 - "GET /static/js/chunk.DuxOD-Sk.js HTTP/1.1" 200
+2026-05-24 16:30:45.205 127.0.0.1:54387 - "GET /static/js/preload-helper.CAj27AsG.js HTTP/1.1" 200
+2026-05-24 16:30:45.744 127.0.0.1:56619 - "GET /static/js/possibleConstructorReturn.DKlO5zKF.js HTTP/1.1" 200
+2026-05-24 16:30:45.844 127.0.0.1:54378 - "GET /static/js/slicedToArray.DMaxrggJ.js HTTP/1.1" 200
+2026-05-24 16:30:46.739 127.0.0.1:56618 - "GET /static/js/createSuper.Da188CdT.js HTTP/1.1" 200
+2026-05-24 16:30:46.743 127.0.0.1:56617 - "GET /static/js/lib.Ck2gXDna.js HTTP/1.1" 200
+2026-05-24 16:30:48.739 127.0.0.1:56615 - "GET /static/js/toaster.B_KSvIoz.js HTTP/1.1" 200
+2026-05-24 16:30:48.873 127.0.0.1:54374 - "GET /static/js/emotion-is-prop-valid.esm.DV_OErv-.js HTTP/1.1" 200
+2026-05-24 16:30:48.984 127.0.0.1:54379 - "GET /static/js/emotion-styled.browser.esm.BPUx6WuE.js HTTP/1.1" 200
+2026-05-24 16:30:54.822 127.0.0.1:54411 - "GET /static/js/pick.CL94X30U.js HTTP/1.1" 200
+2026-05-24 16:30:54.824 127.0.0.1:54412 - "GET /static/js/ResizeObserver.es.DtpUvxB0.js HTTP/1.1" 200
+2026-05-24 16:30:54.854 127.0.0.1:54413 - "GET /static/js/useEmotionTheme.61kSPILX.js HTTP/1.1" 200
+2026-05-24 16:30:55.005 127.0.0.1:54414 - "GET /static/js/toString.BkSzPhlJ.js HTTP/1.1" 200
+2026-05-24 16:30:55.011 127.0.0.1:54415 - "GET /static/js/eq.BGqw_fW_.js HTTP/1.1" 200
+2026-05-24 16:30:55.077 127.0.0.1:54416 - "GET /static/js/_toKey.C0ohEqce.js HTTP/1.1" 200
+2026-05-24 16:30:55.091 127.0.0.1:54417 - "GET /static/js/isArguments.CEs-JkNn.js HTTP/1.1" 200
+2026-05-24 16:30:55.092 127.0.0.1:54419 - "GET /static/js/utils.B9mvrYZE.js HTTP/1.1" 200
+2026-05-24 16:30:55.109 127.0.0.1:54420 - "GET /static/js/isLength.DwwZub7z.js HTTP/1.1" 200
+2026-05-24 16:30:55.798 127.0.0.1:54412 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:30:55.801 127.0.0.1:54413 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:30:55.805 127.0.0.1:54411 - "GET /favicon.png HTTP/1.1" 200
+2026-05-24 16:30:55.817 127.0.0.1:54415 - "GET /static/js/_isIterateeCall.DYlLOvxr.js HTTP/1.1" 200
+2026-05-24 16:30:55.820 127.0.0.1:54414 - "GET /static/js/loglevel.H4SN4KQm.js HTTP/1.1" 200
+2026-05-24 16:30:55.845 127.0.0.1:54416 - "GET /static/js/utils.CuRWPZ_O.js HTTP/1.1" 200
+2026-05-24 16:30:55.846 127.0.0.1:54417 - "GET /static/js/utils.D9m7Ykmm.js HTTP/1.1" 200
+2026-05-24 16:30:55.932 127.0.0.1:54419 - "GET /static/js/UriUtil.B2jDpauP.js HTTP/1.1" 200
+2026-05-24 16:30:56.826 127.0.0.1:54415 - "GET /static/js/PortalContext.BL8o-V2m.js HTTP/1.1" 200
+2026-05-24 16:30:56.829 127.0.0.1:54414 - "GET /static/js/useRequiredContext.DPvSYqB2.js HTTP/1.1" 200
+2026-05-24 16:30:56.844 127.0.0.1:54416 - "GET /static/js/useWindowDimensionsContext.gRLzw0wB.js HTTP/1.1" 200
+2026-05-24 16:30:56.859 127.0.0.1:65207 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:30:56.863 connection open
+2026-05-24 16:30:56.948 127.0.0.1:54420 - "GET /static/js/useEmotionTheme.61kSPILX.js HTTP/1.1" 200
+2026-05-24 16:30:57.005 127.0.0.1:54417 - "GET /static/js/ErrorElement.BPchO-rz.js HTTP/1.1" 200
+2026-05-24 16:30:57.743 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:30:59.250 127.0.0.1:54420 - "GET /static/js/DynamicIcon.CdUbRvnw.js HTTP/1.1" 200
+2026-05-24 16:30:59.252 127.0.0.1:54413 - "GET /static/js/rehype-raw.DycST9n0.js HTTP/1.1" 200
+2026-05-24 16:30:59.253 127.0.0.1:54412 - "GET /static/js/hastscript.D23cXY9u.js HTTP/1.1" 200
+2026-05-24 16:30:59.255 127.0.0.1:54419 - "GET /static/js/useCrossOriginAttribute.wOZu23rZ.js HTTP/1.1" 200
+2026-05-24 16:30:59.256 127.0.0.1:54411 - "GET /static/js/web-namespaces.CPTLFhKH.js HTTP/1.1" 200
+2026-05-24 16:30:59.256 127.0.0.1:54415 - "GET /static/js/FormClearHelper.DblyIMUS.js HTTP/1.1" 200
+2026-05-24 16:30:59.257 127.0.0.1:54414 - "GET /static/js/useTimeout.DBBq-Pb3.js HTTP/1.1" 200
+2026-05-24 16:30:59.258 127.0.0.1:54416 - "GET /static/js/useCopyToClipboard.D6zHcWPd.js HTTP/1.1" 200
+2026-05-24 16:30:59.259 127.0.0.1:65214 - "GET /static/js/IFrame.CWtgwiOd.js HTTP/1.1" 200
+2026-05-24 16:30:59.260 127.0.0.1:54417 - "GET /static/js/lib.Bp2YInuy.js HTTP/1.1" 200
+2026-05-24 16:30:59.260 127.0.0.1:65215 - "GET /static/js/IFrameUtil.BaqCY7QW.js HTTP/1.1" 200
+2026-05-24 16:30:59.350 127.0.0.1:54412 - "GET /static/js/TextInput.D3Tz_H2g.js HTTP/1.1" 200
+2026-05-24 16:30:59.351 127.0.0.1:54411 - "GET /static/js/InputInstructions.PgD3jd3r.js HTTP/1.1" 200
+2026-05-24 16:30:59.357 127.0.0.1:65214 - "GET /static/js/useBasicWidgetState.DAZ7WsXN.js HTTP/1.1" 200
+2026-05-24 16:30:59.363 127.0.0.1:65215 - "GET /static/js/useUpdateUiValue.D01djDVK.js HTTP/1.1" 200
+2026-05-24 16:30:59.411 127.0.0.1:65225 - "GET /static/js/inputUtils.BdAxEjXK.js HTTP/1.1" 200
+2026-05-24 16:30:59.431 127.0.0.1:54420 - "GET /static/js/lib.C6qHMNlQ.js HTTP/1.1" 200
+2026-05-24 16:30:59.437 127.0.0.1:54415 - "GET /static/js/v4.D-g8Wqsd.js HTTP/1.1" 200
+2026-05-24 16:30:59.446 127.0.0.1:54414 - "GET /static/js/space-separated-tokens.DeggmezP.js HTTP/1.1" 200
+2026-05-24 16:30:59.474 127.0.0.1:54417 - "GET /static/js/_hasPath.w5yP9zye.js HTTP/1.1" 200
+2026-05-24 16:30:59.476 127.0.0.1:54419 - "GET /static/js/katex.min.mf1jZfsG.js HTTP/1.1" 200
+2026-05-24 16:30:59.558 127.0.0.1:54416 - "GET /static/js/lib.BSsNtqqO.js HTTP/1.1" 200
+2026-05-24 16:31:00.314 127.0.0.1:65214 - "GET /static/js/base-input.DwcYxu9p.js HTTP/1.1" 200
+2026-05-24 16:31:00.316 127.0.0.1:54411 - "GET /static/js/input.u1KH_YID.js HTTP/1.1" 200
+2026-05-24 16:31:00.319 127.0.0.1:54412 - "GET /static/js/iconPosition.CAyE8Pjc.js HTTP/1.1" 200
+2026-05-24 16:31:00.343 127.0.0.1:65215 - "GET /static/js/FormSubmitContent.mVZv5XK_.js HTTP/1.1" 200
+2026-05-24 16:31:00.412 127.0.0.1:54420 - "GET /static/js/src.D9MArGZj.js HTTP/1.1" 200
+2026-05-24 16:31:02.346 127.0.0.1:65215 - "GET /static/media/SourceCodeVF-Upright.ttf.BjWn63N-.woff2 HTTP/1.1" 200
+2026-05-24 16:31:02.440 127.0.0.1:54417 - "GET /static/js/createSuper.Da188CdT.js HTTP/1.1" 200
+2026-05-24 16:31:02.441 127.0.0.1:54419 - "GET /static/js/slicedToArray.DMaxrggJ.js HTTP/1.1" 200
+2026-05-24 16:31:02.442 127.0.0.1:54416 - "GET /static/js/possibleConstructorReturn.DKlO5zKF.js HTTP/1.1" 200
+2026-05-24 16:31:02.464 127.0.0.1:54415 - "GET /static/js/lib.Ck2gXDna.js HTTP/1.1" 200
+2026-05-24 16:31:02.472 127.0.0.1:54414 - "GET /static/js/toaster.B_KSvIoz.js HTTP/1.1" 200
+2026-05-24 16:31:08.606 127.0.0.1:60716 - "GET /static/js/getColors.DUygtxH4.js HTTP/1.1" 200
+2026-05-24 16:31:08.634 127.0.0.1:60717 - "GET /static/js/assertNever.B_SfJlM1.js HTTP/1.1" 200
+2026-05-24 16:31:08.655 127.0.0.1:60718 - "GET /static/js/protobuf.DyZGXwGk.js HTTP/1.1" 200
+2026-05-24 16:31:08.659 127.0.0.1:60721 - "GET /static/js/isSymbol.CDgzX1Rm.js HTTP/1.1" 200
+2026-05-24 16:31:08.681 127.0.0.1:60728 - "GET /static/js/pick.CL94X30U.js HTTP/1.1" 200
+2026-05-24 16:31:08.732 127.0.0.1:60729 - "GET /static/js/ResizeObserver.es.DtpUvxB0.js HTTP/1.1" 200
+2026-05-24 16:31:13.606 127.0.0.1:60729 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:31:13.608 127.0.0.1:60718 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:31:13.627 127.0.0.1:60728 - "GET /favicon.png HTTP/1.1" 200
+2026-05-24 16:31:13.982 127.0.0.1:53092 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:31:13.988 connection open
+2026-05-24 16:31:14.162 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:31:15.844 127.0.0.1:60728 - "GET /static/js/rehype-raw.DycST9n0.js HTTP/1.1" 200
+2026-05-24 16:31:15.848 127.0.0.1:60718 - "GET /static/js/web-namespaces.CPTLFhKH.js HTTP/1.1" 200
+2026-05-24 16:31:15.850 127.0.0.1:60729 - "GET /static/js/hastscript.D23cXY9u.js HTTP/1.1" 200
+2026-05-24 16:31:15.850 127.0.0.1:53095 - "GET /static/js/IFrame.CWtgwiOd.js HTTP/1.1" 200
+2026-05-24 16:31:15.854 127.0.0.1:53096 - "GET /static/js/IFrameUtil.BaqCY7QW.js HTTP/1.1" 200
+2026-05-24 16:31:15.856 127.0.0.1:53097 - "GET /static/js/TextInput.D3Tz_H2g.js HTTP/1.1" 200
+2026-05-24 16:31:16.039 127.0.0.1:60718 - "GET /static/js/InputInstructions.PgD3jd3r.js HTTP/1.1" 200
+2026-05-24 16:31:16.085 127.0.0.1:60729 - "GET /static/media/SourceCodeVF-Upright.ttf.BjWn63N-.woff2 HTTP/1.1" 200
+2026-05-24 16:31:16.086 127.0.0.1:53095 - "GET /static/js/useBasicWidgetState.DAZ7WsXN.js HTTP/1.1" 200
+2026-05-24 16:31:16.088 127.0.0.1:53096 - "GET /static/js/useUpdateUiValue.D01djDVK.js HTTP/1.1" 200
+2026-05-24 16:31:16.088 127.0.0.1:53097 - "GET /static/js/inputUtils.BdAxEjXK.js HTTP/1.1" 200
+2026-05-24 16:31:17.022 127.0.0.1:60718 - "GET /static/js/input.u1KH_YID.js HTTP/1.1" 200
+2026-05-24 16:31:17.033 127.0.0.1:53095 - "GET /static/js/base-input.DwcYxu9p.js HTTP/1.1" 200
+2026-05-24 16:31:17.040 127.0.0.1:53097 - "GET /static/js/FormSubmitContent.mVZv5XK_.js HTTP/1.1" 200
+2026-05-24 16:31:17.044 127.0.0.1:53096 - "GET /static/js/iconPosition.CAyE8Pjc.js HTTP/1.1" 200
+2026-05-24 16:31:48.008 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:31:48.483 127.0.0.1:57429 - "GET /static/media/MaterialSymbols-Rounded.VqUtTjSV.woff2 HTTP/1.1" 200
+2026-05-24 16:31:48.485 127.0.0.1:57430 - "GET /static/js/Radio.7vHfNFt0.js HTTP/1.1" 200
+2026-05-24 16:31:48.492 127.0.0.1:57431 - "GET /static/js/Button.hZAV5uJM.js HTTP/1.1" 200
+2026-05-24 16:31:48.497 127.0.0.1:57432 - "GET /static/js/Checkbox.jqjO-3P7.js HTTP/1.1" 200
+2026-05-24 16:31:48.503 127.0.0.1:57433 - "GET /static/js/Selectbox.IrFeiYNi.js HTTP/1.1" 200
+2026-05-24 16:31:48.521 127.0.0.1:57434 - "GET /static/js/checkbox.D-sGpr_4.js HTTP/1.1" 200
+2026-05-24 16:31:48.626 127.0.0.1:57430 - "GET /static/js/Slider.Bl-zBDII.js HTTP/1.1" 200
+2026-05-24 16:31:48.898 127.0.0.1:57431 - "GET /static/js/withCalculatedWidth.BU_k3Mtx.js HTTP/1.1" 200
+2026-05-24 16:31:50.894 127.0.0.1:57432 - "GET /static/js/formatMoment.XDSMSnYc.js HTTP/1.1" 200
+2026-05-24 16:31:50.900 127.0.0.1:57431 - "GET /static/js/sprintfjs.Cs3OAHuL.js HTTP/1.1" 200
+2026-05-24 16:31:50.904 127.0.0.1:57434 - "GET /static/js/numbro.BIyn79TP.js HTTP/1.1" 200
+2026-05-24 16:31:50.906 127.0.0.1:57433 - "GET /static/js/formatNumber.Bw8N23iB.js HTTP/1.1" 200
+2026-05-24 16:31:50.928 127.0.0.1:57429 - "GET /static/js/moment.CXYnKcIr.js HTTP/1.1" 200
+2026-05-24 16:31:50.973 127.0.0.1:57432 - "GET /static/js/Metric.CFtF4sc2.js HTTP/1.1" 200
+2026-05-24 16:31:50.981 127.0.0.1:57430 - "GET /static/js/threshold.DcRrkrsb.js HTTP/1.1" 200
+2026-05-24 16:31:50.983 127.0.0.1:57431 - "GET /static/js/embed.Bqebd2RE.js HTTP/1.1" 200
+2026-05-24 16:31:50.999 127.0.0.1:57433 - "GET /static/js/src.Drngj_PG.js HTTP/1.1" 200
+2026-05-24 16:31:51.042 127.0.0.1:57434 - "GET /static/js/timer.BA6XK94l.js HTTP/1.1" 200
+2026-05-24 16:31:51.911 127.0.0.1:57430 - "GET /static/js/lib.BT2isyPB.js HTTP/1.1" 200
+2026-05-24 16:31:51.918 127.0.0.1:57432 - "GET /static/js/remark-emoji.bYfF6O6k.js HTTP/1.1" 200
+2026-05-24 16:31:51.984 127.0.0.1:57429 - "GET /static/js/TextArea.Cfa8uX4I.js HTTP/1.1" 200
+2026-05-24 16:31:52.951 127.0.0.1:57433 - "GET /static/js/useTextInputAutoExpand.CMYnG0Vs.js HTTP/1.1" 200
+2026-05-24 16:32:27.678 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:32:28.067 127.0.0.1:51164 - "GET /static/media/MaterialSymbols-Rounded.VqUtTjSV.woff2 HTTP/1.1" 200
+2026-05-24 16:32:28.102 127.0.0.1:51165 - "GET /static/js/Radio.7vHfNFt0.js HTTP/1.1" 200
+2026-05-24 16:32:28.116 127.0.0.1:51166 - "GET /static/js/Button.hZAV5uJM.js HTTP/1.1" 200
+2026-05-24 16:32:28.202 127.0.0.1:51167 - "GET /static/js/Checkbox.jqjO-3P7.js HTTP/1.1" 200
+2026-05-24 16:32:28.204 127.0.0.1:51168 - "GET /static/js/Selectbox.IrFeiYNi.js HTTP/1.1" 200
+2026-05-24 16:32:28.204 127.0.0.1:51169 - "GET /static/js/checkbox.D-sGpr_4.js HTTP/1.1" 200
+2026-05-24 16:32:29.868 127.0.0.1:51164 - "GET /static/js/Slider.Bl-zBDII.js HTTP/1.1" 200
+2026-05-24 16:32:30.709 127.0.0.1:51169 - "GET /static/js/withCalculatedWidth.BU_k3Mtx.js HTTP/1.1" 200
+2026-05-24 16:32:30.711 127.0.0.1:51167 - "GET /static/js/formatNumber.Bw8N23iB.js HTTP/1.1" 200
+2026-05-24 16:32:30.712 127.0.0.1:51168 - "GET /static/js/formatMoment.XDSMSnYc.js HTTP/1.1" 200
+2026-05-24 16:32:30.719 127.0.0.1:51166 - "GET /static/js/sprintfjs.Cs3OAHuL.js HTTP/1.1" 200
+2026-05-24 16:32:30.756 127.0.0.1:51165 - "GET /static/js/numbro.BIyn79TP.js HTTP/1.1" 200
+2026-05-24 16:32:30.758 127.0.0.1:51164 - "GET /static/js/moment.CXYnKcIr.js HTTP/1.1" 200
+2026-05-24 16:32:30.898 127.0.0.1:51166 - "GET /static/js/src.Drngj_PG.js HTTP/1.1" 200
+2026-05-24 16:32:30.907 127.0.0.1:51168 - "GET /static/js/Metric.CFtF4sc2.js HTTP/1.1" 200
+2026-05-24 16:32:30.909 127.0.0.1:51169 - "GET /static/js/embed.Bqebd2RE.js HTTP/1.1" 200
+2026-05-24 16:32:30.911 127.0.0.1:51167 - "GET /static/js/threshold.DcRrkrsb.js HTTP/1.1" 200
+2026-05-24 16:32:31.731 127.0.0.1:51168 - "GET /static/js/lib.BT2isyPB.js HTTP/1.1" 200
+2026-05-24 16:32:31.733 127.0.0.1:51165 - "GET /static/js/timer.BA6XK94l.js HTTP/1.1" 200
+2026-05-24 16:32:31.734 127.0.0.1:51167 - "GET /static/js/remark-emoji.bYfF6O6k.js HTTP/1.1" 200
+2026-05-24 16:32:31.754 127.0.0.1:51164 - "GET /static/js/useTextInputAutoExpand.CMYnG0Vs.js HTTP/1.1" 200
+2026-05-24 16:32:31.761 127.0.0.1:51166 - "GET /static/js/TextArea.Cfa8uX4I.js HTTP/1.1" 200
+2026-05-24 16:32:39.149 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:32:41.341 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:32:43.360 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:32:44.359 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:33:09.280 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:33:13.801 127.0.0.1:49680 - "GET / HTTP/1.1" 304
+2026-05-24 16:33:13.908 connection closed
+2026-05-24 16:33:13.954 127.0.0.1:49680 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:33:14.037 127.0.0.1:49682 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:33:14.245 127.0.0.1:49686 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:33:14.250 connection open
+2026-05-24 16:33:14.344 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:33:25.971 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:34:08.596 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:34:16.386 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:34:16.396 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:34:16.519 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:34:16.624 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:34:17.388 127.0.0.1:55701 - "GET /static/js/DateInput.CEvUtll2.js HTTP/1.1" 200
+2026-05-24 16:34:17.400 127.0.0.1:55702 - "GET /static/js/useIntlLocale.CzDvWKbw.js HTTP/1.1" 200
+2026-05-24 16:34:17.430 127.0.0.1:55704 - "GET /static/js/ErrorOutline.esm.CWSS1LaE.js HTTP/1.1" 200
+2026-05-24 16:34:17.430 127.0.0.1:55703 - "GET /static/js/timepicker.CM65sYVo.js HTTP/1.1" 200
+2026-05-24 16:34:17.431 127.0.0.1:55705 - "GET /static/js/TimeInput.Cj4OjH8d.js HTTP/1.1" 200
+2026-05-24 16:34:17.448 127.0.0.1:55706 - "GET /static/js/styled-components.D2-xjCg5.js HTTP/1.1" 200
+2026-05-24 16:34:17.615 127.0.0.1:55701 - "GET /static/js/NumberInput.D_-y4tTv.js HTTP/1.1" 200
+2026-05-24 16:34:17.618 127.0.0.1:55704 - "GET /static/js/Multiselect.BO1DJqJ_.js HTTP/1.1" 200
+2026-05-24 16:34:17.776 127.0.0.1:55702 - "GET /static/js/_arrayIncludesWith.C7He3_lH.js HTTP/1.1" 200
+2026-05-24 16:34:18.552 127.0.0.1:55701 - "GET /static/js/_baseIndexOf.DmzSbCrC.js HTTP/1.1" 200
+2026-05-24 16:34:19.668 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:34:19.796 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:34:23.628 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:34:23.745 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:34:33.354 127.0.0.1:53561 - "GET / HTTP/1.1" 304
+2026-05-24 16:34:33.537 connection closed
+2026-05-24 16:34:33.669 127.0.0.1:53561 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:34:33.689 127.0.0.1:53562 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:34:34.008 127.0.0.1:53565 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:34:34.014 connection open
+2026-05-24 16:34:34.169 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:34:53.589 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:34:59.330 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:35:38.822 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:36:27.178 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:36:50.469 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:37:32.077 127.0.0.1:51359 - "GET / HTTP/1.1" 200
+2026-05-24 16:37:32.167 127.0.0.1:51359 - "GET /static/media/SourceSansVF-Upright.ttf.BsWL4Kly.woff2 HTTP/1.1" 200
+2026-05-24 16:37:32.253 127.0.0.1:51362 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 16:37:32.255 127.0.0.1:51363 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 16:37:32.260 127.0.0.1:51364 - "GET /static/js/chunk.DuxOD-Sk.js HTTP/1.1" 200
+2026-05-24 16:37:32.261 127.0.0.1:51365 - "GET /static/js/index.D2ZqaFuW.js HTTP/1.1" 200
+2026-05-24 16:37:32.268 127.0.0.1:51366 - "GET /static/js/preload-helper.CAj27AsG.js HTTP/1.1" 200
+2026-05-24 16:37:33.151 127.0.0.1:51363 - "GET /static/js/emotion-is-prop-valid.esm.DV_OErv-.js HTTP/1.1" 200
+2026-05-24 16:37:33.163 127.0.0.1:51364 - "GET /static/js/emotion-styled.browser.esm.BPUx6WuE.js HTTP/1.1" 200
+2026-05-24 16:37:33.180 127.0.0.1:51359 - "GET /static/js/getColors.DUygtxH4.js HTTP/1.1" 200
+2026-05-24 16:37:33.186 127.0.0.1:51362 - "GET /static/js/assertNever.B_SfJlM1.js HTTP/1.1" 200
+2026-05-24 16:37:34.151 127.0.0.1:51366 - "GET /static/js/protobuf.DyZGXwGk.js HTTP/1.1" 200
+2026-05-24 16:37:35.142 127.0.0.1:51365 - "GET /static/js/isSymbol.CDgzX1Rm.js HTTP/1.1" 200
+2026-05-24 16:37:35.143 127.0.0.1:51363 - "GET /static/js/toString.BkSzPhlJ.js HTTP/1.1" 200
+2026-05-24 16:37:35.152 127.0.0.1:51362 - "GET /static/js/eq.BGqw_fW_.js HTTP/1.1" 200
+2026-05-24 16:37:35.199 127.0.0.1:51364 - "GET /static/js/_toKey.C0ohEqce.js HTTP/1.1" 200
+2026-05-24 16:37:35.219 127.0.0.1:51359 - "GET /static/js/utils.B9mvrYZE.js HTTP/1.1" 200
+2026-05-24 16:37:39.143 127.0.0.1:51363 - "GET /static/js/isArguments.CEs-JkNn.js HTTP/1.1" 200
+2026-05-24 16:37:39.146 127.0.0.1:51365 - "GET /static/js/isLength.DwwZub7z.js HTTP/1.1" 200
+2026-05-24 16:37:39.150 127.0.0.1:51362 - "GET /static/js/_isIterateeCall.DYlLOvxr.js HTTP/1.1" 200
+2026-05-24 16:37:40.139 127.0.0.1:51363 - "GET /static/js/loglevel.H4SN4KQm.js HTTP/1.1" 200
+2026-05-24 16:37:40.155 127.0.0.1:51364 - "GET /static/js/utils.D9m7Ykmm.js HTTP/1.1" 200
+2026-05-24 16:37:40.181 127.0.0.1:51359 - "GET /static/js/utils.CuRWPZ_O.js HTTP/1.1" 200
+2026-05-24 16:37:41.144 127.0.0.1:51363 - "GET /static/js/PortalContext.BL8o-V2m.js HTTP/1.1" 200
+2026-05-24 16:37:41.146 127.0.0.1:51359 - "GET /static/js/UriUtil.B2jDpauP.js HTTP/1.1" 200
+2026-05-24 16:37:41.150 127.0.0.1:51362 - "GET /static/js/useRequiredContext.DPvSYqB2.js HTTP/1.1" 200
+2026-05-24 16:37:41.186 127.0.0.1:51365 - "GET /static/js/useWindowDimensionsContext.gRLzw0wB.js HTTP/1.1" 200
+2026-05-24 16:37:41.223 127.0.0.1:51363 - "GET /static/js/useEmotionTheme.61kSPILX.js HTTP/1.1" 200
+2026-05-24 16:37:41.233 127.0.0.1:51364 - "GET /static/js/ErrorElement.BPchO-rz.js HTTP/1.1" 200
+2026-05-24 16:37:41.656 127.0.0.1:51400 - "GET /static/js/DynamicIcon.CdUbRvnw.js HTTP/1.1" 200
+2026-05-24 16:37:42.152 127.0.0.1:51359 - "GET /static/js/FormClearHelper.DblyIMUS.js HTTP/1.1" 200
+2026-05-24 16:37:42.153 127.0.0.1:51363 - "GET /static/js/useCopyToClipboard.D6zHcWPd.js HTTP/1.1" 200
+2026-05-24 16:37:42.154 127.0.0.1:51400 - "GET /static/js/lib.Bp2YInuy.js HTTP/1.1" 200
+2026-05-24 16:37:42.155 127.0.0.1:51365 - "GET /static/js/useTimeout.DBBq-Pb3.js HTTP/1.1" 200
+2026-05-24 16:37:42.156 127.0.0.1:51362 - "GET /static/js/useCrossOriginAttribute.wOZu23rZ.js HTTP/1.1" 200
+2026-05-24 16:37:42.184 127.0.0.1:51364 - "GET /static/js/lib.C6qHMNlQ.js HTTP/1.1" 200
+2026-05-24 16:37:42.237 127.0.0.1:51359 - "GET /static/js/v4.D-g8Wqsd.js HTTP/1.1" 200
+2026-05-24 16:37:42.241 127.0.0.1:51365 - "GET /static/js/space-separated-tokens.DeggmezP.js HTTP/1.1" 200
+2026-05-24 16:37:42.249 127.0.0.1:51362 - "GET /static/js/_hasPath.w5yP9zye.js HTTP/1.1" 200
+2026-05-24 16:37:42.254 127.0.0.1:51400 - "GET /static/js/katex.min.mf1jZfsG.js HTTP/1.1" 200
+2026-05-24 16:37:42.266 127.0.0.1:51364 - "GET /static/js/lib.BSsNtqqO.js HTTP/1.1" 200
+2026-05-24 16:37:42.302 127.0.0.1:51363 - "GET /static/js/src.D9MArGZj.js HTTP/1.1" 200
+2026-05-24 16:37:43.151 127.0.0.1:51400 - "GET /static/js/slicedToArray.DMaxrggJ.js HTTP/1.1" 200
+2026-05-24 16:37:43.153 127.0.0.1:51362 - "GET /static/js/possibleConstructorReturn.DKlO5zKF.js HTTP/1.1" 200
+2026-05-24 16:37:43.181 127.0.0.1:51365 - "GET /static/js/createSuper.Da188CdT.js HTTP/1.1" 200
+2026-05-24 16:37:43.256 127.0.0.1:51359 - "GET /static/js/lib.Ck2gXDna.js HTTP/1.1" 200
+2026-05-24 16:37:44.147 127.0.0.1:51364 - "GET /static/js/toaster.B_KSvIoz.js HTTP/1.1" 200
+2026-05-24 16:37:49.252 127.0.0.1:53019 - "GET /static/js/ResizeObserver.es.DtpUvxB0.js HTTP/1.1" 200
+2026-05-24 16:37:49.312 127.0.0.1:53020 - "GET /static/js/pick.CL94X30U.js HTTP/1.1" 200
+2026-05-24 16:37:49.464 127.0.0.1:53019 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:37:49.467 127.0.0.1:53020 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:37:49.543 127.0.0.1:53020 - "GET /favicon.png HTTP/1.1" 200
+2026-05-24 16:37:49.652 127.0.0.1:53021 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:37:49.656 connection open
+2026-05-24 16:37:49.782 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:37:51.225 127.0.0.1:53019 - "GET /static/js/hastscript.D23cXY9u.js HTTP/1.1" 200
+2026-05-24 16:37:51.226 127.0.0.1:53022 - "GET /static/js/web-namespaces.CPTLFhKH.js HTTP/1.1" 200
+2026-05-24 16:37:51.226 127.0.0.1:53020 - "GET /static/js/rehype-raw.DycST9n0.js HTTP/1.1" 200
+2026-05-24 16:37:51.231 127.0.0.1:53025 - "GET / HTTP/1.1" 304
+2026-05-24 16:37:51.356 127.0.0.1:53025 - "GET /static/js/IFrame.CWtgwiOd.js HTTP/1.1" 200
+2026-05-24 16:37:51.358 127.0.0.1:53022 - "GET /static/media/SourceCodeVF-Upright.ttf.BjWn63N-.woff2 HTTP/1.1" 200
+2026-05-24 16:37:51.433 127.0.0.1:53019 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:37:51.503 127.0.0.1:53028 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:37:52.300 127.0.0.1:53025 - "GET /static/js/IFrameUtil.BaqCY7QW.js HTTP/1.1" 200
+2026-05-24 16:37:52.380 127.0.0.1:53020 - "GET /static/js/TextInput.D3Tz_H2g.js HTTP/1.1" 200
+2026-05-24 16:37:53.295 127.0.0.1:53019 - "GET /static/js/InputInstructions.PgD3jd3r.js HTTP/1.1" 200
+2026-05-24 16:37:53.300 127.0.0.1:53020 - "GET /static/js/useBasicWidgetState.DAZ7WsXN.js HTTP/1.1" 200
+2026-05-24 16:37:53.355 127.0.0.1:53022 - "GET /static/js/useUpdateUiValue.D01djDVK.js HTTP/1.1" 200
+2026-05-24 16:37:53.374 127.0.0.1:53019 - "GET /static/js/inputUtils.BdAxEjXK.js HTTP/1.1" 200
+2026-05-24 16:37:53.382 127.0.0.1:65418 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:37:53.386 connection open
+2026-05-24 16:37:53.388 127.0.0.1:53020 - "GET /static/js/input.u1KH_YID.js HTTP/1.1" 200
+2026-05-24 16:37:53.389 127.0.0.1:53028 - "GET /static/js/FormSubmitContent.mVZv5XK_.js HTTP/1.1" 200
+2026-05-24 16:37:53.389 127.0.0.1:53025 - "GET /static/js/base-input.DwcYxu9p.js HTTP/1.1" 200
+2026-05-24 16:37:53.448 127.0.0.1:53022 - "GET /static/js/iconPosition.CAyE8Pjc.js HTTP/1.1" 200
+2026-05-24 16:37:53.481 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:37:55.890 connection closed
+2026-05-24 16:38:00.383 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:38:01.326 127.0.0.1:65441 - "GET /static/js/Spinner.BYXwTpWo.js HTTP/1.1" 200
+2026-05-24 16:38:02.440 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:38:17.299 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:38:17.710 127.0.0.1:60821 - "GET /static/js/Progress.DWyrjT0V.js HTTP/1.1" 200
+2026-05-24 16:38:17.783 127.0.0.1:60824 - "GET /static/js/ProgressBar.it8icsSo.js HTTP/1.1" 200
+2026-05-24 16:38:22.099 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:38:22.212 127.0.0.1:60839 - "GET /static/js/Radio.7vHfNFt0.js HTTP/1.1" 200
+2026-05-24 16:38:22.302 127.0.0.1:60842 - "GET /static/media/MaterialSymbols-Rounded.VqUtTjSV.woff2 HTTP/1.1" 200
+2026-05-24 16:38:22.342 127.0.0.1:60839 - "GET /static/js/Slider.Bl-zBDII.js HTTP/1.1" 200
+2026-05-24 16:38:22.344 127.0.0.1:62353 - "GET /static/js/Button.hZAV5uJM.js HTTP/1.1" 200
+2026-05-24 16:38:22.382 127.0.0.1:62354 - "GET /static/js/withCalculatedWidth.BU_k3Mtx.js HTTP/1.1" 200
+2026-05-24 16:38:22.387 127.0.0.1:62355 - "GET /static/js/formatMoment.XDSMSnYc.js HTTP/1.1" 200
+2026-05-24 16:38:22.398 127.0.0.1:62356 - "GET /static/js/formatNumber.Bw8N23iB.js HTTP/1.1" 200
+2026-05-24 16:38:24.040 127.0.0.1:62353 - "GET /static/js/sprintfjs.Cs3OAHuL.js HTTP/1.1" 200
+2026-05-24 16:38:24.189 127.0.0.1:60842 - "GET /static/js/numbro.BIyn79TP.js HTTP/1.1" 200
+2026-05-24 16:38:25.034 127.0.0.1:62354 - "GET /static/js/threshold.DcRrkrsb.js HTTP/1.1" 200
+2026-05-24 16:38:25.041 127.0.0.1:62355 - "GET /static/js/moment.CXYnKcIr.js HTTP/1.1" 200
+2026-05-24 16:38:25.042 127.0.0.1:62356 - "GET /static/js/Metric.CFtF4sc2.js HTTP/1.1" 200
+2026-05-24 16:38:25.043 127.0.0.1:62353 - "GET /static/js/embed.Bqebd2RE.js HTTP/1.1" 200
+2026-05-24 16:38:25.072 127.0.0.1:60839 - "GET /static/js/src.Drngj_PG.js HTTP/1.1" 200
+2026-05-24 16:38:25.107 127.0.0.1:60842 - "GET /static/js/timer.BA6XK94l.js HTTP/1.1" 200
+2026-05-24 16:38:25.138 127.0.0.1:62354 - "GET /static/js/Selectbox.IrFeiYNi.js HTTP/1.1" 200
+2026-05-24 16:38:25.143 127.0.0.1:62356 - "GET /static/js/TextArea.Cfa8uX4I.js HTTP/1.1" 200
+2026-05-24 16:38:26.155 127.0.0.1:62355 - "GET /static/js/useTextInputAutoExpand.CMYnG0Vs.js HTTP/1.1" 200
+2026-05-24 16:38:29.071 127.0.0.1:60839 - "GET /static/js/remark-emoji.bYfF6O6k.js HTTP/1.1" 200
+2026-05-24 16:38:30.030 127.0.0.1:60842 - "GET /static/js/lib.BT2isyPB.js HTTP/1.1" 200
+2026-05-24 16:39:13.006 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:39:14.154 127.0.0.1:55412 - "GET /static/js/Progress.DWyrjT0V.js HTTP/1.1" 200
+2026-05-24 16:39:14.160 127.0.0.1:55413 - "GET /static/js/Spinner.BYXwTpWo.js HTTP/1.1" 200
+2026-05-24 16:39:14.164 127.0.0.1:55414 - "GET /static/js/ProgressBar.it8icsSo.js HTTP/1.1" 200
+2026-05-24 16:39:30.158 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:39:30.249 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:39:31.199 127.0.0.1:56364 - "GET /static/js/DateInput.CEvUtll2.js HTTP/1.1" 200
+2026-05-24 16:39:31.201 127.0.0.1:56365 - "GET /static/js/useIntlLocale.CzDvWKbw.js HTTP/1.1" 200
+2026-05-24 16:39:31.209 127.0.0.1:56366 - "GET /static/js/timepicker.CM65sYVo.js HTTP/1.1" 200
+2026-05-24 16:39:31.210 127.0.0.1:56367 - "GET /static/js/ErrorOutline.esm.CWSS1LaE.js HTTP/1.1" 200
+2026-05-24 16:39:31.218 127.0.0.1:56368 - "GET /static/js/styled-components.D2-xjCg5.js HTTP/1.1" 200
+2026-05-24 16:39:31.236 127.0.0.1:56369 - "GET /static/js/TimeInput.Cj4OjH8d.js HTTP/1.1" 200
+2026-05-24 16:39:31.315 127.0.0.1:56367 - "GET /static/js/NumberInput.D_-y4tTv.js HTTP/1.1" 200
+2026-05-24 16:39:31.320 127.0.0.1:56364 - "GET /static/js/Multiselect.BO1DJqJ_.js HTTP/1.1" 200
+2026-05-24 16:39:32.278 127.0.0.1:56364 - "GET /static/js/_baseIndexOf.DmzSbCrC.js HTTP/1.1" 200
+2026-05-24 16:39:32.281 127.0.0.1:56365 - "GET /static/js/_arrayIncludesWith.C7He3_lH.js HTTP/1.1" 200
+2026-05-24 16:39:48.043 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:39:48.151 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:40:38.786 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:41:35.921 127.0.0.1:56051 - "GET / HTTP/1.1" 304
+2026-05-24 16:41:36.128 127.0.0.1:56051 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:41:36.196 127.0.0.1:56053 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:41:36.347 127.0.0.1:56055 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:41:36.352 connection open
+2026-05-24 16:41:36.442 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:41:43.033 127.0.0.1:56880 - "GET / HTTP/1.1" 200
+2026-05-24 16:41:43.124 127.0.0.1:56880 - "GET /static/media/SourceSansVF-Upright.ttf.BsWL4Kly.woff2 HTTP/1.1" 200
+2026-05-24 16:41:43.248 127.0.0.1:56881 - "GET /static/js/index.D2ZqaFuW.js HTTP/1.1" 200
+2026-05-24 16:41:43.257 127.0.0.1:56882 - "GET /static/js/emotion-styled.browser.esm.BPUx6WuE.js HTTP/1.1" 200
+2026-05-24 16:41:43.263 127.0.0.1:56884 - "GET /static/js/preload-helper.CAj27AsG.js HTTP/1.1" 200
+2026-05-24 16:41:43.265 127.0.0.1:56883 - "GET /static/js/emotion-is-prop-valid.esm.DV_OErv-.js HTTP/1.1" 200
+2026-05-24 16:41:43.266 127.0.0.1:56885 - "GET /static/js/chunk.DuxOD-Sk.js HTTP/1.1" 200
+2026-05-24 16:41:44.152 127.0.0.1:56880 - "GET /static/js/getColors.DUygtxH4.js HTTP/1.1" 200
+2026-05-24 16:41:45.139 127.0.0.1:56884 - "GET /static/js/assertNever.B_SfJlM1.js HTTP/1.1" 200
+2026-05-24 16:41:45.176 127.0.0.1:56882 - "GET /static/js/protobuf.DyZGXwGk.js HTTP/1.1" 200
+2026-05-24 16:41:45.268 127.0.0.1:56881 - "GET /static/js/isSymbol.CDgzX1Rm.js HTTP/1.1" 200
+2026-05-24 16:41:46.154 127.0.0.1:56883 - "GET /static/js/toString.BkSzPhlJ.js HTTP/1.1" 200
+2026-05-24 16:41:46.162 127.0.0.1:56884 - "GET /static/js/_toKey.C0ohEqce.js HTTP/1.1" 200
+2026-05-24 16:41:46.163 127.0.0.1:56885 - "GET /static/js/eq.BGqw_fW_.js HTTP/1.1" 200
+2026-05-24 16:41:46.236 127.0.0.1:56880 - "GET /static/js/utils.B9mvrYZE.js HTTP/1.1" 200
+2026-05-24 16:41:50.150 127.0.0.1:56881 - "GET /static/js/isArguments.CEs-JkNn.js HTTP/1.1" 200
+2026-05-24 16:41:50.158 127.0.0.1:56885 - "GET /static/js/loglevel.H4SN4KQm.js HTTP/1.1" 200
+2026-05-24 16:41:50.160 127.0.0.1:56883 - "GET /static/js/_isIterateeCall.DYlLOvxr.js HTTP/1.1" 200
+2026-05-24 16:41:50.160 127.0.0.1:56884 - "GET /static/js/isLength.DwwZub7z.js HTTP/1.1" 200
+2026-05-24 16:41:50.198 127.0.0.1:56880 - "GET /static/js/utils.D9m7Ykmm.js HTTP/1.1" 200
+2026-05-24 16:41:50.254 127.0.0.1:56881 - "GET /static/js/UriUtil.B2jDpauP.js HTTP/1.1" 200
+2026-05-24 16:41:51.183 127.0.0.1:56883 - "GET /static/js/PortalContext.BL8o-V2m.js HTTP/1.1" 200
+2026-05-24 16:41:51.185 127.0.0.1:56885 - "GET /static/js/useRequiredContext.DPvSYqB2.js HTTP/1.1" 200
+2026-05-24 16:41:51.300 127.0.0.1:56360 - "GET /static/js/useWindowDimensionsContext.gRLzw0wB.js HTTP/1.1" 200
+2026-05-24 16:41:51.337 127.0.0.1:56884 - "GET /static/js/useEmotionTheme.61kSPILX.js HTTP/1.1" 200
+2026-05-24 16:41:52.199 127.0.0.1:56883 - "GET /static/js/ErrorElement.BPchO-rz.js HTTP/1.1" 200
+2026-05-24 16:41:52.203 127.0.0.1:56884 - "GET /static/js/DynamicIcon.CdUbRvnw.js HTTP/1.1" 200
+2026-05-24 16:41:52.204 127.0.0.1:56885 - "GET /static/js/FormClearHelper.DblyIMUS.js HTTP/1.1" 200
+2026-05-24 16:41:52.205 127.0.0.1:56360 - "GET /static/js/useTimeout.DBBq-Pb3.js HTTP/1.1" 200
+2026-05-24 16:41:52.262 127.0.0.1:56881 - "GET /static/js/useCopyToClipboard.D6zHcWPd.js HTTP/1.1" 200
+2026-05-24 16:41:52.280 127.0.0.1:56880 - "GET /static/js/useCrossOriginAttribute.wOZu23rZ.js HTTP/1.1" 200
+2026-05-24 16:41:53.124 127.0.0.1:56880 - "GET /static/js/katex.min.mf1jZfsG.js HTTP/1.1" 200
+2026-05-24 16:41:53.142 127.0.0.1:56885 - "GET /static/js/v4.D-g8Wqsd.js HTTP/1.1" 200
+2026-05-24 16:41:53.143 127.0.0.1:56883 - "GET /static/js/lib.C6qHMNlQ.js HTTP/1.1" 200
+2026-05-24 16:41:53.144 127.0.0.1:56360 - "GET /static/js/space-separated-tokens.DeggmezP.js HTTP/1.1" 200
+2026-05-24 16:41:53.144 127.0.0.1:56884 - "GET /static/js/lib.Bp2YInuy.js HTTP/1.1" 200
+2026-05-24 16:41:53.204 127.0.0.1:56880 - "GET /static/js/_hasPath.w5yP9zye.js HTTP/1.1" 200
+2026-05-24 16:41:53.210 127.0.0.1:56881 - "GET /static/js/lib.BSsNtqqO.js HTTP/1.1" 200
+2026-05-24 16:41:53.253 127.0.0.1:56883 - "GET /static/js/possibleConstructorReturn.DKlO5zKF.js HTTP/1.1" 200
+2026-05-24 16:41:53.255 127.0.0.1:56884 - "GET /static/js/src.D9MArGZj.js HTTP/1.1" 200
+2026-05-24 16:41:53.322 127.0.0.1:56360 - "GET /static/js/slicedToArray.DMaxrggJ.js HTTP/1.1" 200
+2026-05-24 16:41:54.110 127.0.0.1:56880 - "GET /static/js/toaster.B_KSvIoz.js HTTP/1.1" 200
+2026-05-24 16:41:54.111 127.0.0.1:56881 - "GET /static/js/createSuper.Da188CdT.js HTTP/1.1" 200
+2026-05-24 16:41:54.117 127.0.0.1:56883 - "GET /static/js/lib.Ck2gXDna.js HTTP/1.1" 200
+2026-05-24 16:41:54.355 127.0.0.1:56885 - "GET /static/js/pick.CL94X30U.js HTTP/1.1" 200
+2026-05-24 16:41:58.310 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:42:00.297 127.0.0.1:51319 - "GET /static/js/ResizeObserver.es.DtpUvxB0.js HTTP/1.1" 200
+2026-05-24 16:42:00.300 127.0.0.1:51320 - "GET /static/js/utils.CuRWPZ_O.js HTTP/1.1" 200
+2026-05-24 16:42:00.308 127.0.0.1:51321 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 16:42:00.310 127.0.0.1:51322 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 16:42:00.494 127.0.0.1:51320 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:42:00.496 127.0.0.1:51319 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:42:00.679 127.0.0.1:51951 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:42:00.684 connection open
+2026-05-24 16:42:00.800 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:42:02.368 127.0.0.1:51320 - "GET /static/js/web-namespaces.CPTLFhKH.js HTTP/1.1" 200
+2026-05-24 16:42:02.370 127.0.0.1:51321 - "GET /static/js/rehype-raw.DycST9n0.js HTTP/1.1" 200
+2026-05-24 16:42:02.371 127.0.0.1:51319 - "GET /static/js/IFrame.CWtgwiOd.js HTTP/1.1" 200
+2026-05-24 16:42:02.373 127.0.0.1:51322 - "GET /static/js/hastscript.D23cXY9u.js HTTP/1.1" 200
+2026-05-24 16:42:02.374 127.0.0.1:51952 - "GET /static/js/IFrameUtil.BaqCY7QW.js HTTP/1.1" 200
+2026-05-24 16:42:02.465 127.0.0.1:51320 - "GET /static/js/TextInput.D3Tz_H2g.js HTTP/1.1" 200
+2026-05-24 16:42:02.473 127.0.0.1:51952 - "GET /static/js/InputInstructions.PgD3jd3r.js HTTP/1.1" 200
+2026-05-24 16:42:02.474 127.0.0.1:51319 - "GET /static/js/inputUtils.BdAxEjXK.js HTTP/1.1" 200
+2026-05-24 16:42:02.475 127.0.0.1:51322 - "GET /static/js/useUpdateUiValue.D01djDVK.js HTTP/1.1" 200
+2026-05-24 16:42:02.592 127.0.0.1:51955 - "GET /static/js/useBasicWidgetState.DAZ7WsXN.js HTTP/1.1" 200
+2026-05-24 16:42:03.566 127.0.0.1:51320 - "GET /static/js/input.u1KH_YID.js HTTP/1.1" 200
+2026-05-24 16:42:03.569 127.0.0.1:51319 - "GET /static/js/iconPosition.CAyE8Pjc.js HTTP/1.1" 200
+2026-05-24 16:42:03.573 127.0.0.1:51322 - "GET /static/media/SourceCodeVF-Upright.ttf.BjWn63N-.woff2 HTTP/1.1" 200
+2026-05-24 16:42:03.579 127.0.0.1:51952 - "GET /static/js/base-input.DwcYxu9p.js HTTP/1.1" 200
+2026-05-24 16:42:03.580 127.0.0.1:51955 - "GET /static/js/FormSubmitContent.mVZv5XK_.js HTTP/1.1" 200
+2026-05-24 16:42:17.743 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:42:18.010 127.0.0.1:62501 - "GET /static/js/Radio.7vHfNFt0.js HTTP/1.1" 200
+2026-05-24 16:42:18.099 127.0.0.1:62502 - "GET /static/media/MaterialSymbols-Rounded.VqUtTjSV.woff2 HTTP/1.1" 200
+2026-05-24 16:42:18.107 127.0.0.1:62503 - "GET /static/js/Checkbox.jqjO-3P7.js HTTP/1.1" 200
+2026-05-24 16:42:18.108 127.0.0.1:62504 - "GET /static/js/checkbox.D-sGpr_4.js HTTP/1.1" 200
+2026-05-24 16:42:18.135 127.0.0.1:62505 - "GET /static/js/Button.hZAV5uJM.js HTTP/1.1" 200
+2026-05-24 16:42:18.137 127.0.0.1:62506 - "GET /static/js/Selectbox.IrFeiYNi.js HTTP/1.1" 200
+2026-05-24 16:42:18.151 127.0.0.1:62501 - "GET /static/js/Slider.Bl-zBDII.js HTTP/1.1" 200
+2026-05-24 16:42:18.653 127.0.0.1:62504 - "GET /static/js/formatMoment.XDSMSnYc.js HTTP/1.1" 200
+2026-05-24 16:42:18.654 127.0.0.1:62503 - "GET /static/js/withCalculatedWidth.BU_k3Mtx.js HTTP/1.1" 200
+2026-05-24 16:42:20.667 127.0.0.1:62503 - "GET /static/js/formatNumber.Bw8N23iB.js HTTP/1.1" 200
+2026-05-24 16:42:20.669 127.0.0.1:62505 - "GET /static/js/sprintfjs.Cs3OAHuL.js HTTP/1.1" 200
+2026-05-24 16:42:20.670 127.0.0.1:62504 - "GET /static/js/moment.CXYnKcIr.js HTTP/1.1" 200
+2026-05-24 16:42:20.680 127.0.0.1:62506 - "GET /static/js/numbro.BIyn79TP.js HTTP/1.1" 200
+2026-05-24 16:42:20.701 127.0.0.1:62502 - "GET /static/js/Metric.CFtF4sc2.js HTTP/1.1" 200
+2026-05-24 16:42:20.761 127.0.0.1:62501 - "GET /static/js/embed.Bqebd2RE.js HTTP/1.1" 200
+2026-05-24 16:42:20.764 127.0.0.1:62503 - "GET /static/js/threshold.DcRrkrsb.js HTTP/1.1" 200
+2026-05-24 16:42:20.767 127.0.0.1:62505 - "GET /static/js/src.Drngj_PG.js HTTP/1.1" 200
+2026-05-24 16:42:21.653 127.0.0.1:62504 - "GET /static/js/lib.BT2isyPB.js HTTP/1.1" 200
+2026-05-24 16:42:21.655 127.0.0.1:62503 - "GET /static/js/timer.BA6XK94l.js HTTP/1.1" 200
+2026-05-24 16:42:21.656 127.0.0.1:62502 - "GET /static/js/remark-emoji.bYfF6O6k.js HTTP/1.1" 200
+2026-05-24 16:42:21.686 127.0.0.1:62505 - "GET /static/js/TextArea.Cfa8uX4I.js HTTP/1.1" 200
+2026-05-24 16:42:21.758 127.0.0.1:62506 - "GET /static/js/useTextInputAutoExpand.CMYnG0Vs.js HTTP/1.1" 200
+2026-05-24 16:43:00.382 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:43:02.719 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:43:42.963 connection closed
+2026-05-24 16:44:07.343 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:44:10.149 connection closed
+2026-05-24 16:45:00.698 127.0.0.1:61017 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:45:00.800 127.0.0.1:61021 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:45:01.133 127.0.0.1:61036 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:45:01.137 connection open
+2026-05-24 16:45:06.950 connection closed
+2026-05-24 16:46:27.791 127.0.0.1:60435 - "GET / HTTP/1.1" 304
+2026-05-24 16:46:27.935 connection closed
+2026-05-24 16:46:28.758 127.0.0.1:60435 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:46:28.855 127.0.0.1:60440 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:46:29.132 127.0.0.1:60441 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:46:29.137 connection open
+2026-05-24 16:46:29.246 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:46:39.362 127.0.0.1:51111 - "GET / HTTP/1.1" 304
+2026-05-24 16:46:39.582 connection closed
+2026-05-24 16:46:39.739 127.0.0.1:51111 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:46:39.751 127.0.0.1:51112 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:46:40.139 127.0.0.1:51117 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:46:40.145 connection open
+2026-05-24 16:46:40.312 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:46:46.519 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:46:47.156 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:06.854 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:06.928 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:09.483 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:09.562 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:12.731 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:12.804 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:13.409 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:13.492 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:13.589 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:13.674 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:13.746 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:13.820 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:13.937 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:14.025 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:14.139 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:14.204 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:14.296 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:25.286 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:25.361 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:25.959 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:26.044 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:26.170 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:26.256 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:26.366 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:26.441 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:26.544 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:26.620 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:26.686 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:26.828 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:26.910 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:26.917 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:27.057 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:27.138 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:27.218 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:27.282 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:27.422 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:27.502 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:27.587 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:27.667 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:29.297 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:29.363 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:29.476 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:29.552 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:29.673 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:29.765 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:44.998 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:47:45.061 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:48:00.253 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:49:34.065 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:49:40.355 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:49:41.614 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:49:41.742 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:49:42.534 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:50:34.712 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:51:22.701 127.0.0.1:54539 - "GET / HTTP/1.1" 304
+2026-05-24 16:51:22.740 connection closed
+2026-05-24 16:51:23.977 127.0.0.1:54539 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:51:23.981 127.0.0.1:54213 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:51:24.292 127.0.0.1:58615 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:51:24.295 connection open
+2026-05-24 16:51:24.302 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:51:59.160 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:52:58.867 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:53:01.935 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:54:49.565 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:56:09.411 127.0.0.1:49379 - "GET / HTTP/1.1" 304
+2026-05-24 16:56:09.443 connection closed
+2026-05-24 16:56:10.509 127.0.0.1:49379 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:56:10.513 127.0.0.1:59145 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:56:10.839 127.0.0.1:52920 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:56:10.845 connection open
+2026-05-24 16:56:10.868 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:56:34.736 127.0.0.1:54862 - "GET / HTTP/1.1" 304
+2026-05-24 16:56:34.769 connection closed
+2026-05-24 16:56:34.882 127.0.0.1:54862 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 16:56:34.885 127.0.0.1:60451 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 16:56:35.201 127.0.0.1:55727 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 16:56:35.205 connection open
+2026-05-24 16:56:35.212 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 16:59:00.016 127.0.0.1:60012 - "GET / HTTP/1.1" 200
+2026-05-24 16:59:00.520 127.0.0.1:60013 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 16:59:00.533 127.0.0.1:60014 - "GET /static/media/SourceSansVF-Upright.ttf.BsWL4Kly.woff2 HTTP/1.1" 200
+2026-05-24 16:59:00.535 127.0.0.1:60015 - "GET /static/js/index.D2ZqaFuW.js HTTP/1.1" 200
+2026-05-24 16:59:00.540 127.0.0.1:60016 - "GET /static/js/chunk.DuxOD-Sk.js HTTP/1.1" 200
+2026-05-24 16:59:00.542 127.0.0.1:60017 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 16:59:00.554 127.0.0.1:60018 - "GET /static/js/preload-helper.CAj27AsG.js HTTP/1.1" 200
+2026-05-24 16:59:00.640 127.0.0.1:60013 - "GET /static/js/emotion-is-prop-valid.esm.DV_OErv-.js HTTP/1.1" 200
+2026-05-24 16:59:01.098 127.0.0.1:60017 - "GET /static/js/emotion-styled.browser.esm.BPUx6WuE.js HTTP/1.1" 200
+2026-05-24 16:59:01.100 127.0.0.1:60016 - "GET /static/js/assertNever.B_SfJlM1.js HTTP/1.1" 200
+2026-05-24 16:59:02.147 127.0.0.1:60014 - "GET /static/js/getColors.DUygtxH4.js HTTP/1.1" 200
+2026-05-24 16:59:03.107 127.0.0.1:60016 - "GET /static/js/eq.BGqw_fW_.js HTTP/1.1" 200
+2026-05-24 16:59:03.111 127.0.0.1:60015 - "GET /static/js/toString.BkSzPhlJ.js HTTP/1.1" 200
+2026-05-24 16:59:03.112 127.0.0.1:60013 - "GET /static/js/isSymbol.CDgzX1Rm.js HTTP/1.1" 200
+2026-05-24 16:59:03.113 127.0.0.1:60018 - "GET /static/js/protobuf.DyZGXwGk.js HTTP/1.1" 200
+2026-05-24 16:59:03.146 127.0.0.1:60017 - "GET /static/js/_toKey.C0ohEqce.js HTTP/1.1" 200
+2026-05-24 16:59:03.180 127.0.0.1:60014 - "GET /static/js/utils.B9mvrYZE.js HTTP/1.1" 200
+2026-05-24 16:59:03.206 127.0.0.1:60013 - "GET /static/js/isLength.DwwZub7z.js HTTP/1.1" 200
+2026-05-24 16:59:03.211 127.0.0.1:60016 - "GET /static/js/isArguments.CEs-JkNn.js HTTP/1.1" 200
+2026-05-24 16:59:03.222 127.0.0.1:60015 - "GET /static/js/_isIterateeCall.DYlLOvxr.js HTTP/1.1" 200
+2026-05-24 16:59:07.113 127.0.0.1:60017 - "GET /static/js/loglevel.H4SN4KQm.js HTTP/1.1" 200
+2026-05-24 16:59:18.354 connection closed
+2026-05-24 17:02:24.340 127.0.0.1:64347 - "GET / HTTP/1.1" 304
+2026-05-24 17:03:29.902 connection closed
+2026-05-24 17:03:30.249 127.0.0.1:63272 - "GET / HTTP/1.1" 200
+2026-05-24 17:03:30.258 127.0.0.1:63273 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:03:30.259 127.0.0.1:63274 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:03:33.613 127.0.0.1:63274 - "GET / HTTP/1.1" 200
+2026-05-24 17:03:33.617 127.0.0.1:63272 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:03:33.618 127.0.0.1:63273 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:03:33.684 127.0.0.1:51197 - "GET / HTTP/1.1" 304
+2026-05-24 17:03:34.439 127.0.0.1:51197 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:03:34.440 127.0.0.1:52045 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 17:03:34.771 127.0.0.1:53440 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 17:03:34.774 connection open
+2026-05-24 17:03:34.894 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 17:07:47.631 127.0.0.1:54608 - "GET / HTTP/1.1" 304
+2026-05-24 17:07:51.372 connection closed
+2026-05-24 17:07:51.757 127.0.0.1:63329 - "GET / HTTP/1.1" 200
+2026-05-24 17:07:51.766 127.0.0.1:63330 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:07:51.766 127.0.0.1:63331 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:07:54.730 127.0.0.1:59272 - "GET / HTTP/1.1" 304
+2026-05-24 17:07:55.185 127.0.0.1:63330 - "GET / HTTP/1.1" 200
+2026-05-24 17:07:55.189 127.0.0.1:63331 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:07:55.190 127.0.0.1:63329 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:07:55.560 127.0.0.1:59272 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:07:55.566 127.0.0.1:59272 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 17:07:55.888 127.0.0.1:52524 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 17:07:55.893 connection open
+2026-05-24 17:07:55.952 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 17:08:14.716 127.0.0.1:57054 - "GET / HTTP/1.1" 304
+2026-05-24 17:08:18.000 127.0.0.1:62083 - "GET / HTTP/1.1" 304
+2026-05-24 17:08:28.210 connection closed
+2026-05-24 17:13:09.881 connection closed
+2026-05-24 17:13:10.310 127.0.0.1:60739 - "GET / HTTP/1.1" 200
+2026-05-24 17:13:10.328 127.0.0.1:60741 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:13:10.329 127.0.0.1:60740 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:13:13.514 127.0.0.1:51850 - "GET / HTTP/1.1" 304
+2026-05-24 17:13:13.520 127.0.0.1:60740 - "GET / HTTP/1.1" 200
+2026-05-24 17:13:13.529 127.0.0.1:60741 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:13:13.530 127.0.0.1:60739 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:13:14.268 127.0.0.1:51850 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:13:14.271 127.0.0.1:53682 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 17:13:14.606 127.0.0.1:52986 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 17:13:14.610 connection open
+2026-05-24 17:13:14.667 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 17:17:12.862 127.0.0.1:64132 - "GET / HTTP/1.1" 304
+2026-05-24 17:17:17.132 connection closed
+2026-05-24 17:17:17.579 127.0.0.1:64695 - "GET / HTTP/1.1" 200
+2026-05-24 17:17:17.592 127.0.0.1:64696 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:17:17.593 127.0.0.1:64697 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:17:20.451 127.0.0.1:64464 - "GET / HTTP/1.1" 304
+2026-05-24 17:17:20.939 127.0.0.1:64697 - "GET / HTTP/1.1" 200
+2026-05-24 17:17:20.944 127.0.0.1:64695 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:17:20.944 127.0.0.1:64696 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:17:21.272 127.0.0.1:64464 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:17:21.283 127.0.0.1:64464 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 17:17:21.608 127.0.0.1:59402 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 17:17:21.612 connection open
+2026-05-24 17:17:21.682 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 17:19:17.452 127.0.0.1:55043 - "GET / HTTP/1.1" 200
+2026-05-24 17:19:17.465 127.0.0.1:55045 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:19:17.466 127.0.0.1:55044 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:19:18.278 127.0.0.1:55045 - "GET / HTTP/1.1" 200
+2026-05-24 17:19:18.285 127.0.0.1:55043 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:19:18.286 127.0.0.1:55044 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:19:18.585 127.0.0.1:52849 - "GET / HTTP/1.1" 304
+2026-05-24 17:19:19.626 127.0.0.1:52849 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:19:19.628 127.0.0.1:65056 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 17:19:19.967 127.0.0.1:58271 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 17:19:19.971 connection open
+2026-05-24 17:19:19.982 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 17:19:45.800 127.0.0.1:63830 - "GET / HTTP/1.1" 200
+2026-05-24 17:19:58.684 127.0.0.1:61958 - "GET / HTTP/1.1" 304
+2026-05-24 17:23:06.461 127.0.0.1:55584 - "GET / HTTP/1.1" 304
+2026-05-24 17:23:10.905 connection closed
+2026-05-24 17:25:22.451 connection closed
+2026-05-24 17:25:22.509 127.0.0.1:54200 - "GET / HTTP/1.1" 200
+2026-05-24 17:25:22.519 127.0.0.1:54201 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:25:22.521 127.0.0.1:54202 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:25:31.145 127.0.0.1:51119 - "GET / HTTP/1.1" 200
+2026-05-24 17:25:31.154 127.0.0.1:51121 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:25:31.155 127.0.0.1:51120 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:25:31.439 127.0.0.1:54640 - "GET / HTTP/1.1" 304
+2026-05-24 17:25:32.273 127.0.0.1:54640 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:25:32.275 127.0.0.1:55033 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 17:25:32.608 127.0.0.1:52776 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 17:25:32.612 connection open
+2026-05-24 17:25:32.621 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 17:26:01.909 127.0.0.1:51787 - "GET / HTTP/1.1" 304
+2026-05-24 17:26:07.720 connection closed
+2026-05-24 17:26:07.725 127.0.0.1:60453 - "GET / HTTP/1.1" 200
+2026-05-24 17:26:07.734 127.0.0.1:60454 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:26:07.735 127.0.0.1:60455 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:26:14.519 127.0.0.1:55589 - "GET / HTTP/1.1" 200
+2026-05-24 17:26:14.535 127.0.0.1:55589 - "GET /static/media/SourceSansVF-Upright.ttf.BsWL4Kly.woff2 HTTP/1.1" 200
+2026-05-24 17:26:14.537 127.0.0.1:56534 - "GET /static/js/index.D2ZqaFuW.js HTTP/1.1" 200
+2026-05-24 17:26:14.538 127.0.0.1:52738 - "GET /static/js/chunk.DuxOD-Sk.js HTTP/1.1" 200
+2026-05-24 17:26:14.539 127.0.0.1:62661 - "GET /static/js/emotion-is-prop-valid.esm.DV_OErv-.js HTTP/1.1" 200
+2026-05-24 17:26:14.541 127.0.0.1:56583 - "GET /static/js/emotion-styled.browser.esm.BPUx6WuE.js HTTP/1.1" 200
+2026-05-24 17:26:14.541 127.0.0.1:56211 - "GET /static/js/preload-helper.CAj27AsG.js HTTP/1.1" 200
+2026-05-24 17:26:14.551 127.0.0.1:52738 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:26:14.551 127.0.0.1:62661 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:26:14.552 127.0.0.1:56211 - "GET /static/js/assertNever.B_SfJlM1.js HTTP/1.1" 200
+2026-05-24 17:26:14.553 127.0.0.1:56583 - "GET /static/js/getColors.DUygtxH4.js HTTP/1.1" 200
+2026-05-24 17:26:14.558 127.0.0.1:55589 - "GET /static/js/protobuf.DyZGXwGk.js HTTP/1.1" 200
+2026-05-24 17:26:14.560 127.0.0.1:56534 - "GET /static/js/isSymbol.CDgzX1Rm.js HTTP/1.1" 200
+2026-05-24 17:26:14.562 127.0.0.1:62661 - "GET /static/js/toString.BkSzPhlJ.js HTTP/1.1" 200
+2026-05-24 17:26:14.563 127.0.0.1:52738 - "GET /static/js/eq.BGqw_fW_.js HTTP/1.1" 200
+2026-05-24 17:26:14.565 127.0.0.1:56211 - "GET /static/js/_toKey.C0ohEqce.js HTTP/1.1" 200
+2026-05-24 17:26:14.567 127.0.0.1:56583 - "GET /static/js/utils.B9mvrYZE.js HTTP/1.1" 200
+2026-05-24 17:26:14.571 127.0.0.1:56534 - "GET /static/js/isArguments.CEs-JkNn.js HTTP/1.1" 200
+2026-05-24 17:26:14.578 127.0.0.1:62661 - "GET /static/js/_isIterateeCall.DYlLOvxr.js HTTP/1.1" 200
+2026-05-24 17:26:14.579 127.0.0.1:52738 - "GET /static/js/isLength.DwwZub7z.js HTTP/1.1" 200
+2026-05-24 17:26:14.579 127.0.0.1:56211 - "GET /static/js/loglevel.H4SN4KQm.js HTTP/1.1" 200
+2026-05-24 17:26:14.580 127.0.0.1:56583 - "GET /static/js/utils.D9m7Ykmm.js HTTP/1.1" 200
+2026-05-24 17:26:14.581 127.0.0.1:56534 - "GET /static/js/utils.CuRWPZ_O.js HTTP/1.1" 200
+2026-05-24 17:26:14.587 127.0.0.1:55589 - "GET /static/js/UriUtil.B2jDpauP.js HTTP/1.1" 200
+2026-05-24 17:26:14.594 127.0.0.1:56211 - "GET /static/js/PortalContext.BL8o-V2m.js HTTP/1.1" 200
+2026-05-24 17:26:14.595 127.0.0.1:56583 - "GET /static/js/useEmotionTheme.61kSPILX.js HTTP/1.1" 200
+2026-05-24 17:26:14.596 127.0.0.1:62661 - "GET /static/js/useRequiredContext.DPvSYqB2.js HTTP/1.1" 200
+2026-05-24 17:26:14.597 127.0.0.1:56534 - "GET /static/js/useWindowDimensionsContext.gRLzw0wB.js HTTP/1.1" 200
+2026-05-24 17:26:14.597 127.0.0.1:52738 - "GET /static/js/ErrorElement.BPchO-rz.js HTTP/1.1" 200
+2026-05-24 17:26:14.602 127.0.0.1:55589 - "GET /static/js/DynamicIcon.CdUbRvnw.js HTTP/1.1" 200
+2026-05-24 17:26:14.604 127.0.0.1:56211 - "GET /static/js/FormClearHelper.DblyIMUS.js HTTP/1.1" 200
+2026-05-24 17:26:14.615 127.0.0.1:56534 - "GET /static/js/useTimeout.DBBq-Pb3.js HTTP/1.1" 200
+2026-05-24 17:26:14.616 127.0.0.1:56583 - "GET /static/js/useCrossOriginAttribute.wOZu23rZ.js HTTP/1.1" 200
+2026-05-24 17:26:14.616 127.0.0.1:62661 - "GET /static/js/lib.Bp2YInuy.js HTTP/1.1" 200
+2026-05-24 17:26:14.618 127.0.0.1:52738 - "GET /static/js/useCopyToClipboard.D6zHcWPd.js HTTP/1.1" 200
+2026-05-24 17:26:14.623 127.0.0.1:55589 - "GET /static/js/lib.C6qHMNlQ.js HTTP/1.1" 200
+2026-05-24 17:26:14.624 127.0.0.1:56211 - "GET /static/js/v4.D-g8Wqsd.js HTTP/1.1" 200
+2026-05-24 17:26:14.629 127.0.0.1:52738 - "GET /static/js/space-separated-tokens.DeggmezP.js HTTP/1.1" 200
+2026-05-24 17:26:14.630 127.0.0.1:56534 - "GET /static/js/katex.min.mf1jZfsG.js HTTP/1.1" 200
+2026-05-24 17:26:14.631 127.0.0.1:56583 - "GET /static/js/lib.BSsNtqqO.js HTTP/1.1" 200
+2026-05-24 17:26:14.632 127.0.0.1:62661 - "GET /static/js/_hasPath.w5yP9zye.js HTTP/1.1" 200
+2026-05-24 17:26:14.636 127.0.0.1:55589 - "GET /static/js/src.D9MArGZj.js HTTP/1.1" 200
+2026-05-24 17:26:14.639 127.0.0.1:56211 - "GET /static/js/possibleConstructorReturn.DKlO5zKF.js HTTP/1.1" 200
+2026-05-24 17:26:14.645 127.0.0.1:56534 - "GET /static/js/slicedToArray.DMaxrggJ.js HTTP/1.1" 200
+2026-05-24 17:26:14.646 127.0.0.1:62661 - "GET /static/js/lib.Ck2gXDna.js HTTP/1.1" 200
+2026-05-24 17:26:14.646 127.0.0.1:56583 - "GET /static/js/createSuper.Da188CdT.js HTTP/1.1" 200
+2026-05-24 17:26:14.647 127.0.0.1:52738 - "GET /static/js/toaster.B_KSvIoz.js HTTP/1.1" 200
+2026-05-24 17:26:14.648 127.0.0.1:56211 - "GET /static/js/pick.CL94X30U.js HTTP/1.1" 200
+2026-05-24 17:26:14.656 127.0.0.1:56583 - "GET /static/js/ResizeObserver.es.DtpUvxB0.js HTTP/1.1" 200
+2026-05-24 17:26:14.745 127.0.0.1:56583 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:26:14.747 127.0.0.1:55589 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 17:26:14.798 127.0.0.1:55589 - "GET /favicon.png HTTP/1.1" 200
+2026-05-24 17:26:14.801 127.0.0.1:54301 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 17:26:14.804 connection open
+2026-05-24 17:26:14.823 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 17:26:15.877 connection closed
+2026-05-24 17:27:59.018 127.0.0.1:58937 - "GET / HTTP/1.1" 304
+2026-05-24 17:27:59.145 127.0.0.1:58937 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:27:59.147 127.0.0.1:61509 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 17:27:59.467 127.0.0.1:58839 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 17:27:59.470 connection open
+2026-05-24 17:27:59.488 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 17:29:55.799 127.0.0.1:59746 - "GET / HTTP/1.1" 304
+2026-05-24 17:30:19.206 127.0.0.1:61646 - "GET / HTTP/1.1" 304
+2026-05-24 17:30:19.372 127.0.0.1:61646 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:30:19.375 127.0.0.1:49766 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 17:30:19.685 127.0.0.1:62926 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 17:30:19.691 connection open
+2026-05-24 17:30:19.787 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 17:30:22.790 connection closed
+2026-05-24 17:30:40.345 127.0.0.1:55296 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:30:40.391 127.0.0.1:55298 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:30:53.830 127.0.0.1:55397 - "GET / HTTP/1.1" 200
+2026-05-24 17:31:56.813 127.0.0.1:52455 - "GET / HTTP/1.1" 304
+2026-05-24 17:32:13.203 127.0.0.1:59025 - "GET / HTTP/1.1" 200
+2026-05-24 17:32:15.599 127.0.0.1:59039 - "GET / HTTP/1.1" 304
+2026-05-24 17:32:16.234 127.0.0.1:59039 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:32:16.728 127.0.0.1:59039 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 17:32:18.385 127.0.0.1:59051 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 17:32:18.389 connection open
+2026-05-24 17:32:18.871 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 17:33:15.134 connection closed
+2026-05-24 17:39:42.218 127.0.0.1:55374 - "GET / HTTP/1.1" 200
+2026-05-24 17:39:42.232 127.0.0.1:55376 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:39:42.233 127.0.0.1:55375 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:39:43.453 127.0.0.1:55375 - "GET / HTTP/1.1" 200
+2026-05-24 17:39:43.458 127.0.0.1:55374 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:39:43.459 127.0.0.1:55376 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:39:43.733 127.0.0.1:52832 - "GET / HTTP/1.1" 304
+2026-05-24 17:39:44.676 127.0.0.1:52832 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:39:44.678 127.0.0.1:61104 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 17:39:45.001 127.0.0.1:52062 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 17:39:45.004 connection open
+2026-05-24 17:39:45.014 Please replace `st.components.v1.html` with `st.iframe`.
+
+`st.components.v1.html` will be removed after 2026-06-01.
+2026-05-24 17:39:54.142 127.0.0.1:57331 - "GET / HTTP/1.1" 304
+2026-05-24 17:39:56.195 connection closed
+2026-05-24 17:39:56.246 127.0.0.1:58536 - "GET / HTTP/1.1" 200
+2026-05-24 17:39:56.253 127.0.0.1:58537 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:39:56.255 127.0.0.1:58538 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:40:38.452 127.0.0.1:63307 - "GET / HTTP/1.1" 200
+2026-05-24 17:40:38.460 127.0.0.1:63311 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:40:38.462 127.0.0.1:63310 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:40:38.973 127.0.0.1:58529 - "GET / HTTP/1.1" 304
+2026-05-24 17:40:39.013 127.0.0.1:63310 - "GET / HTTP/1.1" 200
+2026-05-24 17:40:39.021 127.0.0.1:63307 - "GET /static/css/index.CSzAT3_b.css HTTP/1.1" 200
+2026-05-24 17:40:39.022 127.0.0.1:63311 - "GET /static/css/katex.DB-ngbxj.css HTTP/1.1" 200
+2026-05-24 17:40:39.954 127.0.0.1:58529 - "GET /_stcore/health HTTP/1.1" 200
+2026-05-24 17:40:39.959 127.0.0.1:58529 - "GET /_stcore/host-config HTTP/1.1" 200
+2026-05-24 17:40:40.283 127.0.0.1:65098 - "WebSocket /_stcore/stream" [accepted]
+2026-05-24 17:40:40.287 connection open

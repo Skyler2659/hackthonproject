@@ -1,0 +1,6 @@
+interface:
+  display_name: "Chrona"
+  short_description: "Operate the Chrona scheduling site from ArkClaw."
+  default_prompt: "Use $chrona to show my Chrona schedule status and website URL."
+policy:
+  allow_implicit_invocation: true

@@ -7,10 +7,18 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, Tuple
 
 from models import UserWeights
+from web_ui.auth import current_username, user_data_dir
 from web_ui.profile import build_energy_curve
 
 
-MEMORY_PATH = Path(__file__).resolve().parents[1] / "data" / "user_profile_memory.json"
+LEGACY_MEMORY_PATH = Path(__file__).resolve().parents[1] / "data" / "user_profile_memory.json"
+
+
+def memory_path() -> Path:
+    username = current_username()
+    if not username:
+        return LEGACY_MEMORY_PATH
+    return user_data_dir(username) / "user_profile_memory.json"
 
 DEFAULT_MEMORY: Dict[str, Any] = {
     "completed": False,
@@ -48,10 +56,11 @@ ENVIRONMENT_LABELS_CN = {
 
 
 def load_profile_memory() -> Dict[str, Any]:
-    if not MEMORY_PATH.exists():
+    path = memory_path()
+    if not path.exists():
         return deepcopy(DEFAULT_MEMORY)
     try:
-        payload = json.loads(MEMORY_PATH.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return deepcopy(DEFAULT_MEMORY)
     memory = deepcopy(DEFAULT_MEMORY)
@@ -62,8 +71,9 @@ def load_profile_memory() -> Dict[str, Any]:
 
 
 def save_profile_memory(memory: Dict[str, Any]) -> None:
-    MEMORY_PATH.parent.mkdir(parents=True, exist_ok=True)
-    MEMORY_PATH.write_text(json.dumps(memory, ensure_ascii=False, indent=2), encoding="utf-8")
+    path = memory_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(memory, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def default_profile_memory(*, completed: bool = True) -> Dict[str, Any]:

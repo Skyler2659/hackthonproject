@@ -13,6 +13,7 @@ import streamlit.components.v1 as components
 from models import DeadlineType, ScheduleResult, Task, TaskScore, TaskStatus, UserProfile, clamp01
 from web_ui.archive import record_operation, save_session_archive
 from web_ui.session_state import mark_schedule_dirty
+from web_ui.styles import styled_warning
 from web_ui.task_data import materialize_tasks, task_status_value
 from web_ui.task_edit import start_task_edit
 
@@ -95,7 +96,7 @@ def average_priority(result: ScheduleResult) -> float:
 
 def render_unscheduled_warning(result: ScheduleResult) -> None:
     if result.unscheduled_task_ids:
-        st.warning(f"未能排入窗口的任务：{', '.join(result.unscheduled_task_ids)}")
+        styled_warning(f"未能排入窗口的任务：{', '.join(result.unscheduled_task_ids)}")
 
 
 def task_lookup() -> Dict[str, Task]:
@@ -387,7 +388,7 @@ def apply_calendar_patch_from_query() -> None:
     try:
         patches = json.loads(payload)
     except json.JSONDecodeError:
-        st.warning("没有读懂这次拖拽修改，请再试一次。")
+        styled_warning("没有读懂这次拖拽修改，请再试一次。")
         return
     if apply_schedule_patches(patches):
         st.session_state.calendar_edit_mode = False
@@ -556,27 +557,28 @@ def calendar_editor_html(
     <html>
     <head>
       <style>
-        body {{ margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #0f172a; }}
-        .edit-note {{ margin: 0 0 10px 0; padding: 10px 12px; border: 1px solid rgba(14,165,233,.26); border-radius: 8px; background: rgba(240,249,255,.9); font-size: 14px; }}
+        body {{ margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #0A2540; background: linear-gradient(120deg, rgba(167,243,208,.15), rgba(224,242,254,.30)); }}
+        .edit-note {{ margin: 0 0 10px 0; padding: 10px 12px; border: 1px solid rgba(20,184,166,.26); border-radius: 16px; background: rgba(255,255,255,.72); backdrop-filter: blur(10px); font-size: 14px; box-shadow: 0 12px 30px rgba(10,37,64,.08); }}
         .edit-actions {{ display:flex; gap: 8px; margin: 0 0 10px 0; align-items: center; }}
-        .edit-actions button {{ border: 0; border-radius: 999px; padding: 8px 14px; font-weight: 750; cursor: pointer; }}
-        #confirm {{ background: #0ea5e9; color: white; }}
-        #reset {{ background: rgba(148,163,184,.18); color: #334155; }}
-        .calendar-grid {{ min-width: 920px; display: grid; grid-template-columns: 82px repeat(7, minmax(112px, 1fr)); border: 1px solid rgba(148, 163, 184, 0.34); border-radius: 8px; overflow: hidden; background: rgba(255,255,255,.64); }}
-        .calendar-time-column, .calendar-day-column {{ border-right: 1px solid rgba(148,163,184,.22); background: rgba(248,250,252,.62); }}
+        .edit-actions button {{ border: 0; border-radius: 999px; padding: 8px 14px; font-weight: 750; cursor: pointer; transition: transform .3s ease, box-shadow .3s ease; }}
+        .edit-actions button:hover {{ transform: translateY(-2px); box-shadow: 0 16px 34px rgba(59,130,246,.18); }}
+        #confirm {{ background: linear-gradient(120deg, #14B8A6, #3B82F6, #8B5CF6); color: white; }}
+        #reset {{ background: rgba(255,255,255,.72); color: #083B66; border: 1px solid rgba(20,184,166,.24); }}
+        .calendar-grid {{ min-width: 920px; display: grid; grid-template-columns: 82px repeat(7, minmax(112px, 1fr)); border: 1px solid rgba(20,184,166,.24); border-radius: 16px; overflow: hidden; background: rgba(255,255,255,.70); backdrop-filter: blur(10px); box-shadow: 0 18px 46px rgba(10,37,64,.12); }}
+        .calendar-time-column, .calendar-day-column {{ border-right: 1px solid rgba(20,184,166,.16); background: rgba(255,255,255,.42); }}
         .calendar-day-column:last-child {{ border-right: 0; }}
-        .calendar-corner, .calendar-day-head {{ height: 48px; display:flex; align-items:center; justify-content:center; border-bottom:1px solid rgba(148,163,184,.26); background:rgba(241,245,249,.72); color:#334155; font-size:13px; font-weight:750; box-sizing:border-box; }}
+        .calendar-corner, .calendar-day-head {{ height: 48px; display:flex; align-items:center; justify-content:center; border-bottom:1px solid rgba(20,184,166,.18); background:rgba(255,255,255,.56); color:#083B66; font-size:13px; font-weight:750; box-sizing:border-box; }}
         .calendar-day-head {{ flex-direction: column; gap: 1px; }}
-        .calendar-day-head span {{ color: #0f172a; }}
-        .calendar-day-head strong {{ color:#64748b; font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }}
+        .calendar-day-head span {{ color: #0A2540; }}
+        .calendar-day-head strong {{ color:#4f6478; font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }}
         .calendar-time-body, .calendar-day-body {{ position: relative; }}
-        .calendar-day-body {{ background: repeating-linear-gradient(to bottom, rgba(148,163,184,.18) 0, rgba(148,163,184,.18) 1px, transparent 1px, transparent {CALENDAR_HOUR_HEIGHT}px), rgba(255,255,255,.54); }}
-        .calendar-time-label {{ position:absolute; right:11px; color:#475569; font-size:12px; font-weight:650; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space:nowrap; }}
-        .calendar-task-block {{ position:absolute; left:8px; right:8px; border:2px solid rgba(14,165,233,.72); border-radius:16px; padding:5px 7px; box-shadow:0 10px 24px rgba(15,23,42,.12); overflow:hidden; color:#0f172a; cursor:grab; user-select:none; box-sizing:border-box; touch-action:none; }}
+        .calendar-day-body {{ background: repeating-linear-gradient(to bottom, rgba(20,184,166,.14) 0, rgba(20,184,166,.14) 1px, transparent 1px, transparent {CALENDAR_HOUR_HEIGHT}px), rgba(255,255,255,.38); }}
+        .calendar-time-label {{ position:absolute; right:11px; color:#4f6478; font-size:12px; font-weight:650; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space:nowrap; }}
+        .calendar-task-block {{ position:absolute; left:8px; right:8px; border:2px solid rgba(20,184,166,.72); border-radius:16px; padding:5px 7px; box-shadow:0 10px 26px rgba(10,37,64,.10); overflow:hidden; color:#0A2540; cursor:grab; user-select:none; box-sizing:border-box; touch-action:none; backdrop-filter: blur(8px); }}
         .calendar-task-block.dragging {{ cursor:grabbing; opacity:.88; transform:scale(.99); z-index: 20; }}
-        .calendar-task-time {{ font-size:10px; color:#475569; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space:nowrap; }}
+        .calendar-task-time {{ font-size:10px; color:#083B66; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space:nowrap; }}
         .calendar-task-title {{ margin-top:2px; font-size:12px; font-weight:750; line-height:1.22; overflow-wrap:anywhere; }}
-        .calendar-task-meta {{ margin-top:2px; font-size:10px; color:#64748b; line-height:1.2; overflow-wrap:anywhere; }}
+        .calendar-task-meta {{ margin-top:2px; font-size:10px; color:#4f6478; line-height:1.2; overflow-wrap:anywhere; }}
       </style>
     </head>
     <body>
@@ -731,13 +733,13 @@ def minutes_since_day_start(moment: datetime, day_start_hour: int) -> int:
 
 def block_palette(task_id: str) -> Dict[str, str]:
     palettes = [
-        {"bg": "rgba(14, 165, 233, 0.20)", "border": "rgba(14, 165, 233, 0.68)"},
-        {"bg": "rgba(16, 185, 129, 0.20)", "border": "rgba(16, 185, 129, 0.68)"},
-        {"bg": "rgba(245, 158, 11, 0.20)", "border": "rgba(245, 158, 11, 0.68)"},
-        {"bg": "rgba(99, 102, 241, 0.18)", "border": "rgba(99, 102, 241, 0.62)"},
-        {"bg": "rgba(236, 72, 153, 0.16)", "border": "rgba(236, 72, 153, 0.56)"},
-        {"bg": "rgba(20, 184, 166, 0.20)", "border": "rgba(20, 184, 166, 0.66)"},
-        {"bg": "rgba(132, 204, 22, 0.20)", "border": "rgba(101, 163, 13, 0.62)"},
+        {"bg": "rgba(20, 184, 166, 0.18)", "border": "rgba(20, 184, 166, 0.62)"},
+        {"bg": "rgba(59, 130, 246, 0.16)", "border": "rgba(59, 130, 246, 0.58)"},
+        {"bg": "rgba(139, 92, 246, 0.14)", "border": "rgba(139, 92, 246, 0.52)"},
+        {"bg": "rgba(45, 212, 191, 0.18)", "border": "rgba(20, 184, 166, 0.56)"},
+        {"bg": "rgba(96, 165, 250, 0.14)", "border": "rgba(59, 130, 246, 0.50)"},
+        {"bg": "rgba(167, 243, 208, 0.34)", "border": "rgba(20, 184, 166, 0.48)"},
+        {"bg": "rgba(224, 242, 254, 0.46)", "border": "rgba(59, 130, 246, 0.46)"},
     ]
     digest = hashlib.sha1(task_id.encode("utf-8")).hexdigest()
     return palettes[int(digest[:2], 16) % len(palettes)]
@@ -779,9 +781,9 @@ def schedule_block_html(
         <span>DDL: {safe(deadline_text(task))}</span>
       </div>
       <div class="dimension-grid">
-        {dimension_bar(DIMENSION_LABELS["cognitive_load"], score.cognitive_load, "#ef4444")}
-        {dimension_bar(DIMENSION_LABELS["urgency"], score.urgency, "#f59e0b")}
-        {dimension_bar(DIMENSION_LABELS["confidence"], score.confidence, "#2563eb")}
+        {dimension_bar(DIMENSION_LABELS["cognitive_load"], score.cognitive_load, "#8B5CF6")}
+        {dimension_bar(DIMENSION_LABELS["urgency"], score.urgency, "#14B8A6")}
+        {dimension_bar(DIMENSION_LABELS["confidence"], score.confidence, "#3B82F6")}
       </div>
       <div class="reason">{safe(block.reason)}</div>
     </div>
@@ -829,12 +831,12 @@ def dimension_bar(label: str, value: float, color: str) -> str:
 def priority_color(priority: float) -> str:
     normalized = clamp01(priority / 6.0)
     if normalized >= 0.72:
-        return "#dc2626"
+        return "#8B5CF6"
     if normalized >= 0.52:
-        return "#d97706"
+        return "#3B82F6"
     if normalized >= 0.34:
-        return "#2563eb"
-    return "#059669"
+        return "#14B8A6"
+    return "#0f766e"
 
 
 def safe(value: Any) -> str:

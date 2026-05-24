@@ -7,6 +7,7 @@ import streamlit as st
 from agents import TaskClarificationAgent
 from llm_client import LLMProviderError
 from web_ui.profile import build_profile
+from web_ui.styles import styled_warning, styled_error
 from web_ui.task_data import materialize_tasks
 
 
@@ -85,7 +86,7 @@ def submit_clarification(
             if question.get("required") and not str(answers.get(str(question.get("id")), "")).strip()
         ]
         if missing_required:
-            st.warning("请先回答标有 * 的问题，或点「跳过，按 AI 推断」。")
+            styled_warning("请先回答标有 * 的问题，或点「跳过，按 AI 推断」。")
             return
 
     enriched_text = pending["task_text"]
@@ -108,19 +109,19 @@ def submit_clarification(
 
     validation_error = validate_task_request(task_request, profile_config)
     if validation_error:
-        st.warning(validation_error)
+        styled_warning(validation_error)
         return
 
     try:
         task_payloads = create_task_payloads(task_request, profile_config)
     except LLMProviderError as exc:
-        st.error(f"AI 任务分析失败：{exc}")
+        styled_error(f"AI 任务分析失败：{exc}")
         return
     except ValueError as exc:
-        st.error(f"AI 解析结果不合法：{exc}")
+        styled_error(f"AI 解析结果不合法：{exc}")
         return
     except Exception as exc:  # pragma: no cover
-        st.error(f"任务分析失败：{type(exc).__name__}: {exc}")
+        styled_error(f"任务分析失败：{type(exc).__name__}: {exc}")
         return
 
     finalize_added_tasks(task_payloads)

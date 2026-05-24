@@ -8,16 +8,25 @@ from typing import Any, Dict, List
 import streamlit as st
 
 from models import ScheduleBlock, ScheduleResult, TaskScore, UserProfile, UserWeights
+from web_ui.auth import current_username, user_data_dir
 
 
-ARCHIVE_PATH = Path(__file__).resolve().parents[1] / "data" / "session_archive.json"
+LEGACY_ARCHIVE_PATH = Path(__file__).resolve().parents[1] / "data" / "session_archive.json"
+
+
+def archive_path() -> Path:
+    username = current_username()
+    if not username:
+        return LEGACY_ARCHIVE_PATH
+    return user_data_dir(username) / "session_archive.json"
 
 
 def load_archive() -> Dict[str, Any]:
-    if not ARCHIVE_PATH.exists():
+    path = archive_path()
+    if not path.exists():
         return empty_archive()
     try:
-        payload = json.loads(ARCHIVE_PATH.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return empty_archive()
     return {
@@ -62,7 +71,8 @@ def record_operation(
 
 
 def save_session_archive() -> None:
-    ARCHIVE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    path = archive_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         "pending_tasks": st.session_state.get("pending_tasks", []),
         "operation_history": st.session_state.get("operation_history", []),
@@ -71,7 +81,7 @@ def save_session_archive() -> None:
         "last_profile": serialize_profile(st.session_state.get("last_profile")),
         "last_run_at": serialize_datetime(st.session_state.get("last_run_at")),
     }
-    ARCHIVE_PATH.write_text(
+    path.write_text(
         json.dumps(payload, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )

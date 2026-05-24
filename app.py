@@ -4,6 +4,7 @@ from datetime import datetime
 
 import streamlit as st
 from web_ui.auto_scheduler import render_auto_scheduler
+from web_ui.auth import require_authentication
 from web_ui.constants import APP_TITLE
 from web_ui.onboarding import render_profile_onboarding
 from web_ui.results import render_results
@@ -19,6 +20,8 @@ from web_ui.task_list import render_pending_tasks
 def main() -> None:
     st.set_page_config(page_title=APP_TITLE, layout="wide")
     inject_styles()
+    if not require_authentication():
+        return
     init_session_state()
     render_profile_onboarding()
     render_page_header()

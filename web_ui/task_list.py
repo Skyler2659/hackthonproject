@@ -122,14 +122,15 @@ def render_unresolved_task_card(task: Dict[str, Any]) -> None:
 
 
 def inject_unresolved_card_style(card_key: str, status: str) -> None:
-    border = "#f59e0b" if status == TaskStatus.MISSED.value else "#94a3b8"
-    background = "rgba(254, 243, 199, 0.62)" if status == TaskStatus.MISSED.value else "rgba(248, 250, 252, 0.82)"
+    border = "rgba(139, 92, 246, 0.54)" if status == TaskStatus.MISSED.value else "rgba(20, 184, 166, 0.34)"
+    background = "rgba(139, 92, 246, 0.12)" if status == TaskStatus.MISSED.value else "rgba(255, 255, 255, 0.70)"
     st.markdown(
         f"""
         <style>
         .st-key-{card_key} {{
             background: {background};
             border-color: {border};
+            backdrop-filter: blur(10px);
         }}
         </style>
         """,

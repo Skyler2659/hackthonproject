@@ -13,6 +13,7 @@ from llm_client import DeepSeekLLMClient, LLMProviderError
 from models import ScheduleResult, Task, TaskScore, UserProfile
 from web_ui.archive import record_operation
 from web_ui.profile_soft import build_algorithm_profile, build_profile_soft_hints
+from web_ui.styles import styled_warning, styled_error, styled_success, styled_info
 from web_ui.task_data import active_schedulable_tasks, materialize_tasks
 
 
@@ -39,7 +40,7 @@ def stop_when_task_list_empty() -> bool:
 
 def can_auto_schedule(profile_config: Dict[str, Any]) -> bool:
     if not profile_config["api_key"]:
-        st.info("输入 API Key 后，日程会在任务变化时自动更新。")
+        styled_info("输入 API Key 后，日程会在任务变化时自动更新。")
         return False
     return True
 
@@ -57,7 +58,7 @@ def run_auto_scheduler(profile_config: Dict[str, Any]) -> None:
         if force_ids and try_force_join_existing_schedule(tasks, force_ids, algo_profile, profile_config):
             return
 
-        st.info("任务列表已更新，正在自动生成新的时间安排。")
+        styled_info("任务列表已更新，正在自动生成新的时间安排。")
         scores, ordered_tasks, result, refinement_summary = run_scheduler_pipeline(
             tasks,
             algo_profile,
@@ -65,19 +66,19 @@ def run_auto_scheduler(profile_config: Dict[str, Any]) -> None:
             force_relaxed_task_ids=force_ids,
         )
     except LLMProviderError as exc:
-        st.error(f"AI 调度失败：{exc}")
+        styled_error(f"AI 调度失败：{exc}")
         return
     except ValueError as exc:
-        st.error(f"调度输入不合法：{exc}")
+        styled_error(f"调度输入不合法：{exc}")
         return
     except Exception as exc:  # pragma: no cover - UI safety net
-        st.error(f"调度引擎执行失败：{type(exc).__name__}: {exc}")
+        styled_error(f"调度引擎执行失败：{type(exc).__name__}: {exc}")
         return
 
     save_schedule_result(scores, ordered_tasks, result, algo_profile, refinement_summary)
     if refinement_summary:
         st.caption(refinement_summary)
-    st.success("日程已自动更新。")
+    styled_success("日程已自动更新。")
 
 
 def stop_when_no_active_tasks(tasks: List[Task]) -> bool:
@@ -121,9 +122,9 @@ def try_force_join_existing_schedule(
     summary = _force_join_summary(placed_ids, still_unscheduled, targets)
     save_schedule_result(scores, st.session_state.get("last_ordered_tasks") or targets, result, profile, summary)
     if still_unscheduled:
-        st.warning(summary)
+        styled_warning(summary)
     else:
-        st.success(summary)
+        styled_success(summary)
     return True
 
 

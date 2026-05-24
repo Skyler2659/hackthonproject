@@ -10,6 +10,7 @@ from models import DeadlineType, ScheduleBlock, ScheduleResult, TaskScore, TaskS
 from web_ui.archive import record_operation, save_session_archive
 from web_ui.constants import ENVIRONMENT_LABELS, ENVIRONMENT_OPTIONS
 from web_ui.session_state import mark_schedule_dirty
+from web_ui.styles import styled_warning
 from web_ui.task_data import task_status_value
 
 
@@ -30,74 +31,72 @@ def render_task_edit_panel() -> None:
     block = schedule_block_by_task_id(str(task_id))
     defaults = editor_defaults(task, block)
 
-    _, center, _ = st.columns([0.35, 4.3, 0.35])
+    _, center, _ = st.columns([0.18, 4.8, 0.18])
     with center:
-        st.markdown('<div class="task-edit-shell">', unsafe_allow_html=True)
-        st.subheader("修改任务")
-        with st.form(f"task_edit_form_{task_id}", clear_on_submit=False, border=False):
-            title = st.text_input("任务名称", value=str(task.get("title", "")))
+        with st.container(key="task_edit_shell", border=False):
+            st.subheader("修改任务")
+            with st.form(f"task_edit_form_{task_id}", clear_on_submit=False, border=False):
+                title = st.text_input("任务名称", value=str(task.get("title", "")))
 
-            deadline_type = st.radio(
-                "DDL 类型",
-                options=[DeadlineType.STRICT.value, DeadlineType.FLEXIBLE.value],
-                index=0 if str(task.get("deadline_type")) == DeadlineType.STRICT.value else 1,
-                format_func=deadline_type_label,
-                horizontal=True,
-            )
-
-            mode = st.radio(
-                "任务类型",
-                options=["单独任务", "系列任务"],
-                index=1 if task.get("series_id") else 0,
-                horizontal=True,
-            )
-            series_id = ""
-            if mode == "系列任务":
-                series_id = st.text_input("系列名称", value=str(task.get("series_id") or ""))
-
-            time_cols = st.columns(3)
-            start_date = time_cols[0].date_input("安排日期", value=defaults["start"].date())
-            start_time = time_cols[1].time_input("开始时间", value=defaults["start"].time())
-            duration_min = int(
-                time_cols[2].number_input(
-                    "任务用时（分钟）",
-                    min_value=5,
-                    max_value=24 * 60,
-                    step=5,
-                    value=int(task.get("duration_min", defaults["duration_min"])),
+                deadline_type = st.radio(
+                    "DDL 类型",
+                    options=[DeadlineType.STRICT.value, DeadlineType.FLEXIBLE.value],
+                    index=0 if str(task.get("deadline_type")) == DeadlineType.STRICT.value else 1,
+                    format_func=deadline_type_label,
+                    horizontal=True,
                 )
-            )
 
-            start = datetime.combine(start_date, start_time).replace(second=0, microsecond=0)
-            end = start + timedelta(minutes=duration_min)
-            st.caption(f"手动安排时间段：{start:%Y-%m-%d %H:%M} - {end:%H:%M}")
+                mode = st.radio(
+                    "任务类型",
+                    options=["单独任务", "系列任务"],
+                    index=1 if task.get("series_id") else 0,
+                    horizontal=True,
+                )
+                series_id = ""
+                if mode == "系列任务":
+                    series_id = st.text_input("系列名称", value=str(task.get("series_id") or ""))
 
-            ddl_cols = st.columns(2)
-            deadline_date = ddl_cols[0].date_input("DDL 日期", value=defaults["deadline"].date())
-            deadline_time = ddl_cols[1].time_input("DDL 时间", value=defaults["deadline"].time())
+                time_cols = st.columns([1.2, 1.25, 1.15], gap="large")
+                start_date = time_cols[0].date_input("安排日期", value=defaults["start"].date())
+                start_time = time_cols[1].time_input("开始时间", value=defaults["start"].time())
+                duration_min = int(
+                    time_cols[2].number_input(
+                        "任务用时（分钟）",
+                        min_value=5,
+                        max_value=24 * 60,
+                        step=5,
+                        value=int(task.get("duration_min", defaults["duration_min"])),
+                    )
+                )
 
-            env_value = normalize_environment_selection(task.get("required_environment", ()))
-            required_environment = st.multiselect(
-                "任务环境",
-                options=ENVIRONMENT_OPTIONS,
-                default=env_value,
-                format_func=lambda value: ENVIRONMENT_LABELS.get(value, value),
-            )
-            required_quietness = st.slider(
-                "安静度需求",
-                min_value=0.0,
-                max_value=1.0,
-                value=float(task.get("required_quietness", 0.0)),
-                step=0.05,
-            )
+                start = datetime.combine(start_date, start_time).replace(second=0, microsecond=0)
+                end = start + timedelta(minutes=duration_min)
+                st.caption(f"手动安排时间段：{start:%Y-%m-%d %H:%M} - {end:%H:%M}")
 
-            action_cols = st.columns(2)
-            with action_cols[0]:
-                submitted = st.form_submit_button("保存修改", type="primary", use_container_width=True)
-            with action_cols[1]:
-                cancelled = st.form_submit_button("取消", use_container_width=True)
+                ddl_cols = st.columns(2, gap="large")
+                deadline_date = ddl_cols[0].date_input("DDL 日期", value=defaults["deadline"].date())
+                deadline_time = ddl_cols[1].time_input("DDL 时间", value=defaults["deadline"].time())
 
-        st.markdown("</div>", unsafe_allow_html=True)
+                env_value = normalize_environment_selection(task.get("required_environment", ()))
+                required_environment = st.multiselect(
+                    "任务环境",
+                    options=ENVIRONMENT_OPTIONS,
+                    default=env_value,
+                    format_func=lambda value: ENVIRONMENT_LABELS.get(value, value),
+                )
+                required_quietness = st.slider(
+                    "安静度需求",
+                    min_value=0.0,
+                    max_value=1.0,
+                    value=float(task.get("required_quietness", 0.0)),
+                    step=0.05,
+                )
+
+                action_cols = st.columns(2, gap="large")
+                with action_cols[0]:
+                    submitted = st.form_submit_button("保存修改", type="primary", use_container_width=True)
+                with action_cols[1]:
+                    cancelled = st.form_submit_button("取消", use_container_width=True)
 
     if cancelled:
         st.session_state.edit_task_id = None
@@ -106,7 +105,7 @@ def render_task_edit_panel() -> None:
         deadline = datetime.combine(deadline_date, deadline_time).replace(second=0, microsecond=0)
         validation_error = validate_editor_input(title, series_id, mode, start, deadline, duration_min)
         if validation_error:
-            st.warning(validation_error)
+            styled_warning(validation_error)
             return
         save_task_edit(
             task_id=str(task_id),

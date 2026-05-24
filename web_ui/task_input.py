@@ -22,10 +22,61 @@ def render_task_form(profile_config: Dict[str, Any]) -> None:
 
     render_task_clarification_dialog(profile_config)
     render_task_added_notice()
-    task_request = render_task_request_form()
-    if task_request is None:
+    render_task_fab()
+    render_task_composer_panel(profile_config)
+
+
+def render_task_fab() -> None:
+    composer_open = bool(st.session_state.get("task_composer_open"))
+    with st.container(key="task_fab"):
+        if st.button(
+            "✕" if composer_open else "✦",
+            key="task_fab_toggle",
+            help="关闭任务窗口" if composer_open else "告诉 AI 你要安排什么任务",
+            use_container_width=True,
+        ):
+            st.session_state.task_composer_open = not composer_open
+            st.rerun()
+
+
+def render_task_composer_panel(profile_config: Dict[str, Any]) -> None:
+    if not st.session_state.get("task_composer_open"):
         return
+
+    from web_ui.styles import ensure_floating_panel_scripts
+
+    st.markdown(
+        '<div data-chrona-composer-open="true" class="chrona-composer-state" aria-hidden="true"></div>',
+        unsafe_allow_html=True,
+    )
+
+    with st.container(key="task_composer_panel"):
+        st.markdown(
+            """
+            <div class="task-composer-panel-header" data-chrona-drag-handle="true">
+                <div class="task-composer-drag-handle">
+                    <span class="task-composer-drag-grip" aria-hidden="true"></span>
+                    <span class="task-composer-panel-title">今天有什么要忙的吗？</span>
+                    <span class="task-composer-drag-hint">拖动标题栏移动</span>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        _, close_col = st.columns([8.2, 1.2])
+        with close_col:
+            if st.button("✕", key="task_composer_close", help="关闭", use_container_width=True):
+                st.session_state.task_composer_open = False
+                st.rerun()
+
+        task_request = render_task_request_form(in_dialog=True)
+        if task_request is None:
+            return
+        st.session_state.task_composer_open = False
+
     add_task_from_request(task_request, profile_config)
+
+    ensure_floating_panel_scripts()
 
 
 def render_task_added_notice() -> None:
@@ -36,15 +87,20 @@ def render_task_added_notice() -> None:
     st.session_state.task_added_notice = ""
 
 
-def render_task_request_form() -> Dict[str, Any] | None:
-    _, center, _ = st.columns([0.35, 4.3, 0.35])
-    with center:
+def render_task_request_form(*, in_dialog: bool = False) -> Dict[str, Any] | None:
+    def render_form_body() -> Dict[str, Any] | None:
         with st.container(key="task_composer"):
             with st.form("new_task_form", clear_on_submit=True, border=False):
-                st.markdown(
-                    '<div class="composer-greeting">今天有什么要忙的吗？</div>',
-                    unsafe_allow_html=True,
-                )
+                if in_dialog:
+                    st.markdown(
+                        '<div class="composer-greeting">用自然语言描述任务，AI 会帮你拆解并排程。</div>',
+                        unsafe_allow_html=True,
+                    )
+                else:
+                    st.markdown(
+                        '<div class="composer-greeting">今天有什么要忙的吗？</div>',
+                        unsafe_allow_html=True,
+                    )
                 task_text = st.text_area(
                     "任务描述",
                     placeholder=(
@@ -56,18 +112,27 @@ def render_task_request_form() -> Dict[str, Any] | None:
                 )
                 submitted = st.form_submit_button("让 AI 分析并添加任务", use_container_width=True)
 
-    if not submitted:
-        return None
-    return {
-        "task_text": task_text.strip(),
-        "fixed_deadline": None,
-    }
+        if not submitted:
+            return None
+        return {
+            "task_text": task_text.strip(),
+            "fixed_deadline": None,
+        }
+
+    if in_dialog:
+        return render_form_body()
+
+    _, center, _ = st.columns([0.35, 4.3, 0.35])
+    with center:
+        return render_form_body()
 
 
 def add_task_from_request(task_request: Dict[str, Any], profile_config: Dict[str, Any]) -> None:
+    from web_ui.styles import styled_warning, styled_error, styled_info
+
     validation_error = validate_task_request(task_request, profile_config)
     if validation_error:
-        st.warning(validation_error)
+        styled_warning(validation_error)
         return
 
     if not task_request.get("_skip_clarification"):
@@ -95,16 +160,16 @@ def add_task_from_request(task_request: Dict[str, Any], profile_config: Dict[str
     except LLMProviderError as exc:
         fallback_payload = build_fixed_window_fallback_payload(task_request["task_text"])
         if fallback_payload is not None:
-            st.info("AI 请求没有成功，但这条固定时间段任务已经能本地识别，已按固定时间段加入。")
+            styled_info("AI 请求没有成功，但这条固定时间段任务已经能本地识别，已按固定时间段加入。")
             finalize_added_tasks([fallback_payload])
             return
-        st.error(f"AI 任务分析失败：{exc}")
+        styled_error(f"AI 任务分析失败：{exc}")
         return
     except ValueError as exc:
-        st.error(f"AI 解析结果不合法：{exc}")
+        styled_error(f"AI 解析结果不合法：{exc}")
         return
     except Exception as exc:  # pragma: no cover - UI safety net
-        st.error(f"任务分析失败：{type(exc).__name__}: {exc}")
+        styled_error(f"任务分析失败：{type(exc).__name__}: {exc}")
         return
 
     finalize_added_tasks(task_payloads)

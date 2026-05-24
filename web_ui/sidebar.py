@@ -4,6 +4,7 @@ from typing import Any, Dict
 
 import streamlit as st
 
+from web_ui.auth import render_user_menu
 from web_ui.constants import DEFAULT_BASE_URL
 from web_ui.user_memory import (
     ENERGY_LABELS,
@@ -16,6 +17,8 @@ from web_ui.user_memory import (
 def render_sidebar() -> Dict[str, Any]:
     with st.sidebar:
         st.header("用户画像")
+        render_theme_toggle()
+        render_user_menu()
         llm_settings = render_llm_settings()
         profile_settings = render_profile_memory_card()
 
@@ -25,6 +28,17 @@ def render_sidebar() -> Dict[str, Any]:
     }
     st.session_state.profile_config = config
     return config
+
+
+def render_theme_toggle() -> None:
+    st.radio(
+        "显示模式",
+        options=["day", "night"],
+        format_func=lambda value: "日间模式" if value == "day" else "夜间模式",
+        horizontal=True,
+        key="theme_mode",
+        label_visibility="collapsed",
+    )
 
 
 def render_llm_settings() -> Dict[str, Any]:
