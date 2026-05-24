@@ -73,8 +73,14 @@ def add_task_from_request(task_request: Dict[str, Any], profile_config: Dict[str
     if not task_request.get("_skip_clarification"):
         from web_ui.task_clarification import assess_task_clarification, start_clarification_pending
 
+        fixed_window = infer_fixed_time_window(
+            task_request["task_text"],
+            datetime.now().replace(second=0, microsecond=0),
+        )
         deadline_type = infer_deadline_type(task_request["task_text"])
-        pending = assess_task_clarification(task_request, profile_config)
+        if deadline_type is None and fixed_window is not None:
+            deadline_type = DeadlineType.STRICT
+        pending = None if fixed_window is not None else assess_task_clarification(task_request, profile_config)
         if deadline_type is None:
             pending = with_deadline_type_question(task_request, pending)
         else:
@@ -87,6 +93,11 @@ def add_task_from_request(task_request: Dict[str, Any], profile_config: Dict[str
     try:
         task_payloads = create_task_payloads(task_request, profile_config)
     except LLMProviderError as exc:
+        fallback_payload = build_fixed_window_fallback_payload(task_request["task_text"])
+        if fallback_payload is not None:
+            st.info("AI 请求没有成功，但这条固定时间段任务已经能本地识别，已按固定时间段加入。")
+            finalize_added_tasks([fallback_payload])
+            return
         st.error(f"AI 任务分析失败：{exc}")
         return
     except ValueError as exc:
@@ -105,6 +116,55 @@ def finalize_added_tasks(task_payloads: List[Dict[str, Any]]) -> None:
     mark_schedule_dirty()
     show_task_added_message(task_payloads)
     st.rerun()
+
+
+def build_fixed_window_fallback_payload(source_text: str) -> Dict[str, Any] | None:
+    now = datetime.now().replace(second=0, microsecond=0)
+    fixed_window = infer_fixed_time_window(source_text, now)
+    if fixed_window is None:
+        return None
+    start, end = fixed_window
+    title = fixed_window_title(source_text)
+    return {
+        "task_id": unique_task_id(title, existing_task_ids()),
+        "title": title,
+        "description": source_text,
+        "series_id": None,
+        "duration_min": int((end - start).total_seconds() // 60),
+        "deadline": end.isoformat(),
+        "deadline_type": DeadlineType.STRICT.value,
+        "earliest_start": start.isoformat(),
+        "manual_start": start.isoformat(),
+        "manual_end": end.isoformat(),
+        "required_environment": ("desk",),
+        "required_quietness": 0.35,
+        "dependencies": (),
+        "must_be_contiguous": False,
+        "status": TaskStatus.PENDING.value,
+        "tags": ("固定时间段",),
+    }
+
+
+def fixed_window_title(source_text: str) -> str:
+    title = re.sub(
+        r"(今天|今晚|明天|明早|明晚|明日|后天|大后天|上午|下午|晚上|早上|中午)",
+        "",
+        source_text,
+    )
+    title = re.sub(
+        r"\d{1,2}(?:\s*[:：点]\s*\d{1,2})?\s*(?:-|~|～|到|至|—|－)\s*"
+        r"\d{1,2}(?:\s*[:：点]\s*\d{1,2})?\s*(?:点|分)?",
+        "",
+        title,
+    )
+    title = re.sub(
+        r"[零〇一二两三四五六七八九十]{1,4}(?:\s*点\s*半?)?\s*(?:-|~|～|到|至|—|－)\s*"
+        r"[零〇一二两三四五六七八九十]{1,4}(?:\s*点\s*半?)?",
+        "",
+        title,
+    )
+    title = re.sub(r"^(有|要|需要|参加|去)\s*", "", title.strip())
+    return title[:28] or "固定时间段任务"
 
 
 def validate_task_request(task_request: Dict[str, Any], profile_config: Dict[str, Any]) -> str:
@@ -224,36 +284,85 @@ def build_task_payload_from_ai(
     explicit_deadline_type: Any = None,
 ) -> Dict[str, Any]:
     ensure_parsed_task_is_dict(parsed)
-    deadline = resolve_deadline(parsed, fixed_deadline, now, source_text)
-    earliest_start = resolve_earliest_start(parsed, now, deadline)
+    fixed_window = resolve_fixed_time_window(parsed, source_text, now)
+    if fixed_window is not None:
+        manual_start, manual_end = fixed_window
+        duration_min = int((manual_end - manual_start).total_seconds() // 60)
+        deadline = manual_end
+        earliest_start = manual_start
+        resolved_deadline_type = DeadlineType.STRICT
+    else:
+        manual_start = None
+        manual_end = None
+        duration_min = normalize_duration(parsed.get("duration_min"))
+        deadline = resolve_deadline(parsed, fixed_deadline, now, source_text)
+        earliest_start = resolve_earliest_start(parsed, now, deadline)
+        resolved_deadline_type = normalize_deadline_type(
+            explicit_deadline_type
+            or parsed.get("deadline_type")
+            or infer_deadline_type(source_text)
+            or DeadlineType.FLEXIBLE
+        )
     source_task_id = normalized_text(parsed.get("task_id"))
     return {
         "task_id": task_id_map.get(source_task_id) or unique_task_id(resolve_title(parsed, source_text), existing_task_ids()),
         "title": resolve_title(parsed, source_text),
         "description": resolve_description(parsed, source_text),
         "series_id": normalized_text(parsed.get("series_id")) or None,
-        "duration_min": normalize_duration(parsed.get("duration_min")),
+        "duration_min": duration_min,
         "deadline": deadline.replace(second=0, microsecond=0).isoformat(),
-        "deadline_type": normalize_deadline_type(
-            explicit_deadline_type
-            or parsed.get("deadline_type")
-            or infer_deadline_type(source_text)
-            or DeadlineType.FLEXIBLE
-        ).value,
+        "deadline_type": resolved_deadline_type.value,
         "earliest_start": earliest_start.replace(second=0, microsecond=0).isoformat(),
-        "manual_start": None,
-        "manual_end": None,
+        "manual_start": manual_start.replace(second=0, microsecond=0).isoformat() if manual_start else None,
+        "manual_end": manual_end.replace(second=0, microsecond=0).isoformat() if manual_end else None,
         "required_environment": tuple(normalize_environments(parsed.get("required_environment"))),
         "required_quietness": normalize_score(parsed.get("required_quietness"), default=0.45),
         "dependencies": normalize_dependencies(parsed.get("dependencies"), task_id_map),
+        "must_be_contiguous": normalize_bool(parsed.get("must_be_contiguous"), default=True),
+        "deep_work_min": normalize_deep_work_min(parsed, duration_min),
         "status": TaskStatus.PENDING.value,
         "tags": tuple(normalize_tags(parsed.get("tags"))),
     }
 
 
+def normalize_deep_work_min(parsed: Dict[str, Any], duration_min: int) -> int | None:
+    if "deep_work_min" not in parsed:
+        return None
+    value = parsed.get("deep_work_min")
+    if value is None:
+        return None
+    return max(0, min(int(value), duration_min))
+
+
 def ensure_parsed_task_is_dict(parsed: Dict[str, Any]) -> None:
     if not isinstance(parsed, dict):
         raise ValueError("AI 必须返回 JSON 对象。")
+
+
+def resolve_fixed_time_window(
+    parsed: Dict[str, Any],
+    source_text: str,
+    now: datetime,
+) -> Optional[tuple[datetime, datetime]]:
+    explicit_start = parse_optional_datetime_like(
+        parsed.get("fixed_start") or parsed.get("manual_start") or parsed.get("start")
+    )
+    explicit_end = parse_optional_datetime_like(
+        parsed.get("fixed_end") or parsed.get("manual_end") or parsed.get("end")
+    )
+    if explicit_start is not None and explicit_end is not None and explicit_start < explicit_end:
+        if explicit_end <= now:
+            raise ValueError("固定时间段已经过去，请重新给出未来时间。")
+        return explicit_start.replace(second=0, microsecond=0), explicit_end.replace(second=0, microsecond=0)
+
+    return infer_fixed_time_window(source_text, now)
+
+
+def parse_optional_datetime_like(value: Any) -> Optional[datetime]:
+    try:
+        return parse_optional_datetime_field(value)
+    except ValueError:
+        return None
 
 
 def resolve_title(parsed: Dict[str, Any], source_text: str) -> str:
@@ -308,14 +417,93 @@ def infer_relative_deadline(source_text: str, now: datetime) -> Optional[datetim
     return deadline
 
 
+def infer_fixed_time_window(source_text: str, now: datetime) -> Optional[tuple[datetime, datetime]]:
+    text = normalized_text(source_text)
+    if not text or not looks_like_fixed_window_task(text):
+        return None
+
+    numeric_match = re.search(
+        r"(?P<start_hour>\d{1,2})(?:\s*[:：点]\s*(?P<start_minute>\d{1,2}))?"
+        r"\s*(?:-|~|～|到|至|—|－)\s*"
+        r"(?P<end_hour>\d{1,2})(?:\s*[:：点]\s*(?P<end_minute>\d{1,2}))?\s*(?:点|分)?",
+        text,
+    )
+    chinese_match = re.search(
+        r"(?P<start_hour>[零〇一二两三四五六七八九十]{1,4})(?:\s*点\s*(?P<start_half>半)?)?"
+        r"\s*(?:-|~|～|到|至|—|－)\s*"
+        r"(?P<end_hour>[零〇一二两三四五六七八九十]{1,4})(?:\s*点\s*(?P<end_half>半)?)?",
+        text,
+    )
+    if numeric_match:
+        start_hour = int(numeric_match.group("start_hour"))
+        start_minute = int(numeric_match.group("start_minute") or 0)
+        end_hour = int(numeric_match.group("end_hour"))
+        end_minute = int(numeric_match.group("end_minute") or 0)
+    elif chinese_match:
+        parsed_start_hour = parse_chinese_number(chinese_match.group("start_hour"))
+        parsed_end_hour = parse_chinese_number(chinese_match.group("end_hour"))
+        if parsed_start_hour is None or parsed_end_hour is None:
+            return None
+        start_hour = parsed_start_hour
+        start_minute = 30 if chinese_match.group("start_half") else 0
+        end_hour = parsed_end_hour
+        end_minute = 30 if chinese_match.group("end_half") else 0
+    else:
+        return None
+
+    start_time = normalize_time_of_day(
+        hour=start_hour,
+        minute=start_minute,
+        text=text,
+    )
+    end_time = normalize_time_of_day(
+        hour=end_hour,
+        minute=end_minute,
+        text=text,
+    )
+    if start_time is None or end_time is None:
+        return None
+
+    day_offset = infer_relative_day_offset(text)
+    base = now + timedelta(days=day_offset or 0)
+    start = base.replace(hour=start_time[0], minute=start_time[1], second=0, microsecond=0)
+    end = base.replace(hour=end_time[0], minute=end_time[1], second=0, microsecond=0)
+    if end <= start:
+        end += timedelta(days=1)
+    if end <= now:
+        start += timedelta(days=1)
+        end += timedelta(days=1)
+    return start, end
+
+
+def looks_like_fixed_window_task(text: str) -> bool:
+    fixed_tokens = (
+        "开会",
+        "会议",
+        "上课",
+        "考试",
+        "测验",
+        "实验",
+        "面试",
+        "预约",
+        "讲座",
+        "值班",
+        "活动",
+        "从",
+        "期间",
+    )
+    range_tokens = ("到", "至", "-", "~", "～", "—", "－")
+    return any(token in text for token in fixed_tokens) and any(token in text for token in range_tokens)
+
+
 def infer_relative_day_offset(text: str) -> Optional[int]:
     if "大后天" in text:
         return 3
     if "后天" in text:
         return 2
-    if "明天" in text:
+    if any(keyword in text for keyword in ("明天", "明早", "明晚", "明日上午", "明天下午", "明日")):
         return 1
-    if any(keyword in text for keyword in ("今天", "今晚", "今夜")):
+    if any(keyword in text for keyword in ("今天", "今晚", "今夜", "早上", "上午")):
         return 0
     if any(keyword in text for keyword in ("上午", "中午", "下午", "晚上", "傍晚", "夜里")):
         return 0
@@ -447,6 +635,19 @@ def normalize_score(value: Any, default: float) -> float:
         return clamp01(float(value))
     except (TypeError, ValueError):
         return clamp01(default)
+
+
+def normalize_bool(value: Any, default: bool) -> bool:
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return default
+    raw = normalized_text(value).lower()
+    if raw in {"true", "1", "yes", "y", "是", "需要", "整块"}:
+        return True
+    if raw in {"false", "0", "no", "n", "否", "不需要", "可中断"}:
+        return False
+    return default
 
 
 def normalize_environments(value: Any) -> List[str]:

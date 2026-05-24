@@ -152,11 +152,11 @@
       "series_id": null,
       "duration_min": 30,
       "deadline": "2026-05-24T23:00:00",
-      "earliest_start": "2026-05-24T15:00:00",
+      "earliest_start": "2026-05-24T22:00:00",
       "required_environment": [
         "mobile"
       ],
-      "required_quietness": 0.2,
+      "required_quietness": 0.0,
       "dependencies": [],
       "status": "pending",
       "tags": [
@@ -164,7 +164,10 @@
         "运动",
         "户外"
       ],
-      "deadline_overdue": false
+      "deadline_overdue": false,
+      "manual_start": "2026-05-24T22:00:00",
+      "manual_end": "2026-05-24T22:30:00",
+      "deadline_type": "flexible"
     },
     {
       "task_id": "task-b35619",
@@ -214,7 +217,7 @@
       "series_id": null,
       "duration_min": 60,
       "deadline": "2026-05-24T23:59:00",
-      "earliest_start": "2026-05-24T13:00:00",
+      "earliest_start": "2026-05-24T18:00:00",
       "required_environment": [
         "desk"
       ],
@@ -227,9 +230,110 @@
         "学习"
       ],
       "deadline_overdue": false,
-      "manual_start": "2026-05-24T13:00:00",
-      "manual_end": "2026-05-24T14:00:00",
+      "manual_start": "2026-05-24T18:00:00",
+      "manual_end": "2026-05-24T19:00:00",
       "deadline_type": "flexible"
+    },
+    {
+      "task_id": "task-c9280f",
+      "title": "做数电实验",
+      "description": "关于JK触发器的实验，包括仿真、接线、写报告等完整实验流程\n\nAI 推断说明：用户明确说'一下午'，推断时长为240分钟；用户补充信息明确deadline_type为strict；实验通常需要实验室环境，但allowed_environment_options中没有lab，故使用desk作为近似；实验操作需要一定专注度，设置quietness=0.65；deadline按明天（2026-05-25）结束设置，因为用户说'明天'且未指定具体时间",
+      "series_id": null,
+      "duration_min": 240,
+      "deadline": "2026-05-25T23:59:00",
+      "deadline_type": "strict",
+      "earliest_start": "2026-05-25T14:30:00",
+      "manual_start": "2026-05-25T14:30:00",
+      "manual_end": "2026-05-25T18:30:00",
+      "required_environment": [
+        "classroom"
+      ],
+      "required_quietness": 0.65,
+      "dependencies": [],
+      "status": "pending",
+      "tags": [
+        "数电实验",
+        "jk触发器",
+        "实验操作",
+        "strict-deadline"
+      ],
+      "deadline_overdue": false
+    },
+    {
+      "task_id": "task-ceb485",
+      "title": "团课会议",
+      "description": "明早8点到10点参加团课会议\n\nAI 推断说明：用户明确说'明早八点到十点'，推断为固定时间窗口任务，设置fixed_start和fixed_end；会议通常不要求极度安静，默认quietness=0.35；会议可中断，must_be_contiguous=false；deadline为会议结束时间，deadline_type为strict",
+      "series_id": null,
+      "duration_min": 120,
+      "deadline": "2026-05-25T10:00:00",
+      "deadline_type": "strict",
+      "earliest_start": "2026-05-25T08:00:00",
+      "manual_start": "2026-05-25T08:00:00",
+      "manual_end": "2026-05-25T10:00:00",
+      "required_environment": [
+        "meeting_room"
+      ],
+      "required_quietness": 0.35,
+      "dependencies": [],
+      "must_be_contiguous": false,
+      "status": "pending",
+      "tags": [
+        "会议",
+        "团课"
+      ],
+      "deadline_overdue": false
+    },
+    {
+      "task_id": "task-e80cd9",
+      "title": "写思政课论文",
+      "description": "完成思政课论文作业，预计需要两小时，用户设定为灵活截止时间\n\nAI 推断说明：用户明确时长2小时(120分钟)；论文写作约2/3为深度工作→deep_work_min=80；deadline_type用户指定为flexible；未指定具体环境，默认desk；quietness基于写作任务推断为0.65；deadline按'今晚'设为当天23:59",
+      "series_id": null,
+      "duration_min": 120,
+      "deadline": "2026-05-24T23:59:00",
+      "deadline_type": "flexible",
+      "earliest_start": "2026-05-24T12:41:00",
+      "manual_start": null,
+      "manual_end": null,
+      "required_environment": [
+        "desk"
+      ],
+      "required_quietness": 0.65,
+      "dependencies": [],
+      "must_be_contiguous": true,
+      "deep_work_min": 80,
+      "status": "pending",
+      "tags": [
+        "思政课",
+        "论文",
+        "写作"
+      ],
+      "deadline_overdue": false
+    },
+    {
+      "task_id": "moe-3f4662",
+      "title": "学习MoE架构",
+      "description": "通过阅读DeepSeek论文了解MoE架构，大概30分钟\n\nAI 推断说明：用户明确时长30分钟；阅读论文需要一定专注，deep_work_min设为25分钟；deadline为明天结束，flexible；环境默认desk，安静度0.65",
+      "series_id": null,
+      "duration_min": 30,
+      "deadline": "2026-05-25T23:59:00",
+      "deadline_type": "flexible",
+      "earliest_start": "2026-05-24T12:57:00",
+      "manual_start": null,
+      "manual_end": null,
+      "required_environment": [
+        "desk"
+      ],
+      "required_quietness": 0.65,
+      "dependencies": [],
+      "must_be_contiguous": true,
+      "deep_work_min": 25,
+      "status": "pending",
+      "tags": [
+        "moe",
+        "论文阅读",
+        "深度学习"
+      ],
+      "deadline_overdue": false
     }
   ],
   "operation_history": [
@@ -540,149 +644,317 @@
       "title": "",
       "detail": "scheduled=3, unscheduled=0",
       "created_at": "2026-05-24T10:27:43"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=3, unscheduled=0",
+      "created_at": "2026-05-24T11:11:59"
+    },
+    {
+      "operation": "task_added",
+      "task_id": "task-c9280f",
+      "title": "做数电实验",
+      "detail": "duration_min=240",
+      "created_at": "2026-05-24T11:16:26"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=3, unscheduled=1",
+      "created_at": "2026-05-24T11:16:48"
+    },
+    {
+      "operation": "task_manual_edited",
+      "task_id": "task-c9280f",
+      "title": "做数电实验",
+      "detail": "manual=2026-05-25 14:30-18:30",
+      "created_at": "2026-05-24T11:18:42"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=3, unscheduled=1",
+      "created_at": "2026-05-24T11:19:05"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=4, unscheduled=0",
+      "created_at": "2026-05-24T11:21:01"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=4, unscheduled=0",
+      "created_at": "2026-05-24T11:51:40"
+    },
+    {
+      "operation": "task_added",
+      "task_id": "task-ceb485",
+      "title": "团课会议",
+      "detail": "duration_min=120",
+      "created_at": "2026-05-24T12:05:39"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=5, unscheduled=0",
+      "created_at": "2026-05-24T12:06:07"
+    },
+    {
+      "operation": "task_added",
+      "task_id": "task-e80cd9",
+      "title": "写思政课论文",
+      "detail": "duration_min=120",
+      "created_at": "2026-05-24T12:41:55"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=5, unscheduled=1",
+      "created_at": "2026-05-24T12:42:29"
+    },
+    {
+      "operation": "task_manual_edited",
+      "task_id": "task-f3005d",
+      "title": "出去跑步",
+      "detail": "manual=2026-05-24 22:00-22:30",
+      "created_at": "2026-05-24T12:43:36"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=6, unscheduled=0",
+      "created_at": "2026-05-24T12:44:10"
+    },
+    {
+      "operation": "task_added",
+      "task_id": "moe-3f4662",
+      "title": "学习MoE架构",
+      "detail": "duration_min=30",
+      "created_at": "2026-05-24T12:57:10"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=6, unscheduled=0",
+      "created_at": "2026-05-24T12:57:52"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=6, unscheduled=0",
+      "created_at": "2026-05-24T13:00:17"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=6, unscheduled=0",
+      "created_at": "2026-05-24T13:03:55"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=6, unscheduled=1",
+      "created_at": "2026-05-24T13:17:43"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=6, unscheduled=1",
+      "created_at": "2026-05-24T13:17:45"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=6, unscheduled=1",
+      "created_at": "2026-05-24T13:18:00"
+    },
+    {
+      "operation": "task_manual_edited",
+      "task_id": "kv-cache-3d0f39",
+      "title": "学习KV Cache",
+      "detail": "manual=2026-05-24 18:00-19:00",
+      "created_at": "2026-05-24T13:18:26"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=6, unscheduled=0",
+      "created_at": "2026-05-24T13:19:09"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=6, unscheduled=0",
+      "created_at": "2026-05-24T13:29:11"
+    },
+    {
+      "operation": "schedule_updated",
+      "task_id": "",
+      "title": "",
+      "detail": "scheduled=7, unscheduled=0",
+      "created_at": "2026-05-24T13:29:13"
     }
   ],
   "last_scores": {
     "task-66427d": {
       "task_id": "task-66427d",
-      "urgency": 0.87,
+      "urgency": 0.85,
       "complexity": 0.55,
-      "cognitive_load": 0.6833333333333333,
-      "block_integrity": 0.7833333333333333,
+      "cognitive_load": 0.65,
+      "block_integrity": 0.7666666666666667,
       "quietness_need": 0.7,
-      "confidence": 0.8084586885286128,
+      "confidence": 0.7814107488058265,
       "rationale": "ensemble average; confidence penalized by vote dispersion",
       "environment_dependency": 0.3333333333333333,
       "agent_votes": [
         {
           "task_id": "task-66427d",
           "scores": {
-            "urgency": 0.88,
+            "urgency": 0.85,
             "complexity": 0.55,
             "cognitive_load": 0.65,
-            "block_integrity": 0.8,
-            "environment_dependency": 0.3,
-            "quietness_need": 0.7
+            "block_integrity": 0.75,
+            "environment_dependency": 0.4,
+            "quietness_need": 0.65
           },
-          "confidence": 0.85,
-          "rationale": "紧迫型：距截止不足13小时"
+          "confidence": 0.8,
+          "rationale": "紧迫型：距截止约10小时"
         },
         {
           "task_id": "task-66427d",
           "scores": {
             "urgency": 0.85,
             "complexity": 0.55,
-            "cognitive_load": 0.7,
+            "cognitive_load": 0.65,
             "block_integrity": 0.8,
-            "environment_dependency": 0.4,
+            "environment_dependency": 0.3,
             "quietness_need": 0.75
           },
           "confidence": 0.8,
-          "rationale": "紧迫型：距截止约13小时，需深度专注"
+          "rationale": "紧迫型：距截止不足11小时"
         },
         {
           "task_id": "task-66427d",
           "scores": {
-            "urgency": 0.88,
+            "urgency": 0.85,
             "complexity": 0.55,
-            "cognitive_load": 0.7,
+            "cognitive_load": 0.65,
             "block_integrity": 0.75,
             "environment_dependency": 0.3,
-            "quietness_need": 0.65
+            "quietness_need": 0.7
           },
-          "confidence": 0.85,
-          "rationale": "紧迫型：距截止不足13小时"
+          "confidence": 0.8,
+          "rationale": "紧迫型：距截止约10小时"
         }
       ]
     },
     "task-f3005d": {
       "task_id": "task-f3005d",
       "urgency": 0.4166666666666667,
-      "complexity": 0.11666666666666667,
-      "cognitive_load": 0.16666666666666666,
-      "block_integrity": 0.11666666666666667,
-      "quietness_need": 0.16666666666666669,
-      "confidence": 0.7646446609406726,
+      "complexity": 0.1,
+      "cognitive_load": 0.1,
+      "block_integrity": 0.1,
+      "quietness_need": 0.1,
+      "confidence": 0.8176198493069656,
       "rationale": "ensemble average; confidence penalized by vote dispersion",
       "environment_dependency": 0.3,
       "agent_votes": [
         {
           "task_id": "task-f3005d",
           "scores": {
-            "urgency": 0.55,
-            "complexity": 0.15,
-            "cognitive_load": 0.2,
-            "block_integrity": 0.15,
-            "environment_dependency": 0.3,
-            "quietness_need": 0.2
-          },
-          "confidence": 0.8,
-          "rationale": "户外运动，截止今晚，低认知需求"
-        },
-        {
-          "task_id": "task-f3005d",
-          "scores": {
             "urgency": 0.35,
             "complexity": 0.1,
-            "cognitive_load": 0.15,
+            "cognitive_load": 0.1,
             "block_integrity": 0.1,
             "environment_dependency": 0.3,
-            "quietness_need": 0.2
+            "quietness_need": 0.1
           },
-          "confidence": 0.8,
-          "rationale": "户外运动，低认知需求"
+          "confidence": 0.85,
+          "rationale": "低强度运动，各项需求低"
+        },
+        {
+          "task_id": "task-f3005d",
+          "scores": {
+            "urgency": 0.55,
+            "complexity": 0.1,
+            "cognitive_load": 0.1,
+            "block_integrity": 0.1,
+            "environment_dependency": 0.3,
+            "quietness_need": 0.1
+          },
+          "confidence": 0.85,
+          "rationale": "运动任务，截止今晚11点"
         },
         {
           "task_id": "task-f3005d",
           "scores": {
             "urgency": 0.35,
             "complexity": 0.1,
-            "cognitive_load": 0.15,
+            "cognitive_load": 0.1,
             "block_integrity": 0.1,
             "environment_dependency": 0.3,
             "quietness_need": 0.1
           },
           "confidence": 0.8,
-          "rationale": "户外运动，低认知需求"
+          "rationale": "低认知运动任务，截止今晚"
         }
       ]
     },
     "kv-cache-3d0f39": {
       "task_id": "kv-cache-3d0f39",
-      "urgency": 0.45,
-      "complexity": 0.6666666666666666,
-      "cognitive_load": 0.6833333333333333,
-      "block_integrity": 0.6833333333333333,
+      "urgency": 0.3833333333333333,
+      "complexity": 0.65,
+      "cognitive_load": 0.7,
+      "block_integrity": 0.6666666666666666,
       "quietness_need": 0.65,
-      "confidence": 0.7246066106314288,
+      "confidence": 0.7303581449670403,
       "rationale": "ensemble average; confidence penalized by vote dispersion",
-      "environment_dependency": 0.5,
+      "environment_dependency": 0.3333333333333333,
       "agent_votes": [
         {
           "task_id": "kv-cache-3d0f39",
           "scores": {
-            "urgency": 0.55,
+            "urgency": 0.35,
             "complexity": 0.65,
             "cognitive_load": 0.7,
-            "block_integrity": 0.7,
-            "environment_dependency": 0.5,
+            "block_integrity": 0.65,
+            "environment_dependency": 0.3,
             "quietness_need": 0.65
           },
           "confidence": 0.75,
-          "rationale": "深度学习任务，需整块时间"
+          "rationale": "深度学习任务，需安静专注"
         },
         {
           "task_id": "kv-cache-3d0f39",
           "scores": {
             "urgency": 0.45,
-            "complexity": 0.7,
-            "cognitive_load": 0.65,
+            "complexity": 0.65,
+            "cognitive_load": 0.7,
             "block_integrity": 0.7,
-            "environment_dependency": 0.5,
+            "environment_dependency": 0.4,
             "quietness_need": 0.65
           },
           "confidence": 0.75,
-          "rationale": "深度学习任务，需整块时间"
+          "rationale": "学习任务，需整块时间"
         },
         {
           "task_id": "kv-cache-3d0f39",
@@ -691,11 +963,219 @@
             "complexity": 0.65,
             "cognitive_load": 0.7,
             "block_integrity": 0.65,
-            "environment_dependency": 0.5,
+            "environment_dependency": 0.3,
             "quietness_need": 0.65
           },
           "confidence": 0.75,
           "rationale": "深度学习任务，需整块时间"
+        }
+      ]
+    },
+    "task-c9280f": {
+      "task_id": "task-c9280f",
+      "urgency": 0.8066666666666666,
+      "complexity": 0.65,
+      "cognitive_load": 0.7,
+      "block_integrity": 0.8333333333333334,
+      "quietness_need": 0.6833333333333333,
+      "confidence": 0.747898328596904,
+      "rationale": "ensemble average; confidence penalized by vote dispersion",
+      "environment_dependency": 0.7333333333333333,
+      "agent_votes": [
+        {
+          "task_id": "task-c9280f",
+          "scores": {
+            "urgency": 0.82,
+            "complexity": 0.65,
+            "cognitive_load": 0.7,
+            "block_integrity": 0.85,
+            "environment_dependency": 0.75,
+            "quietness_need": 0.7
+          },
+          "confidence": 0.75,
+          "rationale": "紧迫型：明天截止，需整块时间"
+        },
+        {
+          "task_id": "task-c9280f",
+          "scores": {
+            "urgency": 0.75,
+            "complexity": 0.65,
+            "cognitive_load": 0.7,
+            "block_integrity": 0.85,
+            "environment_dependency": 0.7,
+            "quietness_need": 0.65
+          },
+          "confidence": 0.75,
+          "rationale": "紧迫型：截止明天，需整块时间"
+        },
+        {
+          "task_id": "task-c9280f",
+          "scores": {
+            "urgency": 0.85,
+            "complexity": 0.65,
+            "cognitive_load": 0.7,
+            "block_integrity": 0.8,
+            "environment_dependency": 0.75,
+            "quietness_need": 0.7
+          },
+          "confidence": 0.8,
+          "rationale": "紧迫型：明天截止，实验需整块时间"
+        }
+      ]
+    },
+    "task-ceb485": {
+      "task_id": "task-ceb485",
+      "urgency": 0.3833333333333333,
+      "complexity": 0.35,
+      "cognitive_load": 0.3666666666666667,
+      "block_integrity": 0.26666666666666666,
+      "quietness_need": 0.35,
+      "confidence": 0.7117688937728668,
+      "rationale": "ensemble average; confidence penalized by vote dispersion",
+      "environment_dependency": 0.5666666666666667,
+      "agent_votes": [
+        {
+          "task_id": "task-ceb485",
+          "scores": {
+            "urgency": 0.45,
+            "complexity": 0.35,
+            "cognitive_load": 0.4,
+            "block_integrity": 0.3,
+            "environment_dependency": 0.6,
+            "quietness_need": 0.35
+          },
+          "confidence": 0.75,
+          "rationale": "会议任务，环境依赖中等"
+        },
+        {
+          "task_id": "task-ceb485",
+          "scores": {
+            "urgency": 0.35,
+            "complexity": 0.4,
+            "cognitive_load": 0.4,
+            "block_integrity": 0.3,
+            "environment_dependency": 0.6,
+            "quietness_need": 0.35
+          },
+          "confidence": 0.75,
+          "rationale": "会议任务，明早截止，环境依赖中等"
+        },
+        {
+          "task_id": "task-ceb485",
+          "scores": {
+            "urgency": 0.35,
+            "complexity": 0.3,
+            "cognitive_load": 0.3,
+            "block_integrity": 0.2,
+            "environment_dependency": 0.5,
+            "quietness_need": 0.35
+          },
+          "confidence": 0.75,
+          "rationale": "会议任务，明早截止，中等紧迫"
+        }
+      ]
+    },
+    "task-e80cd9": {
+      "task_id": "task-e80cd9",
+      "urgency": 0.35,
+      "complexity": 0.6333333333333333,
+      "cognitive_load": 0.7,
+      "block_integrity": 0.75,
+      "quietness_need": 0.65,
+      "confidence": 0.7627382956600748,
+      "rationale": "ensemble average; confidence penalized by vote dispersion",
+      "environment_dependency": 0.3,
+      "agent_votes": [
+        {
+          "task_id": "task-e80cd9",
+          "scores": {
+            "urgency": 0.35,
+            "complexity": 0.65,
+            "cognitive_load": 0.7,
+            "block_integrity": 0.75,
+            "environment_dependency": 0.3,
+            "quietness_need": 0.65
+          },
+          "confidence": 0.75,
+          "rationale": "论文写作需整块时间"
+        },
+        {
+          "task_id": "task-e80cd9",
+          "scores": {
+            "urgency": 0.35,
+            "complexity": 0.6,
+            "cognitive_load": 0.7,
+            "block_integrity": 0.75,
+            "environment_dependency": 0.3,
+            "quietness_need": 0.65
+          },
+          "confidence": 0.75,
+          "rationale": "论文写作需整块时间，截止今晚"
+        },
+        {
+          "task_id": "task-e80cd9",
+          "scores": {
+            "urgency": 0.35,
+            "complexity": 0.65,
+            "cognitive_load": 0.7,
+            "block_integrity": 0.75,
+            "environment_dependency": 0.3,
+            "quietness_need": 0.65
+          },
+          "confidence": 0.8,
+          "rationale": "论文写作需整块时间，截止今晚"
+        }
+      ]
+    },
+    "moe-3f4662": {
+      "task_id": "moe-3f4662",
+      "urgency": 0.35,
+      "complexity": 0.65,
+      "cognitive_load": 0.7,
+      "block_integrity": 0.7166666666666667,
+      "quietness_need": 0.6666666666666666,
+      "confidence": 0.7803581449670404,
+      "rationale": "ensemble average; confidence penalized by vote dispersion",
+      "environment_dependency": 0.3333333333333333,
+      "agent_votes": [
+        {
+          "task_id": "moe-3f4662",
+          "scores": {
+            "urgency": 0.35,
+            "complexity": 0.65,
+            "cognitive_load": 0.7,
+            "block_integrity": 0.75,
+            "environment_dependency": 0.3,
+            "quietness_need": 0.65
+          },
+          "confidence": 0.8,
+          "rationale": "中等紧迫，深度阅读需整块时间"
+        },
+        {
+          "task_id": "moe-3f4662",
+          "scores": {
+            "urgency": 0.35,
+            "complexity": 0.65,
+            "cognitive_load": 0.7,
+            "block_integrity": 0.65,
+            "environment_dependency": 0.3,
+            "quietness_need": 0.65
+          },
+          "confidence": 0.8,
+          "rationale": "中等复杂度，需安静专注"
+        },
+        {
+          "task_id": "moe-3f4662",
+          "scores": {
+            "urgency": 0.35,
+            "complexity": 0.65,
+            "cognitive_load": 0.7,
+            "block_integrity": 0.75,
+            "environment_dependency": 0.4,
+            "quietness_need": 0.7
+          },
+          "confidence": 0.8,
+          "rationale": "论文阅读需专注，截止明天中等紧迫"
         }
       ]
     }
@@ -703,32 +1183,64 @@
   "last_result": {
     "blocks": [
       {
+        "task_id": "task-66427d",
+        "title": "写数电实验报告",
+        "start": "2026-05-24T14:30:00",
+        "end": "2026-05-24T15:30:00",
+        "priority": 7.310097555078506,
+        "reason": "CP-SAT全局排程；精力=0.62, 安静度=0.95, 认知差=0.03, 安静缺口=0.00, 延迟小时=0.00, 槽成本=-7.02"
+      },
+      {
+        "task_id": "task-e80cd9",
+        "title": "写思政课论文",
+        "start": "2026-05-24T15:30:00",
+        "end": "2026-05-24T17:30:00",
+        "priority": 5.323277688460938,
+        "reason": "CP-SAT全局排程；精力=0.62, 安静度=0.95, 认知差=0.08, 安静缺口=0.00, 延迟小时=0.00, 槽成本=-4.71"
+      },
+      {
         "task_id": "kv-cache-3d0f39",
         "title": "学习KV Cache",
-        "start": "2026-05-24T13:00:00",
-        "end": "2026-05-24T14:00:00",
-        "priority": 5.583697773757351,
-        "reason": "CP-SAT全局排程；精力=0.62, 安静度=0.45, 认知差=0.06, 安静缺口=0.20, 延迟小时=0.00, 槽成本=-3.54"
+        "start": "2026-05-24T18:00:00",
+        "end": "2026-05-24T19:00:00",
+        "priority": 5.128940073031041,
+        "reason": "智能塞入：唯一候选，且与前后任务间隔合理，避免紧贴跑步"
       },
       {
         "task_id": "task-f3005d",
         "title": "出去跑步",
-        "start": "2026-05-24T15:45:00",
-        "end": "2026-05-24T16:15:00",
-        "priority": 2.7361534783993733,
-        "reason": "CP-SAT全局排程；精力=0.62, 安静度=0.95, 认知差=0.45, 安静缺口=0.00, 延迟小时=0.00, 槽成本=-0.41"
+        "start": "2026-05-24T22:00:00",
+        "end": "2026-05-24T22:30:00",
+        "priority": 2.694057403466452,
+        "reason": "CP-SAT全局排程；精力=0.42, 安静度=0.45, 认知差=0.32, 安静缺口=0.00, 延迟小时=0.00, 槽成本=-1.06"
       },
       {
-        "task_id": "task-66427d",
-        "title": "写数电实验报告",
-        "start": "2026-05-24T16:15:00",
-        "end": "2026-05-24T17:15:00",
-        "priority": 7.737758107907352,
-        "reason": "CP-SAT全局排程；精力=0.62, 安静度=0.95, 认知差=0.06, 安静缺口=0.00, 延迟小时=0.00, 槽成本=-7.10"
+        "task_id": "task-ceb485",
+        "title": "团课会议",
+        "start": "2026-05-25T08:00:00",
+        "end": "2026-05-25T10:00:00",
+        "priority": 3.699418825384475,
+        "reason": "CP-SAT全局排程；精力=0.88, 安静度=0.45, 认知差=0.51, 安静缺口=0.00, 延迟小时=0.00, 槽成本=-0.57"
+      },
+      {
+        "task_id": "moe-3f4662",
+        "title": "学习MoE架构",
+        "start": "2026-05-25T11:00:00",
+        "end": "2026-05-25T11:30:00",
+        "priority": 5.462507014769282,
+        "reason": "CP-SAT全局排程；精力=0.88, 安静度=0.95, 认知差=0.18, 安静缺口=0.00, 延迟小时=0.00, 槽成本=-4.05"
+      },
+      {
+        "task_id": "task-c9280f",
+        "title": "做数电实验",
+        "start": "2026-05-25T14:30:00",
+        "end": "2026-05-25T18:30:00",
+        "priority": 7.725415785241718,
+        "reason": "CP-SAT全局排程；精力=0.62, 安静度=0.95, 认知差=0.08, 安静缺口=0.00, 延迟小时=0.00, 槽成本=-6.92"
       }
     ],
     "unscheduled_task_ids": [],
-    "total_cost": -11.048
+    "total_cost": -25.894
   },
   "last_profile": {
     "user_id": "streamlit_user",
@@ -761,12 +1273,8 @@
     },
     "available_windows": [
       [
-        "08:30",
-        "12:00"
-      ],
-      [
-        "14:00",
-        "17:30"
+        "06:00",
+        "23:45"
       ]
     ],
     "quiet_windows": [
@@ -779,7 +1287,7 @@
         "16:30"
       ]
     ],
-    "max_daily_deep_work_min": 90,
+    "max_daily_deep_work_min": 300,
     "preferred_environments": [
       "desk",
       "library"
@@ -792,5 +1300,5 @@
       "preference_match": 2.1
     }
   },
-  "last_run_at": "2026-05-24T10:27:00"
+  "last_run_at": "2026-05-24T13:29:00"
 }

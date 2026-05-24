@@ -119,17 +119,25 @@ The `rationale` field MUST be a concise Chinese sentence of MAXIMUM 20 character
 Do NOT list every dimension. Pick the 1–2 most salient factors.
 
 ─── PERSONALIZATION RULES ───
+- Read profile_soft_hints as the user's questionnaire-based preferences (soft). Do not treat preferred time windows as impossible scheduling boundaries.
 - Use chronotype and energy_curve to infer cognitive fit. If task timing aligns with low-energy period, increase cognitive_load.
-- If max_daily_deep_work_min < duration_min, the task exceeds the user's daily deep-work budget; increase block_integrity and lower confidence.
+- Compare max_daily_deep_work_min to task.deep_work_min (sustained deep-focus minutes inside the block), NOT duration_min. If deep_work_min is missing, assume ~30% of duration for mixed homework/reports and 0 for exercise/email.
+- If max_daily_deep_work_min < deep_work_min, the task's deep-focus portion alone exceeds the daily budget; increase block_integrity and lower confidence.
 - If required_environment contains items not in preferred_environments, raise environment_dependency.
 - If the deadline is very near (< 2h), urgency MUST dominate all other dimensions in priority.
 """.strip()
 
 
 class ScoringAgent:
-    def __init__(self, llm_client: LLMClient | None = None, ensemble_size: int = 3) -> None:
+    def __init__(
+        self,
+        llm_client: LLMClient | None = None,
+        ensemble_size: int = 3,
+        profile_soft_hints: str = "",
+    ) -> None:
         self._llm = llm_client or DeepSeekLLMClient.from_env()
         self._ensemble_size = max(1, ensemble_size)
+        self._profile_soft_hints = profile_soft_hints.strip()
 
     def score_task(self, task: Task, profile: UserProfile, now: datetime) -> TaskScore:
         votes = [
@@ -161,6 +169,7 @@ class ScoringAgent:
                 "title": task.title,
                 "description": task.description,
                 "duration_min": task.duration_min,
+                "deep_work_min": task.deep_work_min,
                 "deadline": task.deadline.isoformat(),
                 "deadline_type": task.deadline_type.value,
                 "earliest_start": task.earliest_start.isoformat() if task.earliest_start else None,
@@ -176,11 +185,12 @@ class ScoringAgent:
                 "energy_curve": profile.energy_curve,
                 "available_windows": [
                     [start.strftime("%H:%M"), end.strftime("%H:%M")]
-                    for start, end in profile.available_windows
+                    for start, end in profile.preferred_windows or profile.available_windows
                 ],
                 "max_daily_deep_work_min": profile.max_daily_deep_work_min,
                 "preferred_environments": list(profile.preferred_environments),
             },
+            "profile_soft_hints": self._profile_soft_hints,
         }
         return self._llm.generate_json(
             system_prompt=SYSTEM_PROMPT,

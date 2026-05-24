@@ -6,7 +6,7 @@ import streamlit as st
 
 from web_ui.constants import DEFAULT_BASE_URL
 from web_ui.archive import load_archive, save_session_archive
-from web_ui.user_memory import load_profile_memory
+from web_ui.user_memory import load_profile_memory, profile_config_from_memory
 
 
 def init_session_state() -> None:
@@ -22,6 +22,8 @@ def init_session_state() -> None:
         "last_ordered_tasks": None,
         "last_profile": archive["last_profile"],
         "last_run_at": archive["last_run_at"],
+        "last_refinement_summary": "",
+        "force_join_task_ids": [],
         "auto_schedule_needed": archive["last_result"] is None and bool(archive["pending_tasks"]),
         "profile_config": {},
         "profile_memory": profile_memory,
@@ -52,8 +54,41 @@ def init_session_state() -> None:
         "weight_fragmentation": 0.8,
         "weight_preference_match": 1.0,
     }
+    defaults.update(profile_defaults(profile_memory))
     for key, value in defaults.items():
         st.session_state.setdefault(key, value)
+
+
+def profile_defaults(profile_memory: dict) -> dict:
+    config = profile_config_from_memory(profile_memory)
+    available = list(config["available_windows"])
+    quiet = list(config["quiet_windows"])
+    morning = available[0] if len(available) > 0 else (time(8, 30), time(12, 0))
+    afternoon = available[1] if len(available) > 1 else (time(14, 0), time(17, 30))
+    night = available[2] if len(available) > 2 else (time(19, 0), time(22, 0))
+    quiet_window = quiet[0] if quiet else (time(9, 0), time(11, 30))
+    weights = config["weights"]
+    return {
+        "energy_peak": config["energy_peak"],
+        "max_daily_deep_work_min": config["max_daily_deep_work_min"],
+        "preferred_environments": list(config["preferred_environments"]),
+        "use_morning_window": len(available) > 0,
+        "morning_start": morning[0],
+        "morning_end": morning[1],
+        "use_afternoon_window": len(available) > 1,
+        "afternoon_start": afternoon[0],
+        "afternoon_end": afternoon[1],
+        "use_night_window": len(available) > 2,
+        "night_start": night[0],
+        "night_end": night[1],
+        "quiet_start": quiet_window[0],
+        "quiet_end": quiet_window[1],
+        "weight_lateness": weights.lateness,
+        "weight_cognitive_fit": weights.cognitive_fit,
+        "weight_context_switch": weights.context_switch,
+        "weight_fragmentation": weights.fragmentation,
+        "weight_preference_match": weights.preference_match,
+    }
 
 
 def clear_last_run() -> None:

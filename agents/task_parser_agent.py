@@ -25,12 +25,15 @@ The JSON object MUST contain a "tasks" array. Every user input produces at least
       "duration_min": 60,
       "deadline": "YYYY-MM-DDTHH:MM:SS",
       "deadline_type": "strict|flexible",
+      "fixed_start": null,
+      "fixed_end": null,
       "earliest_start": null,
       "series_id": null,
       "required_environment": ["desk"],
       "required_quietness": 0.45,
       "dependencies": [],
       "must_be_contiguous": true,
+      "deep_work_min": 45,
       "tags": ["标签1", "标签2"],
       "assumptions": "所有推断依据的详细记录"
     }
@@ -44,6 +47,7 @@ The JSON object MUST contain a "tasks" array. Every user input produces at least
 【duration_min】Integer 5–480, preferably a multiple of 5. Convert user time expressions to minutes: "X小时"/"X小时X分"→X×60, "X分钟"→X, "半小时"→30, "一上午"→240, "一下午"→240, "一整天"/"一天"→480, "一会儿"→15, "半天"→240. If NO duration is mentioned, DEFAULT to 30 and record this in assumptions.
 【deadline】ISO-8601 string "YYYY-MM-DDTHH:MM:SS". THIS FIELD MUST NEVER BE NULL, EMPTY, OR MISSING — a null deadline will cause the entire parse to be rejected by the frontend. If fixed_deadline is provided, use it exactly. Otherwise infer from urgency signals: "马上"/"立刻"/"赶紧"→within 2 hours, "今天"→end of today (local time), "明天"→end of tomorrow, "下周X"→that day end. If ambiguous or no time cues exist, you MUST output an ISO-8601 string 3 days from the current time (e.g. if now is 2026-05-23T10:00:00, output "2026-05-26T23:59:00"). NEVER set a deadline in the past.
 【deadline_type】"strict" means the task cannot be repaired after DDL and should become missed if overdue (exam, class, official submission, meeting, appointment, external hard deadline, "必须/不能晚于/过了就没用"). "flexible" means the DDL is a self-imposed expected finish time and can be manually rescheduled if overdue ("希望/最好/计划/尽量/自己设定"). If the UI has appended a user answer about DDL type, obey it exactly. If unclear, choose "flexible" and record uncertainty in assumptions.
+【fixed_start / fixed_end】ISO-8601 strings or null. Use these for fixed time-window tasks: meetings, classes, exams, lab sessions, appointments, interviews, events, or any phrasing like "X点到Y点做...". For example "明天8点到10点开会" is NOT a task with DDL at 10:00; it is a fixed window with fixed_start=tomorrow 08:00 and fixed_end=tomorrow 10:00. For fixed-window tasks, set deadline=fixed_end, deadline_type="strict", duration_min=fixed_end-fixed_start, earliest_start=fixed_start, and must_be_contiguous=false unless the activity itself requires uninterrupted focus.
 【earliest_start】ISO-8601 string or null. Only set if user explicitly says "X点之后"/"不能早于X"/"从X开始". Otherwise null.
 【series_id】CRITICAL for multi-step workflows. If input describes sequential actions connected by 先/再/然后/接着/之后/其次/最后/第一步/第二步…(or first/then/next/after/finally), assign the SAME series_id string (e.g. "workflow_1", "seq_report") to every task in that sequence. For standalone tasks, set to null.
 【required_environment】Array of strings. MUST only contain values from allowed_environment_options. Infer from context: "图书馆"→["library"], "实验室"→["lab"], "在家"→["home"], "电脑前"→["desk"]. Default to ["desk"] if unclear.
@@ -55,6 +59,13 @@ The JSON object MUST contain a "tasks" array. Every user input produces at least
   - "随便"/"嘈杂也没事"/"无所谓"→0.10–0.20
 【dependencies】Array of task_id strings. ONLY populate with task_ids from existing_tasks that the user explicitly marks as prerequisites (e.g. "等XX做完"/"先完成XX再"). Also use for intra-input dependencies: if task B must follow task A from the same input, add A's task_id to B's dependencies.
 【must_be_contiguous】Boolean. true for deep cognitive work requiring uninterrupted focus (写作/编程/分析/研究/设计/数学). false for interruptible tasks (邮件/消息/打卡/填表/会议). Infer from task type and user's tone.
+【deep_work_min】Integer 0–duration_min. **Sustained deep-focus minutes inside this block** — NOT the same as duration_min. A long task often mixes shallow and deep segments.
+  - **0**: running/sports/exercise/commute/meals/shower; email/reply/check-in; meetings/classes; purely physical or admin work.
+  - **Low share (~10–35%)**: routine homework (高数/数学作业) — most time is exercises/setup; only proof-heavy or novel problem stretches count (e.g. 120min total → 25–40min deep).
+  - **Medium share (~40–60%)**: lab/experiment **report writing** (数电/模电实验报告) — formatting, screenshots, copying data are shallow; analysis/writing core sections are deep (e.g. 120min → 50–70min).
+  - **High share (~85–100%)**: KV Cache study, architecture design, hard debugging, paper/thesis drafting, novel research reading — treat nearly all block time as deep unless user says otherwise.
+  - If user states "真正专注X分钟"/"深度工作大概X分钟", use that number (clamped to duration_min).
+  - MUST satisfy 0 <= deep_work_min <= duration_min. Record how you split shallow vs deep in assumptions.
 【tags】Array of strings. Capture TWO categories:
   1. Task-type tags: the nature of work (“年度总结”/"代码"/"阅读"/"会议纪要"/"论文")
   2. Emotion & circumstance tags: implicit signals from the user's language. Examples:
@@ -79,6 +90,8 @@ When the user describes a SEQUENCE of actions:
   4. If the user describes parallel independent tasks (not sequential), split them but leave series_id null for each.
   5. If tasks share a natural grouping (same project/goal) but are not explicitly ordered, they may share a series_id with no inter-dependencies.
 
+For exam prep or other large goals, do not create one giant vague task if the user supplied scope and daily capacity through clarification. Create a series of concrete review tasks across the available days, e.g. "整理范围/补弱项/章节复习/刷题/错题复盘/模拟测试". Keep each task schedulable (usually 45-120 minutes), share one series_id, and set dependencies only where a step truly must precede another.
+
 ─── FEW-SHOT EXAMPLES ───
 
 Example 1:
@@ -99,8 +112,9 @@ Output:
       "required_quietness": 0.92,
       "dependencies": [],
       "must_be_contiguous": true,
+      "deep_work_min": 180,
       "tags": ["年度总结", "深度工作", "需极度专注", "写作"],
-      "assumptions": "'一上午'推断时长为240分钟；'千万别有人打扰'推断需要极高安静度(0.92)；写作类任务推断为深度工作需整块时间；未提供deadline默认3天后"
+      "assumptions": "'一上午'推断时长为240分钟；写作约75%为深度专注→deep_work_min=180；'千万别有人打扰'推断需要极高安静度(0.92)；未提供deadline默认3天后"
     }
   ]
 }
@@ -123,8 +137,9 @@ Output:
       "required_quietness": 0.2,
       "dependencies": [],
       "must_be_contiguous": false,
+      "deep_work_min": 0,
       "tags": ["紧急", "老板催办", "极度焦虑", "邮件", "外部压力"],
-      "assumptions": "明确时长10分钟；回邮件推断为浅层碎片工作；'要死要死'+'老板盯着'等口语化表达推断极高紧迫感、焦虑情绪和外部压力驱动"
+      "assumptions": "明确时长10分钟；回邮件为浅层碎片工作→deep_work_min=0；'要死要死'+'老板盯着'等口语化表达推断极高紧迫感、焦虑情绪和外部压力驱动"
     }
   ]
 }
@@ -147,8 +162,9 @@ Output:
       "required_quietness": 0.65,
       "dependencies": [],
       "must_be_contiguous": true,
+      "deep_work_min": 45,
       "tags": ["论文阅读", "学术", "深度学习"],
-      "assumptions": "未提供时长，论文阅读默认按60分钟计算；阅读+写作学术场景推断需要中等安静环境"
+      "assumptions": "未提供时长，论文阅读默认60分钟；约75%为理解性深度阅读→deep_work_min=45；推断需要中等安静环境"
     },
     {
       "task_id": "task_write_reflection",
@@ -163,8 +179,9 @@ Output:
       "required_quietness": 0.65,
       "dependencies": ["task_read_paper"],
       "must_be_contiguous": true,
+      "deep_work_min": 30,
       "tags": ["读后感", "写作", "学术"],
-      "assumptions": "未提供时长，读后感默认按45分钟计算；'先…再…'明确表达顺序依赖，已将前序任务添加到dependencies并分配相同series_id"
+      "assumptions": "未提供时长，读后感默认45分钟；结构化写作约2/3为深度→deep_work_min=30；'先…再…'已加入dependencies并分配相同series_id"
     }
   ]
 }
@@ -206,7 +223,7 @@ class TaskParserAgent:
                 "energy_curve": profile.energy_curve,
                 "available_windows": [
                     [start.strftime("%H:%M"), end.strftime("%H:%M")]
-                    for start, end in profile.available_windows
+                    for start, end in profile.preferred_windows or profile.available_windows
                 ],
                 "quiet_windows": [
                     [start.strftime("%H:%M"), end.strftime("%H:%M")]
@@ -215,8 +232,25 @@ class TaskParserAgent:
                 "max_daily_deep_work_min": profile.max_daily_deep_work_min,
                 "preferred_environments": list(profile.preferred_environments),
             },
+            "profile_soft_hints": payload_soft_hints(profile),
         }
         return self._llm.generate_json(
             system_prompt=SYSTEM_PROMPT,
             payload=payload,
         )
+
+
+def payload_soft_hints(profile: UserProfile) -> str:
+    try:
+        from web_ui.profile_soft import build_profile_soft_hints
+        import streamlit as st
+
+        memory = st.session_state.get("profile_memory", {})
+        if memory:
+            return build_profile_soft_hints(memory)
+    except Exception:
+        pass
+    return (
+        f"用户偏好软约束：chronotype={profile.chronotype}；"
+        f"偏好时段见 available_windows；深度工作预算约 {profile.max_daily_deep_work_min} 分钟/天。"
+    )

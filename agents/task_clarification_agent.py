@@ -40,6 +40,8 @@ Set true if ANY of these are unclear and would materially change scheduling:
 - **environment** — strict location/device needs mentioned vaguely ("去个安静地方")
 - **dependencies** — multi-step workflow hinted but order unclear
 - **split** — one utterance likely hides multiple tasks but boundaries unclear
+- **fixed_window** - event-like tasks such as meeting/class/lab/exam mention a day but not an exact start-end window
+- **study_plan** - large exam/project goals such as "五天后期末考试" lack scope, daily review capacity, weak areas, or split strategy
 
 ─── WHEN needs_clarification SHOULD BE false ───
 - User gave workable duration (e.g. "两小时", "90分钟", "一下午")
@@ -61,6 +63,12 @@ Input: "我今晚要写高数作业，今晚23:59截止"
 
 Input: "明天下午三点前提交实验报告第三章，大概需要2小时，要安静"
 → needs_clarification: false
+
+Input: "五天后高数期末考试，帮我安排复习"
+=> needs_clarification: true; ask scope/chapters, daily available review time, weak areas, and preferred split strategy.
+
+Input: "明天上午开会"
+=> needs_clarification: true; ask the exact start-end window.
 
 ─── confidence ───
 0.85+ if decision is obvious; lower if borderline.
@@ -201,6 +209,46 @@ def heuristic_assessment(user_text: str) -> Dict[str, Any]:
 
     questions: List[Dict[str, Any]] = []
     missing: List[str] = []
+    if is_large_study_goal(text):
+        missing.append("study_plan")
+        questions.extend(
+            [
+                {
+                    "id": "study_scope",
+                    "prompt": "这次考试/大目标具体覆盖哪些范围？",
+                    "hint": "例如：1-6章、重点是极限/积分/级数，或老师给的复习提纲",
+                    "required": True,
+                },
+                {
+                    "id": "daily_review_time",
+                    "prompt": "接下来每天大概能投入多少复习时间？",
+                    "hint": "例如：每天2小时，周末半天，或者只有晚上有空",
+                    "required": True,
+                },
+                {
+                    "id": "weak_areas",
+                    "prompt": "你最不稳的部分是什么？",
+                    "hint": "例如：证明题、计算速度、某几章完全没看",
+                    "required": False,
+                },
+                {
+                    "id": "split_strategy",
+                    "prompt": "希望系统怎么拆复习任务？",
+                    "hint": "例如：先补弱项，再刷题，最后模拟；或者按章节推进",
+                    "required": False,
+                },
+            ]
+        )
+    if is_fixed_event_without_window(text):
+        missing.append("fixed_window")
+        questions.append(
+            {
+                "id": "fixed_window",
+                "prompt": "这个时间段任务具体是几点到几点？",
+                "hint": "例如：明天 8:00-10:00，或者周三 14:00-16:30",
+                "required": True,
+            }
+        )
     if vague_homework or (very_short and not has_duration):
         missing.append("scope")
         questions.append(
@@ -222,7 +270,12 @@ def heuristic_assessment(user_text: str) -> Dict[str, Any]:
             }
         )
 
-    needs = bool(questions) and (vague_homework or not has_duration or very_short)
+    needs = bool(questions) and (
+        bool(missing)
+        or vague_homework
+        or not has_duration
+        or very_short
+    )
     return {
         "needs_clarification": needs,
         "summary": text[:40] or "新任务",
@@ -230,3 +283,22 @@ def heuristic_assessment(user_text: str) -> Dict[str, Any]:
         "questions": questions[:4] if needs else [],
         "confidence": 0.55,
     }
+
+
+def is_large_study_goal(text: str) -> bool:
+    study_tokens = ("考试", "期末", "期中", "考研", "复习", "备考", "竞赛")
+    big_goal_tokens = ("安排", "计划", "复习", "准备", "五天", "一周", "下周", "几天后")
+    return any(token in text for token in study_tokens) and any(token in text for token in big_goal_tokens)
+
+
+def is_fixed_event_without_window(text: str) -> bool:
+    event_tokens = ("开会", "会议", "上课", "实验", "考试", "面试", "预约", "讲座", "值班")
+    has_event = any(token in text for token in event_tokens)
+    has_range = bool(
+        re.search(
+            r"\d{1,2}(?:\s*[:：点]\s*\d{1,2})?\s*(?:-|~|～|到|至|—|－)\s*\d{1,2}",
+            text,
+        )
+    )
+    vague_period = any(token in text for token in ("上午", "下午", "晚上", "中午", "明天", "后天", "周", "星期"))
+    return has_event and vague_period and not has_range

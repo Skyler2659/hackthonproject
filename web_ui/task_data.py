@@ -29,11 +29,21 @@ def materialize_task(raw: Dict[str, Any]) -> Task:
         required_environment=tuple(raw.get("required_environment", ())),
         required_quietness=float(raw.get("required_quietness", 0.0)),
         dependencies=tuple(raw.get("dependencies", ())),
-        must_be_contiguous=True,
+        must_be_contiguous=bool(raw.get("must_be_contiguous", True)),
         status=TaskStatus(task_status_value(raw)),
         tags=tuple(raw.get("tags", ())),
         deadline_type=deadline_type_value(raw),
+        deep_work_min=parse_optional_deep_work_min(raw),
     )
+
+
+def parse_optional_deep_work_min(raw: Dict[str, Any]) -> int | None:
+    if "deep_work_min" not in raw:
+        return None
+    value = raw.get("deep_work_min")
+    if value is None:
+        return None
+    return max(0, int(value))
 
 
 def parse_optional_datetime(value: Any) -> datetime | None:

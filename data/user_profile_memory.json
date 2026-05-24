@@ -2,7 +2,7 @@
   "completed": true,
   "profile_name": "晨光启动 · 整块专注",
   "energy_peak": "Morning",
-  "max_daily_deep_work_min": 90,
+  "max_daily_deep_work_min": 300,
   "preferred_environments": [
     "desk",
     "library"
@@ -37,7 +37,7 @@
   "answers": {
     "rhythm": "sunrise",
     "day_shape": "classic",
-    "deep_tank": "sprint",
+    "deep_tank": "marathon",
     "deadline_style": "fire",
     "energy_match": "strict",
     "switching": "batch",

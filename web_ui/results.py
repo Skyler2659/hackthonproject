@@ -34,6 +34,9 @@ def render_results() -> None:
         return
 
     st.subheader("调度结果")
+    refinement_summary = st.session_state.get("last_refinement_summary")
+    if refinement_summary:
+        st.info(f"AI 微调说明：{refinement_summary}")
     render_schedule_metrics(result)
     render_unscheduled_warning(result)
     tasks = task_lookup()
@@ -122,13 +125,14 @@ def render_schedule_timeline(
 
 
 def render_daily_task_list(result: ScheduleResult, tasks: Dict[str, Task]) -> None:
-    if not result.blocks:
-        st.info("当前没有成功排入日程的任务。")
-        return
-
     init_day_state(result)
     render_day_nav(result)
     selected_day = selected_schedule_day(result)
+
+    if not result.blocks:
+        render_empty_day_frame(selected_day, has_schedule=False)
+        return
+
     day_blocks = [
         block
         for block in sorted(result.blocks, key=lambda item: item.start)
@@ -136,15 +140,7 @@ def render_daily_task_list(result: ScheduleResult, tasks: Dict[str, Task]) -> No
     ]
 
     if not day_blocks:
-        st.markdown(
-            f"""
-            <div class="day-list-empty">
-              <div class="day-list-empty-title">{selected_day:%Y-%m-%d} 暂无任务</div>
-              <div class="day-list-empty-copy">切换到其他日期查看已排程任务。</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        render_empty_day_frame(selected_day, has_schedule=True)
         return
 
     st.markdown(
@@ -155,24 +151,49 @@ def render_daily_task_list(result: ScheduleResult, tasks: Dict[str, Task]) -> No
         render_day_task_card(block, tasks.get(block.task_id))
 
 
+def render_empty_day_frame(selected_day: date, *, has_schedule: bool) -> None:
+    if has_schedule:
+        title = f"{selected_day:%Y-%m-%d} · {weekday_label(selected_day)}"
+        copy = "这一天没有已排程任务，可用「上一天 / 下一天」查看其他日期。"
+    else:
+        title = f"{selected_day:%Y-%m-%d} · {weekday_label(selected_day)}"
+        copy = "当前还没有成功排入日程的任务，添加任务并完成调度后会出现在对应日期。"
+    st.markdown(
+        f"""
+        <div class="day-list-empty">
+          <div class="day-list-empty-title">{html.escape(title)}</div>
+          <div class="day-list-empty-copy">{html.escape(copy)}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def init_day_state(result: ScheduleResult) -> None:
-    dates = scheduled_dates(result)
+    dates = navigable_dates(result)
     if not dates:
         return
     selected_day = st.session_state.get("schedule_selected_day")
     if not isinstance(selected_day, date) or selected_day not in dates:
-        st.session_state.schedule_selected_day = dates[0]
+        st.session_state.schedule_selected_day = default_schedule_day(result, dates)
 
 
 def render_day_nav(result: ScheduleResult) -> None:
-    dates = scheduled_dates(result)
+    dates = navigable_dates(result)
+    if not dates:
+        return
     selected_day = selected_schedule_day(result)
     current_index = dates.index(selected_day)
+    min_day, max_day = dates[0], dates[-1]
 
     left, center, right = st.columns([1, 3.2, 1])
     with left:
-        if st.button("上一天", use_container_width=True, disabled=current_index == 0):
-            st.session_state.schedule_selected_day = dates[current_index - 1]
+        if st.button(
+            "上一天",
+            use_container_width=True,
+            disabled=selected_day <= min_day,
+        ):
+            st.session_state.schedule_selected_day = selected_day - timedelta(days=1)
             st.rerun()
     with center:
         selected = st.selectbox(
@@ -184,27 +205,63 @@ def render_day_nav(result: ScheduleResult) -> None:
         )
         st.session_state.schedule_selected_day = selected
     with right:
-        if st.button("下一天", use_container_width=True, disabled=current_index == len(dates) - 1):
-            st.session_state.schedule_selected_day = dates[current_index + 1]
+        if st.button(
+            "下一天",
+            use_container_width=True,
+            disabled=selected_day >= max_day,
+        ):
+            st.session_state.schedule_selected_day = selected_day + timedelta(days=1)
             st.rerun()
 
 
 def selected_schedule_day(result: ScheduleResult) -> date:
     selected_day = st.session_state.get("schedule_selected_day")
-    dates = scheduled_dates(result)
+    dates = navigable_dates(result)
     if isinstance(selected_day, date) and selected_day in dates:
         return selected_day
+    return default_schedule_day(result, dates)
+
+
+def default_schedule_day(result: ScheduleResult, dates: list[date]) -> date:
+    if not dates:
+        return date.today()
+    today = date.today()
+    if today in dates:
+        return today
+    task_days = scheduled_dates(result)
+    if task_days:
+        return task_days[0]
     return dates[0]
+
+
+def navigable_dates(result: ScheduleResult) -> list[date]:
+    """Continuous calendar range from first to last scheduled block (includes empty days)."""
+    if not result.blocks:
+        return [date.today()]
+    block_days = [block.start.date() for block in result.blocks]
+    min_day = min(block_days)
+    max_day = max(block_days)
+    days: list[date] = []
+    cursor = min_day
+    while cursor <= max_day:
+        days.append(cursor)
+        cursor += timedelta(days=1)
+    return days
 
 
 def scheduled_dates(result: ScheduleResult) -> list[date]:
     return sorted({block.start.date() for block in result.blocks})
 
 
-def date_option_label(value: date, result: ScheduleResult) -> str:
+def weekday_label(value: date) -> str:
     day_names = ("周一", "周二", "周三", "周四", "周五", "周六", "周日")
+    return day_names[value.weekday()]
+
+
+def date_option_label(value: date, result: ScheduleResult) -> str:
     count = sum(1 for block in result.blocks if block.start.date() == value)
-    return f"{value:%Y-%m-%d} · {day_names[value.weekday()]} · {count} 个任务"
+    suffix = f"{count} 个任务" if count else "无任务"
+    return f"{value:%Y-%m-%d} · {weekday_label(value)} · {suffix}"
 
 
 def render_day_task_card(block: Any, task: Optional[Task]) -> None:

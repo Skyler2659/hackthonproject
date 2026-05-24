@@ -5,14 +5,17 @@ from datetime import datetime, timedelta
 from typing import Dict, Iterable, List, Set, Tuple
 
 from algorithms.base import BaseScheduler
+from algorithms.candidate_slots import preference_window_penalty
 from algorithms.scheduling_policy import (
     earliest_start_for_task,
     environment_fits,
     latest_end_for_task,
     placed_end_times,
     quietness_fits,
+    quietness_is_hard,
     slot_environments,
 )
+from algorithms.semantic_rules import transition_buffer_min
 from algorithms.task_selection import prepare_schedulable_tasks
 from core.models import ScheduleBlock, ScheduleResult, Task, TaskScore, TaskStatus, UserProfile
 
@@ -73,6 +76,7 @@ def place_tasks(
     now: datetime,
 ) -> ScheduleResult:
     placed: List[ScheduleBlock] = []
+    placed_tasks: Dict[str, Task] = {}
     scheduled_ids: Set[str] = set()
     active_ids = {task.task_id for task in ordered_tasks}
     unscheduled: List[str] = []
@@ -80,7 +84,7 @@ def place_tasks(
 
     while pending:
         next_pending, progressed = place_ready_tasks(
-            pending, active_ids, scheduled_ids, placed, unscheduled, scores, profile, now
+            pending, active_ids, scheduled_ids, placed, placed_tasks, unscheduled, scores, profile, now
         )
         if not progressed and next_pending:
             unscheduled.extend(task.task_id for task in next_pending)
@@ -100,6 +104,7 @@ def place_ready_tasks(
     active_ids: Set[str],
     scheduled_ids: Set[str],
     placed: List[ScheduleBlock],
+    placed_tasks: Dict[str, Task],
     unscheduled: List[str],
     scores: Dict[str, TaskScore],
     profile: UserProfile,
@@ -114,13 +119,14 @@ def place_ready_tasks(
         if not set(task.dependencies).issubset(scheduled_ids):
             deferred.append(task)
             continue
-        progressed |= try_place_task(task, placed, scheduled_ids, unscheduled, scores, profile, now)
+        progressed |= try_place_task(task, placed, placed_tasks, scheduled_ids, unscheduled, scores, profile, now)
     return deferred, progressed
 
 
 def try_place_task(
     task: Task,
     placed: List[ScheduleBlock],
+    placed_tasks: Dict[str, Task],
     scheduled_ids: Set[str],
     unscheduled: List[str],
     scores: Dict[str, TaskScore],
@@ -131,14 +137,17 @@ def try_place_task(
     if score is None:
         unscheduled.append(task.task_id)
         return False
-    slot = find_first_slot(task, score, profile, now, placed, strict=True)
-    if slot is None:
-        slot = find_first_slot(task, score, profile, now, placed, strict=False)
+    slot = find_first_slot(
+        task, score, profile, now, placed, placed_tasks, strict=quietness_is_hard(task)
+    )
+    if slot is None and not quietness_is_hard(task):
+        slot = find_first_slot(task, score, profile, now, placed, placed_tasks, strict=False)
     if slot is None:
         unscheduled.append(task.task_id)
         return False
 
     placed.append(build_block(task, score, profile, slot))
+    placed_tasks[task.task_id] = task
     scheduled_ids.add(task.task_id)
     return True
 
@@ -151,6 +160,8 @@ def priority_order(
     return sorted(
         tasks,
         key=lambda task: (
+            0 if task.manual_start is not None and task.manual_end is not None else 1,
+            task.manual_start or task.deadline,
             -task_score(scores, task).priority(profile.weights),
             task.deadline,
             -task_score(scores, task).block_integrity,
@@ -180,6 +191,7 @@ def find_first_slot(
     profile: UserProfile,
     now: datetime,
     placed: List[ScheduleBlock],
+    placed_tasks: Dict[str, Task],
     *,
     strict: bool,
 ) -> Slot | None:
@@ -189,6 +201,7 @@ def find_first_slot(
             fixed_slot.end == task.manual_end
             and fixed_slot.end <= task.deadline
             and not any(overlaps(fixed_slot.start, fixed_slot.end, block.start, block.end) for block in placed)
+            and not has_buffer_conflict(task, fixed_slot, placed, placed_tasks)
         ):
             return fixed_slot
         return None
@@ -201,7 +214,7 @@ def find_first_slot(
 
     while cursor + timedelta(minutes=task.duration_min) <= latest_end:
         candidate = build_slot(task, cursor, profile)
-        if slot_is_feasible(task, score, profile, now, candidate, placed, strict=strict):
+        if slot_is_feasible(task, score, profile, now, candidate, placed, placed_tasks, strict=strict):
             candidate_cost = (slot_cost(task, score, profile, candidate), candidate.start)
             if best_cost is None or candidate_cost < best_cost:
                 best_slot = candidate
@@ -227,10 +240,13 @@ def slot_is_feasible(
     now: datetime,
     slot: Slot,
     placed: List[ScheduleBlock],
+    placed_tasks: Dict[str, Task],
     *,
     strict: bool,
 ) -> bool:
     if any(overlaps(slot.start, slot.end, block.start, block.end) for block in placed):
+        return False
+    if has_buffer_conflict(task, slot, placed, placed_tasks):
         return False
     if slot.end <= task.deadline:
         deadline_ok = True
@@ -247,6 +263,27 @@ def slot_is_feasible(
     return quietness_fits(task, score, slot.quietness, strict=strict)
 
 
+def has_buffer_conflict(
+    task: Task,
+    slot: Slot,
+    placed: List[ScheduleBlock],
+    placed_tasks: Dict[str, Task],
+) -> bool:
+    for block in placed:
+        other = placed_tasks.get(block.task_id)
+        if other is None:
+            continue
+        if block.end <= slot.start:
+            required = transition_buffer_min(other, task)
+            if required > 0 and slot.start < block.end + timedelta(minutes=required):
+                return True
+        elif slot.end <= block.start:
+            required = transition_buffer_min(task, other)
+            if required > 0 and block.start < slot.end + timedelta(minutes=required):
+                return True
+    return False
+
+
 def allows_late_slots(task: Task, now: datetime) -> bool:
     from algorithms.scheduling_policy import allows_late_slots as _allows
 
@@ -259,10 +296,12 @@ def slot_cost(task: Task, score: TaskScore, profile: UserProfile, slot: Slot) ->
     quiet_gap = max(0.0, max(task.required_quietness, score.quietness_need) - slot.quietness)
     preference_fit = 1.0 - min(1.0, cognitive_gap + quiet_gap)
     priority_bonus = score.priority(profile.weights) * preference_fit
+    pref_penalty = preference_window_penalty(slot.start, slot.end, profile) / 1000.0
     return (
         profile.weights.lateness * lateness_hours
         + profile.weights.cognitive_fit * cognitive_gap
         + profile.weights.preference_match * quiet_gap
+        + pref_penalty
         - priority_bonus
     )
 

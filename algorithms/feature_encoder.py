@@ -6,10 +6,9 @@ from typing import Dict, Iterable, List, Tuple
 from algorithms.candidate_slots import CandidateSlot, slot_sort_cost
 from algorithms.constants import (
     COST_SCALE,
-    DEEP_WORK_BLOCK_THRESHOLD,
-    DEEP_WORK_LOAD_THRESHOLD,
     UNSCHEDULED_BASE_PENALTY,
 )
+from algorithms.semantic_rules import effective_deep_work_min
 from core.models import Task, TaskScore, UserProfile
 
 
@@ -20,7 +19,7 @@ class TaskFeatures:
     cognitive_load: float
     block_integrity: float
     quietness_need: float
-    is_deep_work: bool
+    deep_work_min: int
     unscheduled_penalty: int
 
 
@@ -49,18 +48,14 @@ class FeatureEncoder:
                 continue
             score = raw_score.normalized()
             priority = score.priority(profile.weights)
-            is_deep_work = (
-                score.cognitive_load >= DEEP_WORK_LOAD_THRESHOLD
-                or score.block_integrity >= DEEP_WORK_BLOCK_THRESHOLD
-                or max(task.required_quietness, score.quietness_need) >= DEEP_WORK_BLOCK_THRESHOLD
-            )
+            deep_work_min = effective_deep_work_min(task, score)
             task_features[task.task_id] = TaskFeatures(
                 task_id=task.task_id,
                 priority=priority,
                 cognitive_load=score.cognitive_load,
                 block_integrity=score.block_integrity,
                 quietness_need=max(task.required_quietness, score.quietness_need),
-                is_deep_work=is_deep_work,
+                deep_work_min=deep_work_min,
                 unscheduled_penalty=unscheduled_penalty(score, priority),
             )
             for slot in candidates.get(task.task_id, []):

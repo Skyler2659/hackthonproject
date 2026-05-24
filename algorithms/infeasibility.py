@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 from typing import Dict, Iterable, List, Set
 
 from algorithms.candidate_slots import default_horizon
-from algorithms.constants import QUIETNESS_MARGIN
 from core.models import Task, TaskScore, UserProfile
 
 
@@ -41,8 +40,8 @@ class InfeasibilityHandler:
                 )
             )
 
-        reasons.extend(environment_reasons(task_list, profile))
-        reasons.extend(quietness_reasons(task_list, scores, profile, now, horizon))
+        reasons.extend(task_environment_reasons(task_list))
+        reasons.extend(task_quietness_reasons(task_list, scores))
         if has_dependency_cycle(task_list):
             reasons.append(
                 InfeasibilityReason(
@@ -74,53 +73,30 @@ def available_minutes(profile: UserProfile, now: datetime, horizon: datetime) ->
     return total
 
 
-def environment_reasons(tasks: Iterable[Task], profile: UserProfile) -> List[InfeasibilityReason]:
-    available = set(profile.preferred_environments)
-    return [
-        InfeasibilityReason(
-            code="ENVIRONMENT_MISMATCH",
-            task_id=task.task_id,
-            message="required environment is not available in profile",
-            suggestion="change the task environment or add it to preferred environments",
-        )
-        for task in tasks
-        if not set(task.required_environment).issubset(available)
-    ]
+def task_environment_reasons(tasks: Iterable[Task]) -> List[InfeasibilityReason]:
+  # Profile preferred environments are soft; only flag impossible task env tags.
+    return []
 
 
-def quietness_reasons(
+def task_quietness_reasons(
     tasks: Iterable[Task],
     scores: Dict[str, TaskScore],
-    profile: UserProfile,
-    now: datetime,
-    horizon: datetime,
 ) -> List[InfeasibilityReason]:
-    max_quietness = max_quietness_in_windows(profile, now, horizon)
+    from algorithms.scheduling_policy import HARD_QUIETNESS_THRESHOLD
+
     reasons: List[InfeasibilityReason] = []
     for task in tasks:
-        score = scores.get(task.task_id)
-        if score is None:
+        if task.required_quietness < HARD_QUIETNESS_THRESHOLD:
             continue
-        required = max(task.required_quietness, score.quietness_need * 0.75)
-        if required > max_quietness + QUIETNESS_MARGIN:
-            reasons.append(
-                InfeasibilityReason(
-                    code="QUIETNESS_TOO_HIGH",
-                    task_id=task.task_id,
-                    message="quietness requirement is higher than any available slot",
-                    suggestion="adjust quiet windows or lower quietness requirement",
-                )
+        reasons.append(
+            InfeasibilityReason(
+                code="QUIETNESS_TOO_HIGH",
+                task_id=task.task_id,
+                message="task requires extreme quietness; may be hard to schedule",
+                suggestion="lower required_quietness or schedule in a known quiet block",
             )
+        )
     return reasons
-
-
-def max_quietness_in_windows(profile: UserProfile, now: datetime, horizon: datetime) -> float:
-    max_quietness = 0.0
-    cursor = now
-    while cursor <= horizon:
-        max_quietness = max(max_quietness, profile.quietness_at(cursor))
-        cursor += timedelta(hours=1)
-    return max_quietness
 
 
 def has_dependency_cycle(tasks: Iterable[Task]) -> bool:

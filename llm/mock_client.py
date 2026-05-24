@@ -36,9 +36,62 @@ def _route_and_generate(payload: Dict[str, Any], fingerprint: str) -> Dict[str, 
     """Inspect payload to decide parser vs scorer path."""
     if payload.get("mode") == "task_clarification":
         return _mock_clarify(payload, fingerprint)
+    if payload.get("mode") == "schedule_refinement":
+        return _mock_schedule_refinement(payload)
+    if payload.get("mode") == "force_placement":
+        return _mock_force_placement(payload)
     if "user_text" in payload:
         return _mock_parse(payload, fingerprint)
     return _mock_score(payload, fingerprint)
+
+
+def _mock_force_placement(payload: Dict[str, Any]) -> Dict[str, Any]:
+    task = payload.get("task") or {}
+    candidates = list(payload.get("candidates") or [])
+    if not candidates:
+        return {"task_id": task.get("task_id", ""), "chosen_slot_id": "", "reason": "无候选时段"}
+    ranked = sorted(
+        candidates,
+        key=lambda item: (
+            min(item.get("gap_before_min", 0), item.get("gap_after_min", 0)),
+            -float(item.get("heuristic_score", 0)),
+        ),
+        reverse=True,
+    )
+    chosen = ranked[0]
+    return {
+        "task_id": task.get("task_id", ""),
+        "chosen_slot_id": chosen.get("slot_id", ""),
+        "reason": "离线规则：优先前后留白较大的时段",
+    }
+
+
+def _mock_schedule_refinement(payload: Dict[str, Any]) -> Dict[str, Any]:
+    unscheduled = list(payload.get("unscheduled_task_ids") or [])
+    blocks = payload.get("scheduled_blocks") or []
+    density = "balanced"
+    if len(blocks) >= 2:
+        from datetime import datetime
+
+        ordered = sorted(blocks, key=lambda item: item["start"])
+        gaps = []
+        for index in range(len(ordered) - 1):
+            left_end = datetime.fromisoformat(ordered[index]["end"])
+            right_start = datetime.fromisoformat(ordered[index + 1]["start"])
+            gaps.append((right_start - left_end).total_seconds() / 60)
+        if gaps and min(gaps) < 10:
+            density = "too_dense"
+    leave = [
+        {"task_id": task_id, "reason": "求解器未找到可行空档，请手动调整截止日或时长"}
+        for task_id in unscheduled
+    ]
+    return {
+        "density": density,
+        "block_adjustments": [],
+        "retry_unscheduled": unscheduled,
+        "leave_unscheduled": leave,
+        "summary": "离线规则检查完成，已尝试以适度强度塞入未排任务。",
+    }
 
 
 def _mock_clarify(payload: Dict[str, Any], fingerprint: str) -> Dict[str, Any]:
@@ -128,9 +181,10 @@ def _build_task(segment: str, payload: Dict[str, Any]) -> Dict[str, Any]:
     title = _extract_title(segment)
     duration = _extract_duration(segment)
     is_deep = _classify_deep_work(segment, duration)
+    deep_work_min = _estimate_deep_work_min(segment, duration)
     quietness = _extract_quietness(segment, is_deep)
     tags = _extract_tags(segment, is_deep)
-    assumptions = _build_parser_assumptions(segment, duration, is_deep, quietness)
+    assumptions = _build_parser_assumptions(segment, duration, deep_work_min, quietness)
     now = payload.get("now", "")
     task_id = f"task_{abs(hash(segment)) % 100000:05d}"
 
@@ -146,6 +200,7 @@ def _build_task(segment: str, payload: Dict[str, Any]) -> Dict[str, Any]:
         "required_quietness": quietness,
         "dependencies": [],
         "must_be_contiguous": is_deep,
+        "deep_work_min": deep_work_min,
         "tags": tags,
         "assumptions": assumptions,
     }
@@ -165,6 +220,7 @@ def _fallback_task(user_text: str, now: str = "") -> Dict[str, Any]:
         "required_quietness": 0.35,
         "dependencies": [],
         "must_be_contiguous": False,
+        "deep_work_min": 0,
         "tags": [],
         "assumptions": "无法从文本中推断细节，使用默认值",
     }
@@ -262,11 +318,28 @@ def _extract_duration(segment: str) -> int:
 
 
 def _classify_deep_work(segment: str, estimated_minutes: int) -> bool:
-    if _any_match(segment, _SHALLOW_ZH + _SHALLOW_EN):
-        return False
+    return _estimate_deep_work_min(segment, estimated_minutes) > 0
+
+
+def _estimate_deep_work_min(segment: str, duration: int) -> int:
+    lower = segment.lower()
+    if _any_match(segment, _SHALLOW_ZH + _SHALLOW_EN) or _any_match(
+        segment, ("跑步", "运动", "健身", "游泳", "锻炼", "骑车", "体测")
+    ):
+        return 0
+    if "kv cache" in lower or "kv缓存" in segment or "kv 缓存" in segment:
+        return duration
+    if "作业" in segment and _any_match(segment, ("高数", "数学", "微积分", "线代", "calculus")):
+        return min(duration, max(15, duration // 4))
+    if _any_match(segment, ("实验报告", "数电", "模电")) and _any_match(
+        segment, ("报告", "写", "撰写")
+    ):
+        return min(duration, max(30, duration // 2))
     if _any_match(segment, _DEEP_WORK_ZH + _DEEP_WORK_EN):
-        return True
-    return estimated_minutes >= 60
+        if duration >= 90:
+            return min(duration, max(45, int(duration * 0.75)))
+        return min(duration, max(20, int(duration * 0.55)))
+    return 0
 
 
 def _extract_quietness(segment: str, is_deep_work: bool) -> float:
@@ -279,10 +352,12 @@ def _extract_quietness(segment: str, is_deep_work: bool) -> float:
     return 0.35
 
 
-def _build_parser_assumptions(segment: str, mins: int, deep: bool, quiet: float) -> str:
+def _build_parser_assumptions(segment: str, mins: int, deep_work_min: int, quiet: float) -> str:
     parts: List[str] = []
-    if deep:
-        parts.append("推断为深度工作")
+    if deep_work_min > 0:
+        parts.append(f"推断深度专注约{deep_work_min}分钟（总时长{mins}分钟）")
+    elif mins > 0:
+        parts.append("推断无深度专注时段")
     if quiet >= 0.7:
         parts.append("推断需要安静环境")
     elif quiet <= 0.2:

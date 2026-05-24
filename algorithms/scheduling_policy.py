@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from typing import Iterable, List, Tuple
 
-from algorithms.constants import DEADLINE_GRACE_HOURS, DEFAULT_HORIZON_DAYS
+from algorithms.constants import DEADLINE_GRACE_HOURS, DEFAULT_HORIZON_DAYS, HARD_QUIETNESS_THRESHOLD
 from core.models import Task, TaskScore, TaskStatus, UserProfile
 
 
@@ -43,8 +43,13 @@ def slot_environments(profile: UserProfile, task: Task) -> Tuple[str, ...]:
 
 
 def quietness_requirement(task: Task, score: TaskScore, *, strict: bool) -> float:
-    ai_need = score.quietness_need * (0.75 if strict else 0.55)
+    ai_need = score.quietness_need * (0.75 if strict else 0.45)
     return max(task.required_quietness, ai_need)
+
+
+def quietness_is_hard(task: Task) -> bool:
+    """Only explicit task-level extreme quiet needs are hard; profile quiet windows are soft."""
+    return task.required_quietness >= HARD_QUIETNESS_THRESHOLD
 
 
 def environment_fits(task: Task, environments: Tuple[str, ...]) -> bool:

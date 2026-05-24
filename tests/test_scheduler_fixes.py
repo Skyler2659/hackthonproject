@@ -3,7 +3,10 @@ from __future__ import annotations
 from datetime import datetime, time, timedelta
 
 from algorithms import GreedyScheduler, HybridScheduler, WeightedScheduler
+from algorithms.feature_encoder import FeatureEncoder
+from algorithms.semantic_rules import effective_deep_work_min
 from algorithms.task_selection import prepare_schedulable_tasks
+from algorithms.candidate_slots import CandidateSlotGenerator
 from agents.local_agent import LocalSeriesAgent
 from llm.mock_client import MockLLMClient
 from models import Task, TaskScore, TaskStatus, UserProfile, UserWeights
@@ -169,6 +172,79 @@ def test_mock_parser_returns_tasks_array() -> None:
 
 def test_weighted_scheduler_is_hybrid() -> None:
     assert WeightedScheduler is HybridScheduler
+
+
+def test_effective_deep_work_min_respects_explicit_value() -> None:
+    task = Task(
+        task_id="hw",
+        title="高数作业",
+        description="",
+        duration_min=120,
+        deadline=datetime(2026, 5, 24, 20, 0),
+        deep_work_min=30,
+    )
+    assert effective_deep_work_min(task, build_score("hw")) == 30
+
+
+def test_effective_deep_work_min_heuristic_homework_and_run() -> None:
+    homework = Task(
+        task_id="hw",
+        title="高数作业",
+        description="完成课后习题",
+        duration_min=120,
+        deadline=datetime(2026, 5, 24, 20, 0),
+    )
+    run = Task(
+        task_id="run",
+        title="跑步",
+        description="操场慢跑",
+        duration_min=30,
+        deadline=datetime(2026, 5, 24, 20, 0),
+    )
+    kv = Task(
+        task_id="kv",
+        title="学习 KV Cache",
+        description="理解原理与实现",
+        duration_min=90,
+        deadline=datetime(2026, 5, 24, 20, 0),
+    )
+    assert effective_deep_work_min(homework, build_score("hw")) == 30
+    assert effective_deep_work_min(run, build_score("run")) == 0
+    assert effective_deep_work_min(kv, build_score("kv")) == 90
+
+
+def test_feature_encoder_uses_partial_deep_work_minutes() -> None:
+    now = datetime(2026, 5, 23, 8, 0)
+    profile = build_profile()
+    task = Task(
+        task_id="report",
+        title="数电实验报告",
+        description="撰写实验报告",
+        duration_min=120,
+        deadline=now + timedelta(days=1),
+        deep_work_min=60,
+    )
+    scores = {task.task_id: build_score(task.task_id)}
+    candidates = CandidateSlotGenerator(max_slots_per_task=8).generate([task], scores, profile, now)
+    encoded = FeatureEncoder().encode([task], scores, profile, candidates)
+    assert encoded.task_features[task.task_id].deep_work_min == 60
+
+
+def test_mock_parser_estimates_deep_work_min() -> None:
+    client = MockLLMClient()
+    payload = {
+        "user_text": "高数作业大概2小时；出去跑步30分钟",
+        "now": datetime(2026, 5, 23, 10, 0).isoformat(),
+        "allowed_environment_options": ["desk"],
+        "existing_tasks": [],
+        "profile": {"max_daily_deep_work_min": 180},
+    }
+    response = client.generate_json("parser", payload)
+    by_title = {item["title"]: item for item in response["tasks"]}
+    assert by_title["高数作业"]["duration_min"] == 120
+    assert by_title["高数作业"]["deep_work_min"] == 30
+    run_task = next(item for item in response["tasks"] if "跑" in item["title"])
+    assert run_task["deep_work_min"] == 0
 
 
 if __name__ == "__main__":

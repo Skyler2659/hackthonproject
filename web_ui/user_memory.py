@@ -10,7 +10,7 @@ from models import UserWeights
 from web_ui.profile import build_energy_curve
 
 
-MEMORY_PATH = Path("data") / "user_profile_memory.json"
+MEMORY_PATH = Path(__file__).resolve().parents[1] / "data" / "user_profile_memory.json"
 
 DEFAULT_MEMORY: Dict[str, Any] = {
     "completed": False,

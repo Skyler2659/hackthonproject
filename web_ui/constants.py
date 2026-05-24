@@ -1,4 +1,4 @@
-APP_TITLE = "认知能耗自适应调度引擎 V2.0"
+APP_TITLE = "Chrona"
 DEFAULT_BASE_URL = "https://api.deepseek.com/chat/completions"
 ENVIRONMENT_OPTIONS = ["desk", "library", "classroom", "meeting_room", "mobile", "online"]
 ENVIRONMENT_LABELS = {

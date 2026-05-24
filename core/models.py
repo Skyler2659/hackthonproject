@@ -35,6 +35,8 @@ class UserProfile:
     energy_curve: Dict[int, float]
     available_windows: Tuple[Tuple[time, time], ...]
     quiet_windows: Tuple[Tuple[time, time], ...] = field(default_factory=tuple)
+    # Questionnaire / lifestyle windows — affect slot cost only, not feasibility (see preferred_windows).
+    preferred_windows: Tuple[Tuple[time, time], ...] = field(default_factory=tuple)
     max_daily_deep_work_min: int = 180
     preferred_environments: Tuple[str, ...] = ("desk",)
     weights: UserWeights = field(default_factory=UserWeights)
@@ -68,6 +70,8 @@ class Task:
     deadline_type: DeadlineType = DeadlineType.FLEXIBLE
     manual_start: Optional[datetime] = None
     manual_end: Optional[datetime] = None
+    # Sustained deep-focus minutes inside this block (0..duration_min). None → inferred at schedule time.
+    deep_work_min: Optional[int] = None
 
     def with_status(self, status: TaskStatus) -> "Task":
         return replace(self, status=status)

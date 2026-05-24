@@ -9,9 +9,10 @@ from algorithms.constants import (
     DEADLINE_GRACE_HOURS,
     DEFAULT_HORIZON_DAYS,
     MAX_CANDIDATE_SLOTS_PER_TASK,
-    QUIETNESS_MARGIN,
+    PREFERENCE_WINDOW_PENALTY,
     SLOT_STEP_MIN,
 )
+from algorithms.scheduling_policy import quietness_is_hard
 from algorithms.scheduling_policy import (
     environment_fits,
     latest_end_for_task,
@@ -35,6 +36,7 @@ class CandidateSlot:
     cost_cognitive: int
     cost_quiet: int
     cost_priority_bonus: int
+    cost_preference_window: int = 0
     feasible: bool = True
 
 
@@ -83,13 +85,9 @@ class CandidateSlotGenerator:
         candidates: List[CandidateSlot] = []
 
         while cursor + timedelta(minutes=task.duration_min) <= latest_end:
-            slot = self._build_slot(task, score, profile, now, horizon, cursor, strict=True)
+            slot = self._build_slot(task, score, profile, now, horizon, cursor)
             if slot.feasible:
                 candidates.append(slot)
-            else:
-                relaxed = self._build_slot(task, score, profile, now, horizon, cursor, strict=False)
-                if relaxed.feasible:
-                    candidates.append(relaxed)
             cursor += timedelta(minutes=self.step_min)
 
         candidates.sort(key=lambda slot: (slot_sort_cost(slot, profile), slot.start))
@@ -103,7 +101,6 @@ class CandidateSlotGenerator:
         now: datetime,
         horizon: datetime,
         start: datetime,
-        strict: bool,
     ) -> CandidateSlot:
         from algorithms.scheduling_policy import allows_late_slots
 
@@ -117,11 +114,12 @@ class CandidateSlotGenerator:
             deadline_ok = end <= latest_end_for_task(task, now, horizon)
         else:
             deadline_ok = False
+        hard_quiet = quietness_is_hard(task)
         feasible = (
             deadline_ok
             and is_available(start, end, profile)
             and environment_fits(task, environments)
-            and quietness_fits(task, score, quietness, strict=strict)
+            and quietness_fits(task, score, quietness, strict=hard_quiet)
         )
         return CandidateSlot(
             slot_id=f"{task.task_id}@{start:%Y%m%d%H%M}",
@@ -135,6 +133,7 @@ class CandidateSlotGenerator:
             cost_cognitive=scaled_abs(score.cognitive_load - energy),
             cost_quiet=scaled_quiet_gap(task, score, quietness),
             cost_priority_bonus=scaled_priority_bonus(task, score, profile, energy, quietness),
+            cost_preference_window=preference_window_penalty(start, end, profile),
             feasible=feasible,
         )
 
@@ -201,8 +200,22 @@ def slot_sort_cost(slot: CandidateSlot, profile: UserProfile) -> int:
             + weights.cognitive_fit * slot.cost_cognitive
             + weights.preference_match * slot.cost_quiet
             + slot.cost_priority_bonus
+            + slot.cost_preference_window
         )
     )
+
+
+def preference_window_penalty(start: datetime, end: datetime, profile: UserProfile) -> int:
+    windows = profile.preferred_windows or profile.available_windows
+    if not windows:
+        return 0
+    start_t = start.time()
+    end_t = end.time()
+    if start.date() == end.date() and any(
+        window_start <= start_t and end_t <= window_end for window_start, window_end in windows
+    ):
+        return 0
+    return PREFERENCE_WINDOW_PENALTY
 
 
 def scaled_lateness(end: datetime, deadline: datetime) -> int:

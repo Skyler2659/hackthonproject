@@ -51,7 +51,7 @@ def render_profile_memory_card() -> Dict[str, Any]:
     config = profile_config_from_memory(memory)
     weights = config["weights"]
     st.markdown("#### 系统记住的生活节奏")
-    st.caption("这些偏好来自小测试，会直接影响日程优先级、精力匹配和时间块选择。")
+    st.caption("这些偏好来自小测试，作为 AI 理解与微调提示（软约束）；硬算法只保证不重叠、DDL 与依赖。")
     st.markdown(
         f"""
         <div class="profile-memory-card">
@@ -66,6 +66,8 @@ def render_profile_memory_card() -> Dict[str, Any]:
         unsafe_allow_html=True,
     )
     with st.expander("算法会怎样使用这些记忆"):
+        st.write("硬约束：任务截止、依赖、固定时段、日程块互不重叠。")
+        st.write("软约束：问卷时段/安静/深度预算 → 进入 AI 提示词与排程代价，排程后由 AI 微调密度与未排任务。")
         st.write(f"DDL 压力权重：{weights.lateness:.1f}")
         st.write(f"精力匹配权重：{weights.cognitive_fit:.1f}")
         st.write(f"少切换权重：{weights.context_switch:.1f}")

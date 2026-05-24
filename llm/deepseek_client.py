@@ -56,10 +56,15 @@ class DeepSeekLLMClient(ReplayGuard):
         return parse_json_message(extract_message_content(response))
 
     def _post_json(self, request_body: Dict[str, Any]) -> Dict[str, Any]:
-        request = build_http_request(self._base_url, self._api_key, request_body)
         try:
+            request = build_http_request(self._base_url, self._api_key, request_body)
             with urllib.request.urlopen(request, timeout=self._timeout_sec) as response:
                 raw = response.read().decode("utf-8")
+        except UnicodeEncodeError as exc:
+            raise LLMProviderError(
+                "DeepSeek 请求参数里包含了不能放进 HTTP 头的中文或特殊字符。"
+                "请检查 API Key 和 Base URL 是否只包含英文、数字和 URL 符号。"
+            ) from exc
         except urllib.error.HTTPError as exc:
             detail = exc.read().decode("utf-8", errors="replace")
             raise LLMProviderError(f"DeepSeek HTTP {exc.code}: {detail}") from exc

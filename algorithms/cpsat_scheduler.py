@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, Iterable, List, Tuple
 
 from algorithms.base import BaseScheduler
 from algorithms.candidate_slots import CandidateSlot, CandidateSlotGenerator
 from algorithms.constants import (
     COST_SCALE,
+    DEEP_WORK_OVERAGE_COST_PER_MIN,
     DEFAULT_SEARCH_WORKERS,
     DEFAULT_SOLVER_TIME_LIMIT_SEC,
     MAX_CANDIDATE_SLOTS_PER_TASK,
@@ -16,6 +17,7 @@ from algorithms.feature_encoder import EncodedSchedule, FeatureEncoder
 from algorithms.greedy_scheduler import GreedyScheduler
 from algorithms.infeasibility import InfeasibilityHandler, InfeasibilityReason
 from algorithms.recovery import RecoveryEngine
+from algorithms.semantic_rules import transition_buffer_min
 from algorithms.task_selection import prepare_schedulable_tasks
 from core.models import ScheduleBlock, ScheduleResult, Task, TaskScore, TaskStatus, UserProfile
 
@@ -72,8 +74,11 @@ class CPSatScheduler(BaseScheduler):
             model.AddNoOverlap(intervals)
 
         self._add_dependency_constraints(model, active_tasks, candidates, x, y)
-        self._add_deep_work_constraints(model, active_tasks, candidates, encoded, x, profile)
-        self._add_objective(model, active_tasks, candidates, encoded, x, y)
+        self._add_transition_buffer_constraints(model, active_tasks, candidates, x)
+        deep_overage_terms = self._add_deep_work_soft_constraints(
+            model, active_tasks, candidates, encoded, x, profile
+        )
+        self._add_objective(model, active_tasks, candidates, encoded, x, y, deep_overage_terms)
 
         solver = cp_model.CpSolver()
         solver.parameters.max_time_in_seconds = self.time_limit_sec
@@ -141,6 +146,8 @@ class CPSatScheduler(BaseScheduler):
                 )
             if slot_vars:
                 model.Add(sum(slot_vars) == y[task.task_id])
+                if task.manual_start is not None and task.manual_end is not None:
+                    model.Add(y[task.task_id] == 1)
             else:
                 model.Add(y[task.task_id] == 0)
         return x, y, intervals
@@ -172,7 +179,29 @@ class CPSatScheduler(BaseScheduler):
                                 <= 1
                             )
 
-    def _add_deep_work_constraints(
+    def _add_transition_buffer_constraints(
+        self,
+        model: "cp_model.CpModel",
+        tasks: List[Task],
+        candidates: Dict[str, List[CandidateSlot]],
+        x: Dict[Tuple[str, str], "cp_model.IntVar"],
+    ) -> None:
+        task_by_id = {task.task_id: task for task in tasks}
+        task_ids = list(candidates)
+        for left_index, left_id in enumerate(task_ids):
+            left_task = task_by_id[left_id]
+            for right_id in task_ids[left_index + 1 :]:
+                right_task = task_by_id[right_id]
+                for left_slot in candidates.get(left_id, []):
+                    for right_slot in candidates.get(right_id, []):
+                        if violates_transition_buffer(left_task, left_slot, right_task, right_slot):
+                            model.Add(
+                                x[(left_id, left_slot.slot_id)]
+                                + x[(right_id, right_slot.slot_id)]
+                                <= 1
+                            )
+
+    def _add_deep_work_soft_constraints(
         self,
         model: "cp_model.CpModel",
         tasks: List[Task],
@@ -180,22 +209,31 @@ class CPSatScheduler(BaseScheduler):
         encoded: EncodedSchedule,
         x: Dict[Tuple[str, str], "cp_model.IntVar"],
         profile: UserProfile,
-    ) -> None:
+    ) -> List["cp_model.IntVar"]:
         if profile.max_daily_deep_work_min <= 0:
-            return
+            return []
         task_by_id = {task.task_id: task for task in tasks}
         terms_by_day = defaultdict(list)
         for task_id, slots in candidates.items():
             features = encoded.task_features[task_id]
-            if not features.is_deep_work:
+            if features.deep_work_min <= 0:
                 continue
             for slot in slots:
                 terms_by_day[slot.start.date()].append(
-                    task_by_id[task_id].duration_min * x[(task_id, slot.slot_id)]
+                    features.deep_work_min * x[(task_id, slot.slot_id)]
                 )
-        for terms in terms_by_day.values():
+        overage_terms = []
+        for day, terms in terms_by_day.items():
             if terms:
-                model.Add(sum(terms) <= profile.max_daily_deep_work_min)
+                upper_bound = sum(
+                    task_by_id[task_id].duration_min
+                    for task_id, slots in candidates.items()
+                    if any(slot.start.date() == day for slot in slots)
+                )
+                overage = model.NewIntVar(0, max(0, upper_bound), f"deep_overage_{day:%Y%m%d}")
+                model.Add(sum(terms) <= profile.max_daily_deep_work_min + overage)
+                overage_terms.append(overage)
+        return overage_terms
 
     def _add_objective(
         self,
@@ -205,6 +243,7 @@ class CPSatScheduler(BaseScheduler):
         encoded: EncodedSchedule,
         x: Dict[Tuple[str, str], "cp_model.IntVar"],
         y: Dict[str, "cp_model.IntVar"],
+        deep_overage_terms: List["cp_model.IntVar"] | None = None,
     ) -> None:
         objective_terms = []
         for task in tasks:
@@ -213,6 +252,8 @@ class CPSatScheduler(BaseScheduler):
             for slot in candidates.get(task.task_id, []):
                 cost = encoded.slot_costs[(task.task_id, slot.slot_id)]
                 objective_terms.append(cost * x[(task.task_id, slot.slot_id)])
+        for overage in deep_overage_terms or []:
+            objective_terms.append(DEEP_WORK_OVERAGE_COST_PER_MIN * overage)
         model.Minimize(sum(objective_terms))
 
 
@@ -300,6 +341,21 @@ def materialize_result(
         unscheduled_task_ids=unscheduled,
         total_cost=round(float(solver.ObjectiveValue()) / COST_SCALE, 4),
     )
+
+
+def violates_transition_buffer(
+    left_task: Task,
+    left_slot: CandidateSlot,
+    right_task: Task,
+    right_slot: CandidateSlot,
+) -> bool:
+    if left_slot.end <= right_slot.start:
+        required = transition_buffer_min(left_task, right_task)
+        return required > 0 and right_slot.start < left_slot.end + timedelta(minutes=required)
+    if right_slot.end <= left_slot.start:
+        required = transition_buffer_min(right_task, left_task)
+        return required > 0 and left_slot.start < right_slot.end + timedelta(minutes=required)
+    return False
 
 
 def cp_sat_reason(slot: CandidateSlot, slot_cost: int) -> str:

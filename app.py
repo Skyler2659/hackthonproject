@@ -26,8 +26,8 @@ def main() -> None:
 
 
 def render_page_header() -> None:
-    st.title("认知能耗自适应调度引擎 V2.0")
-    st.caption("AI 语义评分 + 确定性调度引擎")
+    st.title("Chrona")
+    st.caption("AI 语义评分 + 确定性调度")
 
 
 def render_page_body() -> None:

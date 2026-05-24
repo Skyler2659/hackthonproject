@@ -10,6 +10,7 @@ from models import TaskStatus
 from web_ui.archive import record_operation
 from web_ui.constants import ENVIRONMENT_LABELS
 from web_ui.session_state import mark_schedule_dirty
+from web_ui.auto_scheduler import request_force_join
 from web_ui.task_data import clear_tasks, remove_task, task_status_value
 from web_ui.task_edit import start_task_edit
 
@@ -107,6 +108,14 @@ def render_unresolved_task_card(task: Dict[str, Any]) -> None:
         with info_col:
             st.markdown(unresolved_task_card_html(task), unsafe_allow_html=True)
         with action_col:
+            if st.button(
+                "自动加入",
+                key=f"auto_join_{dom_key(str(task['task_id']))}",
+                use_container_width=True,
+                help="AI 在可行空档中选时段：遵守截止/不重叠/任务间距，不考虑专注与深度预算",
+            ):
+                request_force_join([str(task["task_id"])])
+                st.rerun()
             if st.button("修改", key=f"edit_unresolved_{dom_key(str(task['task_id']))}", use_container_width=True):
                 start_task_edit(str(task["task_id"]))
                 st.rerun()
@@ -135,6 +144,16 @@ def render_task_list_actions(
     st.metric("未完成", count_unfinished_tasks(tasks))
     st.metric("已完成", status_counts[TaskStatus.DONE.value])
     st.metric("已超时", status_counts[TaskStatus.MISSED.value])
+
+    if unresolved_count(tasks) > 0:
+        if st.button(
+            "全部自动加入日程",
+            use_container_width=True,
+            type="primary",
+            help="将全部未排任务强制塞入现有日程空档",
+        ):
+            request_force_join([str(task["task_id"]) for task in unresolved_tasks(tasks)])
+            st.rerun()
 
     delete_label = st.selectbox(
         "删除任务",
@@ -200,6 +219,10 @@ def resolve_next_status(current_status: str, done_checked: bool) -> str:
 
 def status_label(status: str) -> str:
     return STATUS_LABELS.get(status, status)
+
+
+def unresolved_count(tasks: List[Dict[str, Any]]) -> int:
+    return len(unresolved_tasks(tasks))
 
 
 def count_unfinished_tasks(tasks: List[Dict[str, Any]]) -> int:
