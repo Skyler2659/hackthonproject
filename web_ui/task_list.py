@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import html
 from datetime import datetime
 from typing import Any, Dict, List
 
-import pandas as pd
 import streamlit as st
 
 from models import TaskStatus
@@ -11,6 +11,7 @@ from web_ui.archive import record_operation
 from web_ui.constants import ENVIRONMENT_LABELS
 from web_ui.session_state import mark_schedule_dirty
 from web_ui.task_data import clear_tasks, remove_task, task_status_value
+from web_ui.task_edit import start_task_edit
 
 
 STATUS_LABELS = {
@@ -29,30 +30,53 @@ def render_pending_tasks() -> None:
 
 
 def render_task_list_content() -> None:
-    tasks = st.session_state.pending_tasks
+    all_tasks = st.session_state.pending_tasks
+    tasks = unresolved_tasks(all_tasks)
     st.markdown('<div class="task-list-shell">', unsafe_allow_html=True)
-    st.subheader("任务列表")
+    st.subheader("未安排任务")
 
     if not tasks:
-        render_empty_task_list()
+        render_empty_unresolved_list()
         st.markdown("</div>", unsafe_allow_html=True)
         return
 
-    status_counts = count_tasks_by_status(tasks)
+    status_counts = count_tasks_by_status(all_tasks)
     col_left, col_right = st.columns([4, 1.2])
     with col_left:
-        render_task_table(tasks)
+        render_unresolved_task_cards(tasks)
     with col_right:
-        render_task_list_actions(tasks, status_counts)
+        render_task_list_actions(all_tasks, status_counts)
     st.markdown("</div>", unsafe_allow_html=True)
 
 
-def render_empty_task_list() -> None:
+def unresolved_tasks(tasks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    result = st.session_state.get("last_result")
+    if result is None:
+        return [
+            task
+            for task in tasks
+            if task_status_value(task) not in {TaskStatus.DONE.value, TaskStatus.CANCELLED.value}
+        ]
+
+    scheduled_ids = {block.task_id for block in result.blocks}
+    unscheduled_ids = set(result.unscheduled_task_ids)
+    return [
+        task
+        for task in tasks
+        if task_status_value(task) not in {TaskStatus.DONE.value, TaskStatus.CANCELLED.value}
+        and (
+            str(task["task_id"]) in unscheduled_ids
+            or str(task["task_id"]) not in scheduled_ids
+        )
+    ]
+
+
+def render_empty_unresolved_list() -> None:
     st.markdown(
         """
         <div class="task-list-empty">
-          <div class="task-list-empty-title">当前还没有存档任务</div>
-          <div class="task-list-empty-copy">任务列表会常驻在这里。你可以从页面底部的 AI 对话框添加新任务。</div>
+          <div class="task-list-empty-title">当前没有未安排任务</div>
+          <div class="task-list-empty-copy">已排程任务会显示在上方当日任务里，完成按钮也在那里。</div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -70,30 +94,47 @@ def count_tasks_by_status(tasks: List[Dict[str, Any]]) -> Dict[str, int]:
     return counts
 
 
-def render_task_table(tasks: List[Dict[str, Any]]) -> None:
-    edited_tasks = st.data_editor(
-        tasks_to_dataframe(tasks),
-        hide_index=True,
-        use_container_width=True,
-        num_rows="fixed",
-        column_config={
-            "完成": st.column_config.CheckboxColumn("完成"),
-        },
-        disabled=["任务 ID", "标题", "状态", "系列", "时长", "DDL", "安静度", "依赖", "环境"],
-        key="task_status_editor",
+def render_unresolved_task_cards(tasks: List[Dict[str, Any]]) -> None:
+    for task in tasks:
+        render_unresolved_task_card(task)
+
+
+def render_unresolved_task_card(task: Dict[str, Any]) -> None:
+    card_key = f"unresolved_task_card_{dom_key(str(task['task_id']))}"
+    inject_unresolved_card_style(card_key, task_status_value(task))
+    with st.container(key=card_key):
+        info_col, action_col = st.columns([5, 1])
+        with info_col:
+            st.markdown(unresolved_task_card_html(task), unsafe_allow_html=True)
+        with action_col:
+            if st.button("修改", key=f"edit_unresolved_{dom_key(str(task['task_id']))}", use_container_width=True):
+                start_task_edit(str(task["task_id"]))
+                st.rerun()
+
+
+def inject_unresolved_card_style(card_key: str, status: str) -> None:
+    border = "#f59e0b" if status == TaskStatus.MISSED.value else "#94a3b8"
+    background = "rgba(254, 243, 199, 0.62)" if status == TaskStatus.MISSED.value else "rgba(248, 250, 252, 0.82)"
+    st.markdown(
+        f"""
+        <style>
+        .st-key-{card_key} {{
+            background: {background};
+            border-color: {border};
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
     )
-    if apply_status_edits(edited_tasks):
-        st.rerun()
 
 
 def render_task_list_actions(
     tasks: List[Dict[str, Any]],
     status_counts: Dict[str, int],
 ) -> None:
-    st.metric("待排程", status_counts[TaskStatus.PENDING.value])
+    st.metric("未完成", count_unfinished_tasks(tasks))
     st.metric("已完成", status_counts[TaskStatus.DONE.value])
     st.metric("已超时", status_counts[TaskStatus.MISSED.value])
-    st.metric("历史操作", len(st.session_state.get("operation_history", [])))
 
     delete_label = st.selectbox(
         "删除任务",
@@ -108,40 +149,24 @@ def render_task_list_actions(
         st.rerun()
 
 
-def tasks_to_dataframe(tasks: List[Dict[str, Any]]) -> pd.DataFrame:
-    return pd.DataFrame([task_to_table_row(task) for task in tasks])
-
-
-def task_to_table_row(task: Dict[str, Any]) -> Dict[str, Any]:
-    return {
-        "完成": task_status_value(task) == TaskStatus.DONE.value,
-        "任务 ID": task["task_id"],
-        "标题": task["title"],
-        "状态": status_label(task_status_value(task)),
-        "系列": task.get("series_id") or "单独任务",
-        "时长": f"{task['duration_min']} 分钟",
-        "DDL": datetime.fromisoformat(task["deadline"]).strftime("%m-%d %H:%M"),
-        "安静度": f"{float(task.get('required_quietness', 0.0)):.2f}",
-        "依赖": ", ".join(task.get("dependencies", ())) or "-",
-        "环境": environment_text(task.get("required_environment", ())),
-    }
-
-
-def apply_status_edits(edited_tasks: pd.DataFrame) -> bool:
-    if "完成" not in edited_tasks or "任务 ID" not in edited_tasks:
-        return False
-
-    changed = update_task_statuses(read_done_values(edited_tasks))
-    if changed:
-        mark_schedule_dirty()
-    return changed
-
-
-def read_done_values(edited_tasks: pd.DataFrame) -> Dict[str, bool]:
-    return {
-        str(row["任务 ID"]): bool(row["完成"])
-        for _, row in edited_tasks.iterrows()
-    }
+def unresolved_task_card_html(task: Dict[str, Any]) -> str:
+    status = task_status_value(task)
+    deadline = datetime.fromisoformat(str(task["deadline"]))
+    return f"""
+    <div class="unresolved-task-content">
+      <div class="unresolved-task-head">
+        <span>{html_escape(str(task["title"]))}</span>
+        <strong>{status_label(status)}</strong>
+      </div>
+      <div class="unresolved-task-meta">
+        <span>{html_escape(str(task.get("series_id") or "单独任务"))}</span>
+        <span>{deadline_type_text(task)}</span>
+        <span>{int(task["duration_min"])} 分钟</span>
+        <span>DDL {deadline:%m-%d %H:%M}</span>
+        <span>{environment_text(task.get("required_environment", ()))}</span>
+      </div>
+    </div>
+    """
 
 
 def update_task_statuses(done_by_id: Dict[str, bool]) -> bool:
@@ -177,8 +202,25 @@ def status_label(status: str) -> str:
     return STATUS_LABELS.get(status, status)
 
 
+def count_unfinished_tasks(tasks: List[Dict[str, Any]]) -> int:
+    finished_statuses = {TaskStatus.DONE.value, TaskStatus.CANCELLED.value}
+    return sum(1 for task in tasks if task_status_value(task) not in finished_statuses)
+
+
 def environment_text(environments: Any) -> str:
     if isinstance(environments, str):
         environments = [environments]
     labels = [ENVIRONMENT_LABELS.get(str(env), str(env)) for env in environments]
     return ", ".join(labels) or "-"
+
+
+def html_escape(value: str) -> str:
+    return html.escape(value)
+
+
+def dom_key(value: str) -> str:
+    return "".join(char if char.isalnum() else "_" for char in value)
+
+
+def deadline_type_text(task: Dict[str, Any]) -> str:
+    return "严格DDL" if str(task.get("deadline_type")) == "strict" else "期望DDL"

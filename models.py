@@ -1,6 +1,7 @@
 from core.models import (
     ScheduleBlock,
     ScheduleResult,
+    DeadlineType,
     Task,
     TaskScore,
     TaskStatus,
@@ -13,6 +14,7 @@ from core.models import (
 __all__ = [
     "ScheduleBlock",
     "ScheduleResult",
+    "DeadlineType",
     "Task",
     "TaskScore",
     "TaskStatus",

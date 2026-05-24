@@ -6,7 +6,7 @@ from typing import Any, Dict, Iterable, List
 
 import streamlit as st
 
-from models import Task, TaskStatus
+from models import DeadlineType, Task, TaskStatus
 from web_ui.archive import record_operation, save_session_archive
 from web_ui.session_state import mark_schedule_dirty
 
@@ -23,6 +23,8 @@ def materialize_task(raw: Dict[str, Any]) -> Task:
         duration_min=int(raw["duration_min"]),
         deadline=datetime.fromisoformat(raw["deadline"]),
         earliest_start=parse_optional_datetime(raw.get("earliest_start")),
+        manual_start=parse_optional_datetime(raw.get("manual_start")),
+        manual_end=parse_optional_datetime(raw.get("manual_end")),
         series_id=raw.get("series_id"),
         required_environment=tuple(raw.get("required_environment", ())),
         required_quietness=float(raw.get("required_quietness", 0.0)),
@@ -30,6 +32,7 @@ def materialize_task(raw: Dict[str, Any]) -> Task:
         must_be_contiguous=True,
         status=TaskStatus(task_status_value(raw)),
         tags=tuple(raw.get("tags", ())),
+        deadline_type=deadline_type_value(raw),
     )
 
 
@@ -97,24 +100,35 @@ def clear_tasks() -> None:
     mark_schedule_dirty()
 
 
-def mark_overdue_tasks_missed(now: datetime) -> bool:
-    changed = False
+def mark_overdue_tasks_missed(now: datetime) -> List[str]:
+    missed_task_ids: List[str] = []
     for task in st.session_state.pending_tasks:
         if task_status_value(task) != TaskStatus.PENDING.value:
             continue
         if datetime.fromisoformat(task["deadline"]) > now:
+            task["deadline_overdue"] = False
             continue
-        task["status"] = TaskStatus.MISSED.value
-        record_operation(
-            "task_missed",
-            task_id=str(task["task_id"]),
-            title=str(task.get("title", "")),
-            detail="deadline passed",
-        )
-        changed = True
-    if changed:
+        if deadline_type_value(task) == DeadlineType.STRICT:
+            task["status"] = TaskStatus.MISSED.value
+            missed_task_ids.append(str(task["task_id"]))
+            record_operation(
+                "task_missed",
+                task_id=str(task["task_id"]),
+                title=str(task.get("title", "")),
+                detail="strict deadline passed",
+            )
+        elif not task.get("deadline_overdue"):
+            task["deadline_overdue"] = True
+            missed_task_ids.append(str(task["task_id"]))
+            record_operation(
+                "task_overdue_flexible",
+                task_id=str(task["task_id"]),
+                title=str(task.get("title", "")),
+                detail="flexible deadline passed; kept pending",
+            )
+    if missed_task_ids:
         mark_schedule_dirty()
-    return changed
+    return missed_task_ids
 
 
 def task_status_value(task: Dict[str, Any]) -> str:
@@ -123,3 +137,10 @@ def task_status_value(task: Dict[str, Any]) -> str:
         return TaskStatus(status).value
     except ValueError:
         return TaskStatus.PENDING.value
+
+
+def deadline_type_value(task: Dict[str, Any]) -> DeadlineType:
+    try:
+        return DeadlineType(str(task.get("deadline_type", DeadlineType.FLEXIBLE.value)))
+    except ValueError:
+        return DeadlineType.FLEXIBLE

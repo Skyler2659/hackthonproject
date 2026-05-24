@@ -1,10 +1,19 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timedelta
 from typing import Dict, Iterable, List, Set, Tuple
 
 from algorithms.base import BaseScheduler
+from algorithms.scheduling_policy import (
+    earliest_start_for_task,
+    environment_fits,
+    latest_end_for_task,
+    placed_end_times,
+    quietness_fits,
+    slot_environments,
+)
+from algorithms.task_selection import prepare_schedulable_tasks
 from core.models import ScheduleBlock, ScheduleResult, Task, TaskScore, TaskStatus, UserProfile
 
 
@@ -28,7 +37,7 @@ class Slot:
 
 
 class GreedyScheduler(BaseScheduler):
-    """Deterministic MVP scheduler; CP-SAT can implement BaseScheduler later."""
+    """Deterministic fallback scheduler used when CP-SAT is unavailable or times out."""
 
     def schedule(
         self,
@@ -37,7 +46,7 @@ class GreedyScheduler(BaseScheduler):
         profile: UserProfile,
         now: datetime,
     ) -> ScheduleResult:
-        active_tasks = [task for task in tasks if task.status == TaskStatus.PENDING]
+        active_tasks = prepare_schedulable_tasks(tasks)
         return place_tasks(priority_order(active_tasks, scores, profile), scores, profile, now)
 
     def recover_after_miss(
@@ -48,14 +57,13 @@ class GreedyScheduler(BaseScheduler):
         profile: UserProfile,
         now: datetime,
     ) -> ScheduleResult:
-        affected_ids = affected_task_ids(missed_task_id, tasks, now)
-        recovery_tasks = [
-            relax_recovery_dependencies(task, affected_ids, missed_task_id)
-            for task in tasks
-            if task.task_id in affected_ids and task.task_id != missed_task_id
-            and task.status in {TaskStatus.PENDING, TaskStatus.SCHEDULED}
-        ]
-        return self.schedule(recovery_tasks, scores, profile, now)
+        affected_task_ids(missed_task_id, tasks, now)
+        return self.schedule(
+            prepare_schedulable_tasks(tasks),
+            scores,
+            profile,
+            now,
+        )
 
 
 def place_tasks(
@@ -119,8 +127,13 @@ def try_place_task(
     profile: UserProfile,
     now: datetime,
 ) -> bool:
-    score = scores[task.task_id]
-    slot = find_first_slot(task, score, profile, now, placed)
+    score = scores.get(task.task_id)
+    if score is None:
+        unscheduled.append(task.task_id)
+        return False
+    slot = find_first_slot(task, score, profile, now, placed, strict=True)
+    if slot is None:
+        slot = find_first_slot(task, score, profile, now, placed, strict=False)
     if slot is None:
         unscheduled.append(task.task_id)
         return False
@@ -138,9 +151,25 @@ def priority_order(
     return sorted(
         tasks,
         key=lambda task: (
-            -scores[task.task_id].priority(profile.weights),
+            -task_score(scores, task).priority(profile.weights),
             task.deadline,
-            -scores[task.task_id].block_integrity,
+            -task_score(scores, task).block_integrity,
+        ),
+    )
+
+
+def task_score(scores: Dict[str, TaskScore], task: Task) -> TaskScore:
+    return scores.get(
+        task.task_id,
+        TaskScore(
+            task_id=task.task_id,
+            urgency=0.5,
+            complexity=0.5,
+            cognitive_load=0.5,
+            block_integrity=0.5,
+            quietness_need=0.45,
+            confidence=0.5,
+            rationale="missing score",
         ),
     )
 
@@ -151,15 +180,28 @@ def find_first_slot(
     profile: UserProfile,
     now: datetime,
     placed: List[ScheduleBlock],
+    *,
+    strict: bool,
 ) -> Slot | None:
-    cursor = ceil_to_step(task.earliest_start or now, step_min=15)
-    horizon = max(task.deadline + timedelta(hours=8), now + timedelta(days=3))
+    if task.manual_start is not None and task.manual_end is not None:
+        fixed_slot = build_slot(task, task.manual_start, profile)
+        if (
+            fixed_slot.end == task.manual_end
+            and fixed_slot.end <= task.deadline
+            and not any(overlaps(fixed_slot.start, fixed_slot.end, block.start, block.end) for block in placed)
+        ):
+            return fixed_slot
+        return None
+
+    ends_by_id = placed_end_times(placed)
+    cursor = ceil_to_step(earliest_start_for_task(task, now, ends_by_id), step_min=15)
+    latest_end = latest_end_for_task(task, now)
     best_slot: Slot | None = None
     best_cost: tuple[float, datetime] | None = None
 
-    while cursor < horizon:
-        candidate = build_slot(cursor, task.duration_min, profile)
-        if is_available(candidate.start, candidate.end, profile) and fits(task, score, candidate, placed):
+    while cursor + timedelta(minutes=task.duration_min) <= latest_end:
+        candidate = build_slot(task, cursor, profile)
+        if slot_is_feasible(task, score, profile, now, candidate, placed, strict=strict):
             candidate_cost = (slot_cost(task, score, profile, candidate), candidate.start)
             if best_cost is None or candidate_cost < best_cost:
                 best_slot = candidate
@@ -168,28 +210,47 @@ def find_first_slot(
     return best_slot
 
 
-def build_slot(start: datetime, duration_min: int, profile: UserProfile) -> Slot:
+def build_slot(task: Task, start: datetime, profile: UserProfile) -> Slot:
     return Slot(
         start=start,
-        end=start + timedelta(minutes=duration_min),
+        end=start + timedelta(minutes=task.duration_min),
         energy=profile.energy_at(start),
         quietness=profile.quietness_at(start),
-        environments=profile.preferred_environments,
+        environments=slot_environments(profile, task),
     )
 
 
-def fits(
+def slot_is_feasible(
     task: Task,
     score: TaskScore,
+    profile: UserProfile,
+    now: datetime,
     slot: Slot,
     placed: List[ScheduleBlock],
+    *,
+    strict: bool,
 ) -> bool:
     if any(overlaps(slot.start, slot.end, block.start, block.end) for block in placed):
         return False
-    if not set(task.required_environment).issubset(set(slot.environments)):
+    if slot.end <= task.deadline:
+        deadline_ok = True
+    elif allows_late_slots(task, now):
+        deadline_ok = slot.end <= latest_end_for_task(task, now)
+    else:
+        deadline_ok = False
+    if not deadline_ok:
         return False
-    quietness_need = max(task.required_quietness, score.quietness_need * 0.75)
-    return slot.quietness + 0.05 >= quietness_need
+    if not is_available(slot.start, slot.end, profile):
+        return False
+    if not environment_fits(task, slot.environments):
+        return False
+    return quietness_fits(task, score, slot.quietness, strict=strict)
+
+
+def allows_late_slots(task: Task, now: datetime) -> bool:
+    from algorithms.scheduling_policy import allows_late_slots as _allows
+
+    return _allows(task, now)
 
 
 def slot_cost(task: Task, score: TaskScore, profile: UserProfile, slot: Slot) -> float:
@@ -253,7 +314,9 @@ def total_cost(
 ) -> float:
     cost = 0.0
     for block in blocks:
-        score = scores[block.task_id]
+        score = scores.get(block.task_id)
+        if score is None:
+            continue
         cognitive_gap = abs(score.cognitive_load - profile.energy_at(block.start))
         quiet_gap = max(0.0, score.quietness_need - profile.quietness_at(block.start))
         cost += cognitive_gap * profile.weights.cognitive_fit + quiet_gap
@@ -296,22 +359,12 @@ def extend_affected_tasks(affected: Set[str], series_id: str | None, tasks: List
 
 
 def relax_recovery_dependencies(task: Task, affected_ids: Set[str], missed_task_id: str) -> Task:
-    return Task(
-        task_id=task.task_id,
-        title=task.title,
-        description=task.description,
-        duration_min=task.duration_min,
-        deadline=task.deadline,
-        earliest_start=task.earliest_start,
-        series_id=task.series_id,
-        required_environment=task.required_environment,
-        required_quietness=task.required_quietness,
+    return replace(
+        task,
         dependencies=tuple(
             dep for dep in task.dependencies if dep != missed_task_id and dep in affected_ids
         ),
-        must_be_contiguous=task.must_be_contiguous,
         status=TaskStatus.PENDING,
-        tags=task.tags,
     )
 
 
@@ -327,6 +380,3 @@ def ceil_to_step(moment: datetime, step_min: int) -> datetime:
     minute = ((moment.minute + step_min - 1) // step_min) * step_min
     base = moment.replace(second=0, microsecond=0, minute=0)
     return base + timedelta(minutes=minute)
-
-
-WeightedScheduler = GreedyScheduler

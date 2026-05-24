@@ -7,7 +7,7 @@ from models import Task, TaskScore, UserProfile
 
 
 class LocalSeriesAgent:
-    """Coordinates semantically related series before global scheduling."""
+    """Orders tasks respecting dependencies across the full pending set."""
 
     def order_tasks(
         self,
@@ -15,29 +15,10 @@ class LocalSeriesAgent:
         scores: Dict[str, TaskScore],
         profile: UserProfile,
     ) -> List[Task]:
-        grouped: Dict[str, List[Task]] = defaultdict(list)
-        standalone: List[Task] = []
-
-        for task in tasks:
-            if task.series_id:
-                grouped[task.series_id].append(task)
-            else:
-                standalone.append(task)
-
-        ordered: List[Task] = []
-        for series_tasks in grouped.values():
-            ordered.extend(self._topological_order(series_tasks, scores, profile))
-
-        ordered.extend(
-            sorted(
-                standalone,
-                key=lambda task: (
-                    task.deadline,
-                    -scores[task.task_id].priority(profile.weights),
-                ),
-            )
-        )
-        return ordered
+        task_list = list(tasks)
+        if not task_list:
+            return []
+        return self._topological_order(task_list, scores, profile)
 
     def _topological_order(
         self,
@@ -66,16 +47,21 @@ class LocalSeriesAgent:
         while ready:
             task_id = ready.popleft()
             result.append(by_id[task_id])
-            for child_id in children[task_id]:
+            for child_id in sorted(
+                children[task_id],
+                key=lambda cid: self._rank(by_id[cid], scores, profile),
+            ):
                 indegree[child_id] -= 1
                 if indegree[child_id] == 0:
                     ready.append(child_id)
 
         if len(result) != len(tasks):
-            raise ValueError("cycle detected inside task series")
+            raise ValueError("cycle detected in task dependencies")
 
         return result
 
     @staticmethod
     def _rank(task: Task, scores: Dict[str, TaskScore], profile: UserProfile) -> tuple:
-        return (task.deadline, -scores[task.task_id].priority(profile.weights))
+        score = scores.get(task.task_id)
+        priority = score.priority(profile.weights) if score else 0.0
+        return (task.deadline, -priority)

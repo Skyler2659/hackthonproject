@@ -14,6 +14,11 @@ class TaskStatus(str, Enum):
     CANCELLED = "cancelled"
 
 
+class DeadlineType(str, Enum):
+    STRICT = "strict"
+    FLEXIBLE = "flexible"
+
+
 @dataclass(frozen=True)
 class UserWeights:
     lateness: float = 3.0
@@ -60,6 +65,9 @@ class Task:
     must_be_contiguous: bool = True
     status: TaskStatus = TaskStatus.PENDING
     tags: Tuple[str, ...] = field(default_factory=tuple)
+    deadline_type: DeadlineType = DeadlineType.FLEXIBLE
+    manual_start: Optional[datetime] = None
+    manual_end: Optional[datetime] = None
 
     def with_status(self, status: TaskStatus) -> "Task":
         return replace(self, status=status)

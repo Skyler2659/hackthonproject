@@ -7,6 +7,7 @@ from core.exceptions import (
 from core.models import (
     ScheduleBlock,
     ScheduleResult,
+    DeadlineType,
     Task,
     TaskScore,
     TaskStatus,
@@ -23,6 +24,7 @@ __all__ = [
     "SchedulerError",
     "ScheduleBlock",
     "ScheduleResult",
+    "DeadlineType",
     "Task",
     "TaskScore",
     "TaskStatus",

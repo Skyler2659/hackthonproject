@@ -1,0 +1,52 @@
+{
+  "completed": true,
+  "profile_name": "晨光启动 · 整块专注",
+  "energy_peak": "Morning",
+  "max_daily_deep_work_min": 90,
+  "preferred_environments": [
+    "desk",
+    "library"
+  ],
+  "available_windows": [
+    [
+      "08:30",
+      "12:00"
+    ],
+    [
+      "14:00",
+      "17:30"
+    ]
+  ],
+  "quiet_windows": [
+    [
+      "09:00",
+      "11:30"
+    ],
+    [
+      "14:30",
+      "16:30"
+    ]
+  ],
+  "weights": {
+    "lateness": 4.8,
+    "cognitive_fit": 2.4,
+    "context_switch": 2.3,
+    "fragmentation": 2.4,
+    "preference_match": 2.1
+  },
+  "answers": {
+    "rhythm": "sunrise",
+    "day_shape": "classic",
+    "deep_tank": "sprint",
+    "deadline_style": "fire",
+    "energy_match": "strict",
+    "switching": "batch",
+    "block_style": "deep",
+    "focus_noise": "cave",
+    "preference_style": "ritual",
+    "environments": [
+      "desk",
+      "library"
+    ]
+  }
+}

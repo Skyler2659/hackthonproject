@@ -2,14 +2,14 @@ from __future__ import annotations
 
 import re
 import uuid
-from datetime import date, datetime, time, timedelta
+from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 import streamlit as st
 
 from agents import TaskParserAgent
 from llm_client import DeepSeekLLMClient, LLMProviderError
-from models import Task, TaskStatus, UserProfile, clamp01
+from models import DeadlineType, Task, TaskStatus, UserProfile, clamp01
 from web_ui.archive import record_operation
 from web_ui.constants import ENVIRONMENT_OPTIONS
 from web_ui.profile import build_profile
@@ -18,7 +18,9 @@ from web_ui.task_data import materialize_tasks
 
 
 def render_task_form(profile_config: Dict[str, Any]) -> None:
-    st.subheader("AI 添加任务")
+    from web_ui.task_clarification import render_task_clarification_dialog
+
+    render_task_clarification_dialog(profile_config)
     render_task_added_notice()
     task_request = render_task_request_form()
     if task_request is None:
@@ -35,42 +37,31 @@ def render_task_added_notice() -> None:
 
 
 def render_task_request_form() -> Dict[str, Any] | None:
-    with st.form("new_task_form", clear_on_submit=True):
-        task_text = render_task_text_input()
-        fixed_deadline = render_fixed_deadline_input()
-        submitted = st.form_submit_button("让 AI 分析并添加任务", use_container_width=True)
+    _, center, _ = st.columns([0.35, 4.3, 0.35])
+    with center:
+        with st.container(key="task_composer"):
+            with st.form("new_task_form", clear_on_submit=True, border=False):
+                st.markdown(
+                    '<div class="composer-greeting">今天有什么要忙的吗？</div>',
+                    unsafe_allow_html=True,
+                )
+                task_text = st.text_area(
+                    "任务描述",
+                    placeholder=(
+                        "例如：我明天晚上前要提交数字电子技术实验报告，"
+                        "需要比较安静的环境，大概是深度工作，最好别安排得太碎。"
+                    ),
+                    height=104,
+                    label_visibility="collapsed",
+                )
+                submitted = st.form_submit_button("让 AI 分析并添加任务", use_container_width=True)
 
     if not submitted:
         return None
     return {
         "task_text": task_text.strip(),
-        "fixed_deadline": fixed_deadline,
+        "fixed_deadline": None,
     }
-
-
-def render_task_text_input() -> str:
-    return st.text_area(
-        "告诉 AI 你要安排什么",
-        placeholder=(
-            "例如：我明天晚上前要提交数字电子技术实验报告，"
-            "需要比较安静的环境，大概是深度工作，最好别安排得太碎。"
-        ),
-        height=132,
-    )
-
-
-def render_fixed_deadline_input() -> Optional[datetime]:
-    has_fixed_deadline = st.checkbox("这个任务有固定 DDL")
-    if not has_fixed_deadline:
-        return None
-
-    col_date, col_time = st.columns(2)
-    fixed_date = col_date.date_input(
-        "固定 DDL 日期",
-        value=date.today() + timedelta(days=1),
-    )
-    fixed_time = col_time.time_input("固定 DDL 时间", value=time(18, 0))
-    return datetime.combine(fixed_date, fixed_time)
 
 
 def add_task_from_request(task_request: Dict[str, Any], profile_config: Dict[str, Any]) -> None:
@@ -79,8 +70,22 @@ def add_task_from_request(task_request: Dict[str, Any], profile_config: Dict[str
         st.warning(validation_error)
         return
 
+    if not task_request.get("_skip_clarification"):
+        from web_ui.task_clarification import assess_task_clarification, start_clarification_pending
+
+        deadline_type = infer_deadline_type(task_request["task_text"])
+        pending = assess_task_clarification(task_request, profile_config)
+        if deadline_type is None:
+            pending = with_deadline_type_question(task_request, pending)
+        else:
+            task_request["_deadline_type"] = deadline_type.value
+        if pending is not None:
+            start_clarification_pending(pending)
+            st.rerun()
+            return
+
     try:
-        task_payload = create_task_payload(task_request, profile_config)
+        task_payloads = create_task_payloads(task_request, profile_config)
     except LLMProviderError as exc:
         st.error(f"AI 任务分析失败：{exc}")
         return
@@ -91,15 +96,14 @@ def add_task_from_request(task_request: Dict[str, Any], profile_config: Dict[str
         st.error(f"任务分析失败：{type(exc).__name__}: {exc}")
         return
 
-    st.session_state.pending_tasks.append(task_payload)
-    record_operation(
-        "task_added",
-        task_id=str(task_payload["task_id"]),
-        title=str(task_payload["title"]),
-        detail=f"duration_min={task_payload['duration_min']}",
-    )
+    finalize_added_tasks(task_payloads)
+
+
+def finalize_added_tasks(task_payloads: List[Dict[str, Any]]) -> None:
+    st.session_state.pending_tasks.extend(task_payloads)
+    record_added_tasks(task_payloads)
     mark_schedule_dirty()
-    show_task_added_message(task_payload)
+    show_task_added_message(task_payloads)
     st.rerun()
 
 
@@ -108,17 +112,14 @@ def validate_task_request(task_request: Dict[str, Any], profile_config: Dict[str
         return "请先告诉 AI 你要安排什么任务。"
     if not profile_config["api_key"]:
         return "请先在侧边栏输入 API Key，AI 才能分析任务。"
-    fixed_deadline = task_request["fixed_deadline"]
-    if fixed_deadline and fixed_deadline <= datetime.now():
-        return "固定 DDL 需要晚于当前时间。"
     return ""
 
 
-def create_task_payload(task_request: Dict[str, Any], profile_config: Dict[str, Any]) -> Dict[str, Any]:
+def create_task_payloads(task_request: Dict[str, Any], profile_config: Dict[str, Any]) -> List[Dict[str, Any]]:
     now = datetime.now().replace(second=0, microsecond=0)
     profile = build_profile(profile_config)
     existing_tasks = materialize_tasks(st.session_state.pending_tasks)
-    parsed_task = parse_task_with_ai(
+    parsed_response = parse_task_with_ai(
         task_text=task_request["task_text"],
         profile=profile,
         profile_config=profile_config,
@@ -126,12 +127,27 @@ def create_task_payload(task_request: Dict[str, Any], profile_config: Dict[str, 
         fixed_deadline=task_request["fixed_deadline"],
         existing_tasks=existing_tasks,
     )
-    return build_task_payload_from_ai(
-        parsed=parsed_task,
+    parsed_tasks = extract_tasks_from_response(parsed_response)
+    return build_task_payloads_from_ai(
+        parsed_tasks=parsed_tasks,
         source_text=task_request["task_text"],
         fixed_deadline=task_request["fixed_deadline"],
         now=now,
+        explicit_deadline_type=task_request.get("_deadline_type"),
     )
+
+
+def extract_tasks_from_response(parsed_response: Dict[str, Any]) -> List[Dict[str, Any]]:
+    if not isinstance(parsed_response, dict):
+        raise ValueError("AI 必须返回 JSON 对象。")
+    tasks = parsed_response.get("tasks")
+    if not isinstance(tasks, list) or len(tasks) == 0:
+        if parsed_response.get("title"):
+            return [parsed_response]
+        raise ValueError("AI 返回的任务列表为空。")
+    if not all(isinstance(task, dict) for task in tasks):
+        raise ValueError("AI 返回的任务格式不正确。")
+    return tasks
 
 
 def parse_task_with_ai(
@@ -162,26 +178,74 @@ def build_llm_client(profile_config: Dict[str, Any]) -> DeepSeekLLMClient:
     )
 
 
+def build_task_payloads_from_ai(
+    parsed_tasks: List[Dict[str, Any]],
+    source_text: str,
+    fixed_deadline: Optional[datetime],
+    now: datetime,
+    explicit_deadline_type: Any = None,
+) -> List[Dict[str, Any]]:
+    task_id_map = build_task_id_map(parsed_tasks, source_text)
+    return [
+        build_task_payload_from_ai(parsed, source_text, fixed_deadline, now, task_id_map, explicit_deadline_type)
+        for parsed in parsed_tasks
+    ]
+
+
+def build_task_id_map(parsed_tasks: List[Dict[str, Any]], source_text: str) -> Dict[str, str]:
+    task_id_map: Dict[str, str] = {}
+    used_ids = existing_task_ids()
+    for parsed in parsed_tasks:
+        ai_task_id = normalized_text(parsed.get("task_id"))
+        generated_id = unique_task_id(resolve_title(parsed, source_text), used_ids)
+        if ai_task_id:
+            task_id_map[ai_task_id] = generated_id
+        used_ids.add(generated_id)
+    return task_id_map
+
+
+def existing_task_ids() -> set[str]:
+    return {str(task["task_id"]) for task in st.session_state.pending_tasks}
+
+
+def unique_task_id(title: str, used_ids: set[str]) -> str:
+    while True:
+        task_id = make_task_id(title)
+        if task_id not in used_ids:
+            return task_id
+
+
 def build_task_payload_from_ai(
     parsed: Dict[str, Any],
     source_text: str,
     fixed_deadline: Optional[datetime],
     now: datetime,
+    task_id_map: Dict[str, str],
+    explicit_deadline_type: Any = None,
 ) -> Dict[str, Any]:
     ensure_parsed_task_is_dict(parsed)
-    deadline = resolve_deadline(parsed, fixed_deadline, now)
+    deadline = resolve_deadline(parsed, fixed_deadline, now, source_text)
     earliest_start = resolve_earliest_start(parsed, now, deadline)
+    source_task_id = normalized_text(parsed.get("task_id"))
     return {
-        "task_id": make_task_id(resolve_title(parsed, source_text)),
+        "task_id": task_id_map.get(source_task_id) or unique_task_id(resolve_title(parsed, source_text), existing_task_ids()),
         "title": resolve_title(parsed, source_text),
         "description": resolve_description(parsed, source_text),
         "series_id": normalized_text(parsed.get("series_id")) or None,
         "duration_min": normalize_duration(parsed.get("duration_min")),
         "deadline": deadline.replace(second=0, microsecond=0).isoformat(),
+        "deadline_type": normalize_deadline_type(
+            explicit_deadline_type
+            or parsed.get("deadline_type")
+            or infer_deadline_type(source_text)
+            or DeadlineType.FLEXIBLE
+        ).value,
         "earliest_start": earliest_start.replace(second=0, microsecond=0).isoformat(),
+        "manual_start": None,
+        "manual_end": None,
         "required_environment": tuple(normalize_environments(parsed.get("required_environment"))),
         "required_quietness": normalize_score(parsed.get("required_quietness"), default=0.45),
-        "dependencies": normalize_dependencies(parsed.get("dependencies")),
+        "dependencies": normalize_dependencies(parsed.get("dependencies"), task_id_map),
         "status": TaskStatus.PENDING.value,
         "tags": tuple(normalize_tags(parsed.get("tags"))),
     }
@@ -208,11 +272,127 @@ def resolve_deadline(
     parsed: Dict[str, Any],
     fixed_deadline: Optional[datetime],
     now: datetime,
+    source_text: str,
 ) -> datetime:
-    deadline = fixed_deadline or parse_datetime_field(parsed.get("deadline"), "deadline")
+    deadline = (
+        fixed_deadline
+        or infer_relative_deadline(source_text, now)
+        or parse_datetime_field(parsed.get("deadline"), "deadline")
+    )
     if deadline <= now:
         raise ValueError("AI 推断出的 DDL 已经过期，请在描述里补充更明确的时间。")
     return deadline
+
+
+def infer_relative_deadline(source_text: str, now: datetime) -> Optional[datetime]:
+    text = normalized_text(source_text)
+    if not text:
+        return None
+
+    day_offset = infer_relative_day_offset(text)
+    explicit_time = infer_explicit_time(text)
+    if day_offset is None and explicit_time is None:
+        return None
+
+    if day_offset is None:
+        day_offset = 0
+    hour, minute = explicit_time or infer_default_deadline_time(text)
+    deadline = (now + timedelta(days=day_offset)).replace(
+        hour=hour,
+        minute=minute,
+        second=0,
+        microsecond=0,
+    )
+    while deadline <= now:
+        deadline += timedelta(days=1)
+    return deadline
+
+
+def infer_relative_day_offset(text: str) -> Optional[int]:
+    if "大后天" in text:
+        return 3
+    if "后天" in text:
+        return 2
+    if "明天" in text:
+        return 1
+    if any(keyword in text for keyword in ("今天", "今晚", "今夜")):
+        return 0
+    if any(keyword in text for keyword in ("上午", "中午", "下午", "晚上", "傍晚", "夜里")):
+        return 0
+    return None
+
+
+def infer_default_deadline_time(text: str) -> tuple[int, int]:
+    if any(keyword in text for keyword in ("今晚", "晚上", "傍晚", "夜里", "今夜")):
+        return (23, 59)
+    return (23, 59)
+
+
+def infer_explicit_time(text: str) -> Optional[tuple[int, int]]:
+    numeric_colon_match = re.search(r"(?P<hour>\d{1,2})\s*[:：]\s*(?P<minute>\d{1,2})", text)
+    if numeric_colon_match:
+        return normalize_time_of_day(
+            hour=int(numeric_colon_match.group("hour")),
+            minute=int(numeric_colon_match.group("minute")),
+            text=text,
+        )
+
+    numeric_point_match = re.search(
+        r"(?P<hour>\d{1,2})\s*[点點]\s*(?P<half>半)?\s*(?P<minute>\d{1,2})?\s*(?:分)?",
+        text,
+    )
+    if numeric_point_match:
+        minute = 30 if numeric_point_match.group("half") else int(numeric_point_match.group("minute") or 0)
+        return normalize_time_of_day(
+            hour=int(numeric_point_match.group("hour")),
+            minute=minute,
+            text=text,
+        )
+
+    chinese_point_match = re.search(
+        r"(?P<hour>[零〇一二两三四五六七八九十]{1,4})\s*[点點]\s*(?P<half>半)?\s*(?P<minute>[零〇一二两三四五六七八九十]{1,4})?\s*(?:分)?",
+        text,
+    )
+    if chinese_point_match:
+        hour = parse_chinese_number(chinese_point_match.group("hour"))
+        minute = 30 if chinese_point_match.group("half") else parse_chinese_number(chinese_point_match.group("minute") or "零")
+        if hour is None or minute is None:
+            return None
+        return normalize_time_of_day(hour=hour, minute=minute, text=text)
+
+    return None
+
+
+def normalize_time_of_day(hour: int, minute: int, text: str) -> Optional[tuple[int, int]]:
+    if minute < 0 or minute > 59:
+        return None
+    if is_afternoon_or_evening(text) and 1 <= hour <= 11:
+        hour += 12
+    if "中午" in text and 1 <= hour <= 10:
+        hour += 12
+    if hour < 0 or hour > 23:
+        return None
+    return (hour, minute)
+
+
+def is_afternoon_or_evening(text: str) -> bool:
+    return any(keyword in text for keyword in ("下午", "晚上", "今晚", "傍晚", "夜里", "今夜"))
+
+
+def parse_chinese_number(value: str) -> Optional[int]:
+    digits = {"零": 0, "〇": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
+    if not value:
+        return None
+    if value in digits:
+        return digits[value]
+    if value == "十":
+        return 10
+    if "十" in value:
+        left, right = value.split("十", 1)
+        tens = digits.get(left, 1) if left else 1
+        ones = digits.get(right, 0) if right else 0
+        return tens * 10 + ones
+    return None
 
 
 def resolve_earliest_start(parsed: Dict[str, Any], now: datetime, deadline: datetime) -> datetime:
@@ -222,9 +402,14 @@ def resolve_earliest_start(parsed: Dict[str, Any], now: datetime, deadline: date
     return earliest_start
 
 
-def normalize_dependencies(value: Any) -> tuple[str, ...]:
-    valid_dependency_ids = {task["task_id"] for task in st.session_state.pending_tasks}
-    return tuple(dep for dep in normalize_string_list(value) if dep in valid_dependency_ids)
+def normalize_dependencies(value: Any, task_id_map: Dict[str, str]) -> tuple[str, ...]:
+    valid_dependency_ids = existing_task_ids() | set(task_id_map.values())
+    normalized_dependencies = []
+    for dep in normalize_string_list(value):
+        mapped_dep = task_id_map.get(dep, dep)
+        if mapped_dep in valid_dependency_ids:
+            normalized_dependencies.append(mapped_dep)
+    return tuple(dict.fromkeys(normalized_dependencies))
 
 
 def parse_datetime_field(value: Any, field_name: str) -> datetime:
@@ -290,6 +475,98 @@ def normalize_string_list(value: Any) -> List[str]:
     return [str(item).strip() for item in raw_items if str(item).strip()]
 
 
+def deadline_type_clarification(task_request: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "task_text": task_request["task_text"],
+        "fixed_deadline": task_request.get("fixed_deadline"),
+        "summary": task_request["task_text"][:40],
+        "questions": [
+            {
+                "id": "deadline_type",
+                "prompt": "这个 DDL 是严格截止，还是你自己设定的期望完成时间？",
+                "hint": "严格截止超时后直接标记超时；期望截止超时后进入未安排，可手动调整。",
+                "required": True,
+                "kind": "deadline_type",
+            }
+        ],
+        "missing_aspects": ["deadline_type"],
+        "confidence": 1.0,
+    }
+
+
+def with_deadline_type_question(
+    task_request: Dict[str, Any],
+    pending: Optional[Dict[str, Any]],
+) -> Dict[str, Any]:
+    deadline_pending = deadline_type_clarification(task_request)
+    if pending is None:
+        return deadline_pending
+    questions = list(pending.get("questions", []))
+    if not any(str(question.get("id")) == "deadline_type" for question in questions):
+        questions.append(deadline_pending["questions"][0])
+    return {
+        **pending,
+        "questions": questions[:4],
+        "missing_aspects": list(pending.get("missing_aspects", [])) + ["deadline_type"],
+    }
+
+
+def infer_deadline_type(text: str) -> Optional[DeadlineType]:
+    normalized = normalized_text(text)
+    strict_tokens = (
+        "必须",
+        "一定要",
+        "提交",
+        "考试",
+        "测验",
+        "上课",
+        "会议",
+        "预约",
+        "面试",
+        "不能晚",
+        "不能超过",
+        "不可补救",
+        "过了就",
+        "过期",
+        "硬性",
+        "严格",
+    )
+    flexible_tokens = (
+        "希望",
+        "最好",
+        "尽量",
+        "计划",
+        "期望",
+        "想在",
+        "自己定",
+        "自定",
+        "不急",
+        "可以晚",
+    )
+    if any(token in normalized.lower() for token in strict_tokens):
+        return DeadlineType.STRICT
+    if any(token in normalized.lower() for token in flexible_tokens):
+        return DeadlineType.FLEXIBLE
+    return None
+
+
+def normalize_deadline_type(value: Any) -> DeadlineType:
+    if isinstance(value, DeadlineType):
+        return value
+    raw = normalized_text(value).lower()
+    aliases = {
+        "strict": DeadlineType.STRICT,
+        "hard": DeadlineType.STRICT,
+        "严格": DeadlineType.STRICT,
+        "严格截止": DeadlineType.STRICT,
+        "flexible": DeadlineType.FLEXIBLE,
+        "soft": DeadlineType.FLEXIBLE,
+        "期望": DeadlineType.FLEXIBLE,
+        "期望截止": DeadlineType.FLEXIBLE,
+    }
+    return aliases.get(raw, DeadlineType.FLEXIBLE)
+
+
 def normalized_text(value: Any) -> str:
     if value is None:
         return ""
@@ -304,9 +581,26 @@ def make_task_id(title: str) -> str:
     return f"{slug[:28]}-{uuid.uuid4().hex[:6]}"
 
 
-def show_task_added_message(task_payload: Dict[str, Any]) -> None:
+def record_added_tasks(task_payloads: List[Dict[str, Any]]) -> None:
+    for task_payload in task_payloads:
+        record_operation(
+            "task_added",
+            task_id=str(task_payload["task_id"]),
+            title=str(task_payload["title"]),
+            detail=f"duration_min={task_payload['duration_min']}",
+        )
+
+
+def show_task_added_message(task_payloads: List[Dict[str, Any]]) -> None:
+    if len(task_payloads) == 1:
+        st.session_state.task_added_notice = single_task_notice(task_payloads[0])
+        return
+    st.session_state.task_added_notice = f"AI 已拆解并添加 {len(task_payloads)} 个任务。"
+
+
+def single_task_notice(task_payload: Dict[str, Any]) -> str:
     deadline = datetime.fromisoformat(task_payload["deadline"])
-    st.session_state.task_added_notice = (
+    return (
         f"AI 已添加任务：{task_payload['title']} · "
         f"{task_payload['duration_min']} 分钟 · DDL {deadline:%m-%d %H:%M}"
     )

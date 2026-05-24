@@ -5,22 +5,29 @@ from datetime import time
 import streamlit as st
 
 from web_ui.constants import DEFAULT_BASE_URL
-from web_ui.archive import load_archive
+from web_ui.archive import load_archive, save_session_archive
+from web_ui.user_memory import load_profile_memory
 
 
 def init_session_state() -> None:
     archive = load_archive()
+    profile_memory = load_profile_memory()
     defaults = {
         "pending_tasks": archive["pending_tasks"],
         "operation_history": archive["operation_history"],
         "task_added_notice": "",
-        "last_scores": None,
-        "last_result": None,
+        "task_clarification_pending": None,
+        "last_scores": archive["last_scores"],
+        "last_result": archive["last_result"],
         "last_ordered_tasks": None,
-        "last_profile": None,
-        "last_run_at": None,
-        "auto_schedule_needed": False,
+        "last_profile": archive["last_profile"],
+        "last_run_at": archive["last_run_at"],
+        "auto_schedule_needed": archive["last_result"] is None and bool(archive["pending_tasks"]),
         "profile_config": {},
+        "profile_memory": profile_memory,
+        "onboarding_step": "intro",
+        "show_profile_test": not bool(profile_memory.get("completed")),
+        "calendar_edit_mode": False,
         "api_key": "",
         "llm_model": "deepseek-chat",
         "llm_base_url": DEFAULT_BASE_URL,
@@ -60,3 +67,4 @@ def clear_last_run() -> None:
 def mark_schedule_dirty() -> None:
     clear_last_run()
     st.session_state.auto_schedule_needed = True
+    save_session_archive()
